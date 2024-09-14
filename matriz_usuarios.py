@@ -68,7 +68,7 @@ def imprimir_matriz_usuarios(matriz, ids_usuarios, encabezado_usuarios):
     # Imprimir el encabezado
     print(" " * 12, end="")  # Espacio para alinear
     for i in encabezado_usuarios:
-        print(f"{i:>20}", end="") 
+        print(f"{i:>25}", end="") 
     print()   
 
     # Imprimir cada fila 
@@ -76,6 +76,6 @@ def imprimir_matriz_usuarios(matriz, ids_usuarios, encabezado_usuarios):
         print(f"{ids_usuarios[i]:<12}", end="")
         for j in range(len(matriz[i])):
             valor = str(matriz[i][j]).capitalize() #mayuscula en la 1er letra
-            print(f"{valor:>20}", end="")
+            print(f"{valor:>25}", end="")
         print()
 
