@@ -1,13 +1,10 @@
 #Matriz Peliculas
-
 def crear_contenido_peliculas(contenido, proximo_id, titulo, tipo, genero, año, duracion):
     item = [proximo_id, titulo, tipo, genero, año, duracion]
 
     contenido.append(item)
 
     print(f"La {tipo} '{titulo}' creada con ID {proximo_id}.")
-
-    return contenido
 
 def leer_contenido_peliculas(contenido):
     if not contenido:
@@ -21,7 +18,7 @@ def leer_contenido_peliculas(contenido):
         print(f"Tipo: {tipo}")
         print(f"Género: {genero}")
         print(f"Año: {año}")
-        print(f"Duración: {duracion} minutos")
+        print(f"Duración: {duracion}")
         print("-" * 30)
 
 def actualizar_contenido_peliculas(contenido, item_id, titulo=None, tipo=None, genero=None, año=None, duracion=None):
@@ -44,31 +41,13 @@ def eliminar_contenido_peliculas(contenido, item_id):
             return
     print(f"No se encontró el contenido con ID {item_id}.")
 
-def crear_matriz_peliculas(n, m):
-    """
-    pre: recibe n y m. Donde n: filas y m:columnas
-    pos: devuelve una matriz de NxM creada con ceros
-    
-    """
-    """return [[0]*m for fil in range (n)]"""
-    return [[0]*m for _ in range(n)]
-
-def llenar_matriz_peliculas(m, peliculas_ordenadas):
-    """
-    Pre: Recibe una matriz ya creada y una lista 'contenido' que contiene otras listas.
-    Pos: Llena la matriz con los valores de la lista 'contenido'.
-    """
-    for i in range(len(peliculas_ordenadas)):
-        for j in range(len(peliculas_ordenadas[i])):
-            m[i][j] = peliculas_ordenadas[i][j]
-
 def imprimir_matriz_peliculas(matriz, ids, encabezado):
     """
     Pre: Recibe una matriz ya creada.
     Pos: Muestra por consola los elementos de la matriz.
     """
     # Imprimir el encabezado
-    print(" " * 12, end="")  # Espacio para alinear con los nombres
+    print(" " * 12, end="")  # Espacio para alinear los encabezados
     for i in encabezado:
         print(f"{i:>15}", end="") 
     print()   
@@ -80,6 +59,3 @@ def imprimir_matriz_peliculas(matriz, ids, encabezado):
             valor = str(matriz[i][j]).capitalize() #mayuscula
             print(f"{valor:>15}", end="")
         print()
-
-
-
