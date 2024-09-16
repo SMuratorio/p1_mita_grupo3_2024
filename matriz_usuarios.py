@@ -1,13 +1,10 @@
 #Matriz usuarios
-
 def crear_contenido_usuarios(contenido_usuarios, proximo_id_usuarios, nombre, apellido, dni, correo):
     item = [proximo_id_usuarios, nombre, apellido, dni, correo]
 
     contenido_usuarios.append(item)
 
     print(f"El usuario {nombre} {apellido} con el DNI '{dni}' creado con ID {proximo_id_usuarios}.")
-
-    return contenido_usuarios
 
 def leer_contenido_usuarios(contenido_usuarios):
     if not contenido_usuarios:
@@ -38,27 +35,9 @@ def eliminar_contenido_usuarios(contenido_usuarios, item_id_usuarios):
     for item in contenido_usuarios:
         if item[0] == item_id_usuarios:
             contenido_usuarios.remove(item)
-            print(f"El {item[2]} con ID {item_id_usuarios} ha sido eliminado.")
+            print(f"El usuario {item[2]} con ID {item_id_usuarios} ha sido eliminado.")
             return
     print(f"No se encontró el contenido con ID {item_id_usuarios}.")
-
-def crear_matriz_usuarios(n, m):
-    """
-    pre: recibe n y m. Donde n: filas y m:columnas
-    pos: devuelve una matriz de NxM creada con ceros
-    
-    """
-    """return [[0]*m for fil in range (n)]"""
-    return [[0]*m for _ in range(n)]
-
-def llenar_matriz_usuarios(m, usuarios_ordenados):
-    """
-    Pre: Recibe una matriz ya creada y una lista 'contenido' que contiene otras listas.
-    Pos: Llena la matriz con los valores de la lista 'contenido'.
-    """
-    for i in range(len(usuarios_ordenados)):
-        for j in range(len(usuarios_ordenados[i])):
-            m[i][j] = usuarios_ordenados[i][j]
 
 def imprimir_matriz_usuarios(matriz, ids_usuarios, encabezado_usuarios):
     """
@@ -78,4 +57,3 @@ def imprimir_matriz_usuarios(matriz, ids_usuarios, encabezado_usuarios):
             valor = str(matriz[i][j]).capitalize() #mayuscula en la 1er letra
             print(f"{valor:>25}", end="")
         print()
-
