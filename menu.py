@@ -28,5 +28,6 @@ def mostrar_submenu(opcion):
         print("a. Agregar Registro")
         print("b. Listar Registros")
         print("c. Actualizar Registro")
+        print("d. Eliminar Registro")
         print("e. Generar reporte")
         print("f. Volver al Menú Principal")
