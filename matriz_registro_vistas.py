@@ -1,9 +1,7 @@
-#Matriz registro vistas
 import validar
-
-def crear_contenido_registro_vistas(contenido_registro_vistas, usuario_id,pelicula_id, estado, calificacion, matriz1, matriz2):
-    apellido = validar.obtener_apellido_usuario(matriz2, usuario_id)
-    titulo = validar.obtener_titulo_pelicula(matriz1, pelicula_id)
+def crear_contenido_registro_vistas(contenido_registro_vistas, usuario_id,pelicula_id, estado, calificacion, contenido_peliculas, contenido_usuarios):
+    apellido = validar.obtener_apellido_usuario(contenido_usuarios, usuario_id)
+    titulo = validar.obtener_titulo_pelicula(contenido_peliculas, pelicula_id)
     
     item = [usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
     contenido_registro_vistas.append(item)
@@ -34,15 +32,27 @@ def actualizar_contenido_registro_vistas(contenido_registro_vistas, nuevo_id_reg
             return
     print(f"No se encontró el contenido con ID {nuevo_id_registro}.")
 
-def eliminar_contenido_registro_vistas(contenido, item_id):
-    for item in contenido:
-        if item[0] == item_id:
-            contenido.remove(item)
-            print(f"El {item[2]} con ID {item_id} ha sido eliminado.")
-            return
-    print(f"No se encontró el contenido con ID {item_id}.")
+def eliminar_contenido_registro_vistas(contenido_regidtro_vistas):
+    while True: #Se inicia un bucle infinito
+        eliminar_id_registro = input("Ingrese el ID del usuario del registro a eliminar: ").strip()
 
-def imprimir_matriz_registro_vistas(matriz3, ids_registro, encabezado_registros):
+        # Verifica si el ID es un número
+        if eliminar_id_registro.isdigit():
+            eliminar_id_registro = int(eliminar_id_registro)
+            # Verifica si el ID existe en el contenido
+            if validar.si_existe_id_usuario(eliminar_id_registro, contenido_regidtro_vistas):
+                # Proceder a eliminar el contenido con el ID válido
+                for item in contenido_regidtro_vistas:
+                    if item[0] == eliminar_id_registro:
+                        contenido_regidtro_vistas.remove(item)
+                        print(f"El usuario con ID {eliminar_id_registro} ha sido eliminado.")
+                        return  # Sale de la función después de eliminar
+            else:
+                print(f"ID no encontrado. Por favor, ingrese un ID válido.")
+        else:
+            print("Por favor, ingrese un número válido.")  # Mensaje si el input no es numérico
+
+def imprimir_matriz_registro_vistas(registros_ordenados, ids_registro, encabezado_registros):
     """
     Pre: Recibe una matriz ya creada.
     Pos: Muestra por consola los elementos de la matriz.
@@ -54,10 +64,9 @@ def imprimir_matriz_registro_vistas(matriz3, ids_registro, encabezado_registros)
     print()   
 
     # Imprimir cada fila con el nombre de la pelicula/serie
-    for i in range(len(matriz3)):
+    for i in range(len(registros_ordenados)):
         print(f"{ids_registro[i]:<12}", end="")
-        for j in range(len(matriz3[i])):
-            valor = str(matriz3[i][j]).capitalize() #mayuscula
+        for j in range(len(registros_ordenados[i])):
+            valor = str(registros_ordenados[i][j]).capitalize() #mayuscula
             print(f"{valor:>15}", end="")
         print()
-
