@@ -1,4 +1,5 @@
-#Matriz Peliculas
+import validar
+
 def crear_contenido_peliculas(contenido, proximo_id, titulo, tipo, genero, año, duracion):
     item = [proximo_id, titulo, tipo, genero, año, duracion]
 
@@ -33,15 +34,27 @@ def actualizar_contenido_peliculas(contenido, item_id, titulo=None, tipo=None, g
             return
     print(f"No se encontró el contenido con ID {item_id}.")
 
-def eliminar_contenido_peliculas(contenido, item_id):
-    for item in contenido:
-        if item[0] == item_id:
-            contenido.remove(item)
-            print(f"El {item[2]} con ID {item_id} ha sido eliminado.")
-            return
-    print(f"No se encontró el contenido con ID {item_id}.")
+def eliminar_contenido_peliculas(contenido_peliculas):
+    while True:
+        eliminar_id_peliculas = input("Ingrese el ID de la pelicula/serie a eliminar: ").strip()
 
-def imprimir_matriz_peliculas(matriz, ids, encabezado):
+        # Verifica si el ID es un número
+        if eliminar_id_peliculas.isdigit():
+            eliminar_id_peliculas = int(eliminar_id_peliculas)
+            # Verifica si el ID existe en el contenido
+            if validar.si_existe_id_pelicula(eliminar_id_peliculas, contenido_peliculas):
+                # Proceder a eliminar el contenido con el ID válido
+                for item in contenido_peliculas:
+                    if item[0] == eliminar_id_peliculas:
+                        contenido_peliculas.remove(item)
+                        print(f"La pelicula con ID {eliminar_id_peliculas} ha sido eliminado.")
+                        return  # Sale de la función después de eliminar
+            else:
+                print(f"ID no encontrado. Por favor, ingrese un ID válido.")
+        else:
+            print("Por favor, ingrese un número válido.")  # Mensaje si el input no es numérico
+
+def imprimir_matriz_peliculas(peliculas_ordenadas, ids, encabezado):
     """
     Pre: Recibe una matriz ya creada.
     Pos: Muestra por consola los elementos de la matriz.
@@ -49,13 +62,13 @@ def imprimir_matriz_peliculas(matriz, ids, encabezado):
     # Imprimir el encabezado
     print(" " * 12, end="")  # Espacio para alinear los encabezados
     for i in encabezado:
-        print(f"{i:>15}", end="") 
+        print(f"{i:>25}", end="") 
     print()   
 
     # Imprimir cada fila con el nombre de la pelicula/serie
-    for i in range(len(matriz)):
+    for i in range(len(peliculas_ordenadas)):
         print(f"{ids[i]:<12}", end="")
-        for j in range(len(matriz[i])):
-            valor = str(matriz[i][j]).capitalize() #mayuscula
-            print(f"{valor:>15}", end="")
+        for j in range(len(peliculas_ordenadas[i])):
+            valor = str(peliculas_ordenadas[i][j]).capitalize() #mayuscula
+            print(f"{valor:>25}", end="")
         print()
