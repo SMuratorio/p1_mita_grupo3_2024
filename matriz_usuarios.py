@@ -1,4 +1,5 @@
-#Matriz usuarios
+import validar
+
 def crear_contenido_usuarios(contenido_usuarios, proximo_id_usuarios, nombre, apellido, dni, correo):
     item = [proximo_id_usuarios, nombre, apellido, dni, correo]
 
@@ -31,29 +32,41 @@ def actualizar_contenido_usuarios(contenido_usuarios, item_id_usuarios, nombre=N
             return
     print(f"No se encontró el contenido con ID {item_id_usuarios}.")
 
-def eliminar_contenido_usuarios(contenido_usuarios, item_id_usuarios):
-    for item in contenido_usuarios:
-        if item[0] == item_id_usuarios:
-            contenido_usuarios.remove(item)
-            print(f"El usuario {item[2]} con ID {item_id_usuarios} ha sido eliminado.")
-            return
-    print(f"No se encontró el contenido con ID {item_id_usuarios}.")
+def eliminar_contenido_usuarios(contenido_usuarios):
+    while True:
+        eliminar_id_usuarios = input("Ingrese el ID del usuario a eliminar: ").strip()
 
-def imprimir_matriz_usuarios(matriz, ids_usuarios, encabezado_usuarios):
+        # Verifica si el ID es un número
+        if eliminar_id_usuarios.isdigit():
+            eliminar_id_usuarios = int(eliminar_id_usuarios)
+            # Verifica si el ID existe en el contenido
+            if validar.si_existe_id_usuario(eliminar_id_usuarios, contenido_usuarios):
+                # Proceder a eliminar el contenido con el ID válido
+                for item in contenido_usuarios:
+                    if item[0] == eliminar_id_usuarios:
+                        contenido_usuarios.remove(item)
+                        print(f"El usuario con ID {eliminar_id_usuarios} ha sido eliminado.")
+                        return  # Sale de la función después de eliminar
+            else:
+                print(f"ID no encontrado. Por favor, ingrese un ID válido.")
+        else:
+            print("Por favor, ingrese un número válido.")  # Mensaje si el input no es numérico
+
+def imprimir_matriz_usuarios(usuarios_ordenados, ids_usuarios, encabezado_usuarios):
     """
     Pre: Recibe una matriz ya creada.
     Pos: Muestra por consola los elementos de la matriz.
     """
     # Imprimir el encabezado
     print(" " * 12, end="")  # Espacio para alinear
-    for i in encabezado_usuarios:
+    for i in encabezado_usuarios: 
         print(f"{i:>25}", end="") 
     print()   
 
     # Imprimir cada fila 
-    for i in range(len(matriz)):
-        print(f"{ids_usuarios[i]:<12}", end="")
-        for j in range(len(matriz[i])):
-            valor = str(matriz[i][j]).capitalize() #mayuscula en la 1er letra
-            print(f"{valor:>25}", end="")
+    for i in range(len(usuarios_ordenados)): 
+        print(f"{ids_usuarios[i]:<12}", end="") 
+        for j in range(len(usuarios_ordenados[i])): 
+            valor = str(usuarios_ordenados[i][j]).capitalize() 
+            print(f"{valor:>25}", end="") 
         print()
