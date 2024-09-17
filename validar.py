@@ -2,63 +2,53 @@ import re
 
 #Matriz usuarios
 
-def validar_email(mail, permitir_blanco=False):
-    if permitir_blanco and mail == "":
-        return True  # Si se permite blanco y el correo está vacío, es válido (no se actualiza)
-    
+def validar_email(mail):
     patron = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
     return re.match(patron, mail) is not None
 
-def obtener_email(permitir_blanco=False):
+def obtener_email():
     while True:  # Bucle infinito hasta recibir un correo válido
         mail = input("Ingrese su correo electrónico: ").strip()
-        if validar_email(mail, permitir_blanco):
+        if validar_email(mail):
             return mail  # Retorna el correo si es válido
         else:
             print("Correo no válido. Intente nuevamente.")
 
 
-def validar_dni(dni, permitir_blanco=False):
-    if permitir_blanco and dni == "":
-        return True  # Si se permite blanco y el DNI está vacío, es válido (no se actualiza)
-    
+def validar_dni(dni):
     patron = r'^\d{2}\.\d{3}\.\d{3}$'  # Expresión regular para el formato XX.XXX.XXX
     return re.match(patron, dni) is not None
 
-def obtener_dni(permitir_blanco=False):
+def obtener_dni():
     while True:  # Bucle infinito hasta recibir un DNI válido
         dni = input("Ingrese el DNI del usuario (con puntos, formato XX.XXX.XXX): ").strip()
-        if validar_dni(dni, permitir_blanco):
+        if validar_dni(dni):
             return dni  # Retorna el DNI si es válido
         else:
             print("El DNI ingresado no es válido. Intente nuevamente.")
 
 
-def validar_nombre(nombre, permitir_blanco=False):    
-    if permitir_blanco and nombre == "":
-        return True 
-    patron = r'[A-Za-z]'
+def validar_nombre(nombre):    
+    patron = r'^[A-Za-z]+$'
     return re.match(patron, nombre) is not None
     
-def obtener_nombre(permitir_blanco=False):
+def obtener_nombre():
     while True:
         nombre = input("Ingrese el nombre del usuario: ").strip().capitalize()
-        if validar_genero(nombre, permitir_blanco):
+        if validar_genero(nombre):
             return nombre
         else:
             print("Nombre de usuario no válido. ", end="")
 
 
-def validar_apellido(apellido, permitir_blanco=False):    
-    if permitir_blanco and apellido == "":
-        return True 
-    patron = r'[A-Za-z]'
+def validar_apellido(apellido):    
+    patron = r'^[A-Za-z]+$'
     return re.match(patron, apellido) is not None
     
-def obtener_apellido(permitir_blanco=False):
+def obtener_apellido():
     while True:
         apellido = input("Ingrese el apellido del usuario: ").strip().capitalize()
-        if validar_genero(apellido, permitir_blanco):
+        if validar_genero(apellido):
             return apellido
         else:
             print("Apellido de usuario no válido. ", end="")
@@ -73,35 +63,28 @@ def si_existe_id_usuario(id_usuario, contenido_usuario):
 
 #Matriz peliculas y series
 
-def validar_año(año, permitir_blanco=False):
-    if permitir_blanco and año == "":
-        return True  # Si se permite blanco y el año está vacío, es válido (no se actualiza)
-    
+def validar_año(año):
     # Expresión regular para validar un año en formato YYYY (de 1900 a 2099)
     patron = r'^(19|20)\d{2}$'
     return re.match(patron, año) is not None
 
-def obtener_año(permitir_blanco=False):
+def obtener_año():
     while True:  # Bucle infinito hasta recibir un año válido
         año = input("Ingrese el año de estreno (formato YYYY): ").strip()
-        if validar_año(año, permitir_blanco):
+        if validar_año(año):
             return año  # Retorna el año si es válido
         else:
             print("Año no válido. Intente nuevamente.")
 
 
-def validar_tipo(tipo, permitir_blanco=False):
+def validar_tipo(tipo):
     opciones_validas = ["serie", "película", "pelicula"]
-    
-    if permitir_blanco and tipo == "":
-        return True  # Si se permite blanco y el tipo está vacío, es válido (no se actualiza)
-    
     return tipo in opciones_validas
 
-def obtener_tipo(permitir_blanco=False):
+def obtener_tipo():
     while True:  # Bucle infinito hasta recibir una respuesta válida
         tipo = input("Ingrese el tipo (serie/película): ").strip().lower()
-        if validar_tipo(tipo, permitir_blanco):
+        if validar_tipo(tipo):
             return tipo  # Retorna el tipo si es válido
         else:
             print("Entrada no válida. Por favor, ingrese 'serie' o 'película'.")
@@ -113,18 +96,12 @@ def es_entero_positivo(entrada):
         return int(entrada) > 0
     return False
 
-def validar_duracion(tipo, permitir_blanco=False):
+def validar_duracion(tipo):
     while True:
         if tipo in ['película', 'pelicula']:
             entrada = input("Ingrese la duración de la película (en minutos): ").strip()
-            
-            if entrada == "":
-                if permitir_blanco:
-                    return None  # O cualquier otro valor que prefieras para representar una entrada en blanco
-                else:
-                    print("No puede dejar el campo en blanco.")
                     
-            elif es_entero_positivo(entrada):
+            if es_entero_positivo(entrada):
                 duracion = int(entrada)
                 return f"{duracion} minutos"
             else:
@@ -132,13 +109,8 @@ def validar_duracion(tipo, permitir_blanco=False):
 
         elif tipo == 'serie':
             entrada = input("Ingrese la cantidad de temporadas: ").strip()
-            
-            if entrada == "":
-                if permitir_blanco:
-                    return None  # O cualquier otro valor que prefieras para representar una entrada en blanco
-                else:
-                    print("No puede dejar el campo en blanco.")
-            elif es_entero_positivo(entrada):
+
+            if es_entero_positivo(entrada):
                 temporadas = int(entrada)
                 return f"{temporadas} temporadas"
             else:
@@ -149,30 +121,25 @@ def validar_duracion(tipo, permitir_blanco=False):
             return None
 
 
-def validar_titulo(titulo, permitir_blanco=False):
-    if permitir_blanco:
-        return True
-    return titulo != ""  
-
-def obtener_titulo(permitir_blanco=False):
+def obtener_titulo():
     while True:
         titulo = input("Ingrese el título de la serie/película: ").strip().lower()
-        if validar_titulo(titulo, permitir_blanco):
+        #if validar_titulo(titulo):
+        patron = r'\w+'
+        if re.match(patron, titulo):
             return titulo  
         else:
             print("Entrada no válida. Inténtelo de nuevo.")
 
    
-def validar_genero(genero, permitir_blanco=False):    
-    if permitir_blanco and genero == "":
-        return True 
-    patron = r'[A-Za-z]'
+def validar_genero(genero):    
+    patron = r'^[A-Za-z]+$'
     return re.match(patron, genero) is not None
     
-def obtener_genero(permitir_blanco=False):
+def obtener_genero():
     while True:
         genero = input("Ingrese el género: ").strip().lower()
-        if validar_genero(genero, permitir_blanco):
+        if validar_genero(genero):
             return genero
         else:
             print("Tipo de género no válido. ", end="")
@@ -187,28 +154,22 @@ def si_existe_id_pelicula(id_pelicula, contenido):
 
 #Matriz registro vistas
 
-def validar_calificacion(calificacion, permitir_blanco=False):
-    if permitir_blanco and calificacion == "":
-        return True  # Si se permite blanco y la calificación está vacía, es válida (no se actualiza)
-
-    # Expresión regular para validar que el número esté entre 1 y 10
-    patron = r'^(?:[1-9]|10)$'
+def validar_calificacion(calificacion):
+    patron = r'^(?:[1-9]|10)$' # Expresión regular para validar que el número esté entre 1 y 10
     return re.match(patron, calificacion) is not None
 
-def obtener_calificacion(permitir_blanco=False):
+def obtener_calificacion():
     while True:  # Bucle infinito hasta recibir una calificación válida
         calificacion = input("Ingrese la calificación (entero entre 1 y 10): ").strip()
-        if validar_calificacion(calificacion, permitir_blanco):
+        if validar_calificacion(calificacion):
             return int(calificacion) if calificacion else None  # Retorna la calificación si es válida
         else:
             print("Calificación no válida. Debe ser un número entero entre 1 y 10. Intente nuevamente.")
 
 
 def validar_estado(estado):
-    # Lista de estados válidos
-    estados_validos = {"en curso", "pendiente", "terminada"}
-    # Verifica si el estado ingresado está en la lista de estados válidos
-    return estado.lower() in estados_validos
+    estados_validos = {"en curso", "pendiente", "terminada"}     # Lista de estados válidos
+    return estado.lower() in estados_validos # Verifica si el estado ingresado está en la lista de estados válidos
 
 def obtener_estado():
     while True:  # Bucle infinito hasta recibir un estado válido
