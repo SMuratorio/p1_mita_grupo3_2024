@@ -168,7 +168,7 @@ def obtener_calificacion():
 
 
 def validar_estado(estado):
-    estados_validos = {"en curso", "pendiente", "terminada"}     # Lista de estados válidos
+    estados_validos = ["en curso", "pendiente", "terminada"]     # Lista de estados válidos
     return estado.lower() in estados_validos # Verifica si el estado ingresado está en la lista de estados válidos
 
 def obtener_estado():
