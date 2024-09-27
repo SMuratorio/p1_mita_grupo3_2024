@@ -1,8 +1,9 @@
 import validar
 
-def crear_contenido_usuarios(contenido_usuarios, proximo_id_usuarios):
+def crear_contenido_usuarios(matriz_usuarios):
     agregar_usuario=validar.validar_continuacion()
     while agregar_usuario=="s":
+        proximo_id_usuarios=len(matriz_usuarios)+1
         print("\nAgregar usuario:")
         nombre=validar.obtener_nombre()
         apellido=validar.obtener_apellido()
@@ -12,13 +13,9 @@ def crear_contenido_usuarios(contenido_usuarios, proximo_id_usuarios):
         print(f"El usuario {nombre} {apellido} con el DNI '{dni}' creado con ID {proximo_id_usuarios}.")
 
         item = [proximo_id_usuarios, nombre, apellido, dni, correo]
-        contenido_usuarios.append(item)
-
-        proximo_id_usuarios+=1
+        matriz_usuarios.append(item)
 
         agregar_usuario=validar.validar_continuacion(primera_consulta=False)
-
-    return proximo_id_usuarios
 
 def leer_contenido_usuarios(contenido_usuarios):
     if not contenido_usuarios:

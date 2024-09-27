@@ -1,25 +1,22 @@
 import validar
 
-def crear_contenido_peliculas(contenido_peliculas, proximo_id_peliculas):
+def crear_contenido_peliculas(matriz_peliculas):
     agregar_pelicula=validar.validar_continuacion()
     while agregar_pelicula=="s":
+        proximo_id_peliculas=len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
         titulo=validar.obtener_titulo()
         tipo = validar.obtener_tipo()
         genero=validar.obtener_genero()
-        anio = validar.obtener_año()
+        anio = validar.obtener_anio()
         duracion = validar.validar_duracion(tipo)
 
         print(f"La {tipo} '{titulo}' creada con ID {proximo_id_peliculas}.")
 
         item = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
-        contenido_peliculas.append(item)
-
-        proximo_id_peliculas+=1
+        matriz_peliculas.append(item)
 
         agregar_pelicula=validar.validar_continuacion(primera_consulta=False)
-    
-    return proximo_id_peliculas
 
 def leer_contenido_peliculas(contenido):
     if not contenido:

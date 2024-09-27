@@ -1,9 +1,10 @@
 #Matriz registro vistas
 import validar
 
-def crear_contenido_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas, proximo_id_registro):
+def crear_contenido_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
     agregar_registro=validar.validar_continuacion()
     while agregar_registro=="s":
+        proximo_id_registro=len(contenido_registro_vistas)+1
         print("\nAgregar registro:")
         usuario_id = validar.validar_usuario_id(contenido_usuarios)
         pelicula_id = validar.validar_pelicula_id(contenido_peliculas)
@@ -18,11 +19,7 @@ def crear_contenido_registro_vistas(contenido_registro_vistas, contenido_usuario
         item = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
         contenido_registro_vistas.append(item)
 
-        proximo_id_registro=+1
-
         agregar_registro=validar.validar_continuacion(primera_consulta=False)
-
-    return proximo_id_registro
     
 def leer_contenido_registro_vistas(contenido_registro_vistas):
     if not contenido_registro_vistas:
