@@ -1,6 +1,6 @@
 import validar
 
-def crear_contenido_usuarios(matriz_usuarios):
+def crear_matriz_usuarios(matriz_usuarios):
     agregar_usuario=validar.validar_continuacion()
     while agregar_usuario=="s":
         proximo_id_usuarios=len(matriz_usuarios)+1
@@ -17,13 +17,13 @@ def crear_contenido_usuarios(matriz_usuarios):
 
         agregar_usuario=validar.validar_continuacion(primera_consulta=False)
 
-def leer_contenido_usuarios(contenido_usuarios):
-    if not contenido_usuarios:
+def leer_matriz_usuarios(matriz_usuarios):
+    if not matriz_usuarios:
         print("No hay contenido disponible.")
         print()
         return
     
-    for item in contenido_usuarios:
+    for item in matriz_usuarios:
         proximo_id_usuarios, nombre, apellido, dni, correo = item
         print(f"ID: {proximo_id_usuarios}")
         print(f"Nombre: {nombre}")
@@ -32,17 +32,17 @@ def leer_contenido_usuarios(contenido_usuarios):
         print(f"Correo: {correo}")
         print("-" * 30)
 
-def actualizar_contenido_usuarios(contenido_usuarios):
+def actualizar_matriz_usuarios(matriz_usuarios):
     actualizar_usuario=validar.validar_continuacion()
   
     while actualizar_usuario == 's':
         actualizar_id_usuario = input("Ingrese el ID del usuario a actualizar: ").strip()
-        while not actualizar_id_usuario.isdigit() or not validar.si_existe_id(int(actualizar_id_usuario), contenido_usuarios):
+        while not actualizar_id_usuario.isdigit() or not validar.si_existe_id(int(actualizar_id_usuario), matriz_usuarios):
             actualizar_id_usuario = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
         actualizar_id_usuario = int(actualizar_id_usuario)
 
-        for item in contenido_usuarios:
+        for item in matriz_usuarios:
             if item[0] == actualizar_id_usuario:
                 print("Ingrese los nuevos datos (deje en blanco si no desea cambiar un campo).")
                 def validar_dato(dato, funcion_validar, obtener_funcion, actual):
@@ -59,14 +59,14 @@ def actualizar_contenido_usuarios(contenido_usuarios):
                 
                 return
 
-def eliminar_contenido_usuarios(contenido_usuarios):
+def eliminar_matriz_usuarios(matriz_usuarios):
     eliminar_usuario = validar.validar_continuacion()
     
     while eliminar_usuario == 's':
         print("\nEliminar contenido:")
         eliminar_id_usuarios = input("Ingrese el ID del usuario a eliminar: ").strip()
 
-        while not eliminar_id_usuarios.isdigit() or not validar.si_existe_id(int(eliminar_id_usuarios), contenido_usuarios):
+        while not eliminar_id_usuarios.isdigit() or not validar.si_existe_id(int(eliminar_id_usuarios), matriz_usuarios):
             if not eliminar_id_usuarios.isdigit():
                 print("Por favor, ingrese un número válido.")
             else:
@@ -76,17 +76,17 @@ def eliminar_contenido_usuarios(contenido_usuarios):
         eliminar_id_usuarios = int(eliminar_id_usuarios)
         
         # Eliminar el usuario
-        contenido_usuarios[:] = [item for item in contenido_usuarios if item[0] != eliminar_id_usuarios] 
+        matriz_usuarios[:] = [item for item in matriz_usuarios if item[0] != eliminar_id_usuarios] 
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"El usuario con ID {eliminar_id_usuarios} ha sido eliminado.")
         
         eliminar_usuario = validar.validar_continuacion(primera_consulta=False)
 
-def imprimir_matriz_usuarios(contenido_usuarios):
-    for i in range(len(contenido_usuarios)):
-        contenido_usuarios[i][1] = contenido_usuarios[i][1][:8]  # Recortar el nombre a 8 caracteres
+def imprimir_matriz_usuarios(matriz_usuarios):
+    for i in range(len(matriz_usuarios)):
+        matriz_usuarios[i][1] = matriz_usuarios[i][1][:8]  # Recortar el nombre a 8 caracteres
                     
-    usuarios_ordenados = sorted(contenido_usuarios, key=lambda x: x[2])# Ordenar la lista por apellido
+    usuarios_ordenados = sorted(matriz_usuarios, key=lambda x: x[2])# Ordenar la lista por apellido
 
     ids_usuarios = [item[1] for item in usuarios_ordenados]  # Nombres de los usuarios
     encabezado_usuarios = ["ID", "Nombre", "Apellido", "DNI", "Correo"]  # Atributos de cada contenido
@@ -104,3 +104,13 @@ def imprimir_matriz_usuarios(contenido_usuarios):
             valor = str(usuarios_ordenados[i][j]).capitalize() #mayuscula en la 1er letra
             print(f"{valor:>25}", end="") #Imprime cada valor con un ancho de 25 caracteres, alineado a la derecha (:>25)
         print()
+        
+    print()
+
+def listar_matriz_usuarios(matriz_usuarios):
+    usuarios_ordenados = sorted(matriz_usuarios, key=lambda x: x[2]) # Ordenar la lista por apellido
+    encabezado_usuarios = ["ID", "Nombre", "Apellido", "DNI", "Correo"]  # Atributos de cada contenido
+    usuarios = [dict(zip(encabezado_usuarios, fila)) for fila in usuarios_ordenados] #La combierte a diccionario
+    for usuario in usuarios: # Imprimir los diccionarios
+        print(usuario)
+    print()
