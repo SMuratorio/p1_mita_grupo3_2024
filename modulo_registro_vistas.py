@@ -1,7 +1,7 @@
 #Matriz registro vistas
 import validar
 
-def crear_contenido_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
+def crear_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
     agregar_registro=validar.validar_continuacion()
     while agregar_registro=="s":
         proximo_id_registro=len(contenido_registro_vistas)+1
@@ -21,7 +21,7 @@ def crear_contenido_registro_vistas(contenido_registro_vistas, contenido_usuario
 
         agregar_registro=validar.validar_continuacion(primera_consulta=False)
     
-def leer_contenido_registro_vistas(contenido_registro_vistas):
+def leer_matriz_registro_vistas(contenido_registro_vistas):
     if not contenido_registro_vistas:
         print("No hay contenido disponible.")
         print()
@@ -38,7 +38,7 @@ def leer_contenido_registro_vistas(contenido_registro_vistas):
         print(f"Calificacion: {calificacion}")
         print("-" * 30)
 
-def actualizar_contenido_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas): 
+def actualizar_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas): 
     actualizar_registro_vistas = validar.validar_continuacion()
     while actualizar_registro_vistas == 's':
         actualizar_id_registro = input("Ingrese el ID del registro a actualizar: ").strip()
@@ -85,7 +85,7 @@ def actualizar_contenido_registro_vistas(contenido_registro_vistas, contenido_us
                 
                 return         
 
-def eliminar_contenido_registro_vistas(contenido_registro_vistas):
+def eliminar_matriz_registro_vistas(contenido_registro_vistas):
     eliminar_registro = validar.validar_continuacion()
     
     while eliminar_registro == 's':
@@ -129,3 +129,14 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
             valor = str(registros_ordenados[i][j]).capitalize() #mayuscula
             print(f"{valor:>20}", end="")
         print()
+    print()
+
+def listar_matriz_registro_vistas(matriz_registro_vistas):
+    registros_ordenados = sorted(matriz_registro_vistas, key=lambda x: x[2])# Ordenar la lista por apellido
+    # Imprimir matriz
+    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Clasificacion"]
+    registros = [dict(zip(encabezado_registros, fila)) for fila in registros_ordenados]
+    
+    for vistas in registros: # Imprimir los diccionarios
+        print(vistas)
+    print()

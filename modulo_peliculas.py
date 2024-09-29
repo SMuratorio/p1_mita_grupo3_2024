@@ -1,6 +1,6 @@
 import validar
 
-def crear_contenido_peliculas(matriz_peliculas):
+def crear_matriz_peliculas(matriz_peliculas):
     agregar_pelicula=validar.validar_continuacion()
     while agregar_pelicula=="s":
         proximo_id_peliculas=len(matriz_peliculas)+1
@@ -18,7 +18,7 @@ def crear_contenido_peliculas(matriz_peliculas):
 
         agregar_pelicula=validar.validar_continuacion(primera_consulta=False)
 
-def leer_contenido_peliculas(contenido):
+def leer_matriz_peliculas(contenido):
     if not contenido:
         print("No hay contenido disponible.")
         print()
@@ -34,7 +34,7 @@ def leer_contenido_peliculas(contenido):
         print(f"Duración: {duracion}")
         print("-" * 30)
 
-def actualizar_contenido_peliculas(contenido_peliculas):
+def actualizar_matriz_peliculas(contenido_peliculas):
     actualizar_pelicula=validar.validar_continuacion()
   
     while actualizar_pelicula == 's':
@@ -69,7 +69,7 @@ def actualizar_contenido_peliculas(contenido_peliculas):
                 
                 return
 
-def eliminar_contenido_peliculas(contenido_peliculas):
+def eliminar_matriz_peliculas(contenido_peliculas):
     eliminar_pelicula = validar.validar_continuacion()
     
     while eliminar_pelicula == 's':
@@ -117,3 +117,20 @@ def imprimir_matriz_peliculas(contenido_peliculas):
             valor = str(peliculas_ordenadas[i][j]).capitalize() #mayuscula
             print(f"{valor:>20}", end="")
         print()
+    print()
+    
+def listar_matriz_peliculas(matriz_peliculas):
+    # Convertir el año a entero si está en formato de cadena
+    for pelicula in matriz_peliculas:
+        pelicula[4] = int(pelicula[4])  # Convertir el año de estreno a entero
+
+    # Ordenar la lista por año de estreno (ascendente)
+    peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4])
+
+    #imprimir matriz
+    encabezado = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
+    peliculas = [dict(zip(encabezado, fila)) for fila in peliculas_ordenadas]
+    # Imprimir los diccionarios
+    for pelis in peliculas:
+        print(pelis)
+    print()

@@ -1,7 +1,6 @@
 import menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas
 
 def _main_():
-
     matriz_usuarios = [
     [1, "Juan", "Pérez","12.345.678", "juan.perez@gmail.com"],
     [2, "Ana", "García","23.456.789", "ana.garcia@yahoo.com"],
@@ -54,6 +53,7 @@ def _main_():
                     
                     elif subopcion_usuarios == 'f': # Volver al menú principal
                         submenu_activo = False  # Salir del submenú volviendo al menú principal
+
                     else:
                         print("\nOpción no válida, intente nuevamente.")
 
@@ -64,48 +64,31 @@ def _main_():
                     subopcion_peliculas = input("Seleccione una opción del submenú de Películas/Series: ").strip().lower()
 
                     if subopcion_peliculas == 'a': #Agregar peliculas
-                        modulo_peliculas.crear_contenido_peliculas(matriz_peliculas)
-
+                        modulo_peliculas.crear_matriz_peliculas(matriz_peliculas)
                         print("\nPelícula/Serie agregada con éxito.")
                         print("\nContenido registrado:")
-                        modulo_peliculas.leer_contenido_peliculas(matriz_peliculas)
+                        modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
-                    elif subopcion_peliculas == 'b':#listar películas/series
+                    elif subopcion_peliculas == 'b': #Listar películas/series
                         print("\nContenido registrado:")
-                        # Convertir el año a entero si está en formato de cadena
-                        for pelicula in matriz_peliculas:
-                            pelicula[4] = int(pelicula[4])  # Convertir el año de estreno a entero
-
-                        # Ordenar la lista por año de estreno (ascendente)
-                        peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4])
-
-                        #imprimir matriz
-                        encabezado = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
-                        peliculas = [dict(zip(encabezado, fila)) for fila in peliculas_ordenadas]
-                        # Imprimir los diccionarios
-                        for pelis in peliculas:
-                            print(pelis)
-                        print()
+                        modulo_peliculas.listar_matriz_peliculas(matriz_peliculas)
                         
-                    elif subopcion_peliculas == 'c': #actualizar
-                        modulo_peliculas.actualizar_contenido_peliculas(matriz_peliculas)
-
+                    elif subopcion_peliculas == 'c': #Actualizar
+                        modulo_peliculas.actualizar_matriz_peliculas(matriz_peliculas)
                         print("\nContenido actualizado:")
-                        modulo_peliculas.leer_contenido_peliculas(matriz_peliculas)
+                        modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
-                    elif subopcion_peliculas == 'd': #eliminar
-                        modulo_peliculas.eliminar_contenido_peliculas(matriz_peliculas)
-
+                    elif subopcion_peliculas == 'd': #Eliminar
+                        modulo_peliculas.eliminar_matriz_peliculas(matriz_peliculas)
                         print("\nContenido después de la eliminación:")
-                        modulo_peliculas.leer_contenido_peliculas(matriz_peliculas)
+                        modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'e': #Mostrar reporte
                         modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
-                        print()
                     
-                    elif subopcion_peliculas == 'f':# Volver al menú principal
-                        submenu_activo = False  # Bandera para salir del bucle del submenú
-                
+                    elif subopcion_peliculas == 'f': #Volver al menú principal
+                        submenu_activo = False  #Bandera para salir del bucle del submenú
+
                     else:
                         print("Opción no válida, intente nuevamente.")
 
@@ -116,43 +99,30 @@ def _main_():
                     subopcion_registro = input("Seleccione una opción del submenú de Registro: ").strip().lower()
 
                     if subopcion_registro == 'a':  # Agregar Registro de Vistas
-                        modulo_registro_vistas.crear_contenido_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
-
+                        modulo_registro_vistas.crear_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
                         print("\nRegistro agregado con éxito.")
                         print("\nContenido registrado:")
-                        modulo_registro_vistas.leer_contenido_registro_vistas(matriz_registro_vistas)
+                        modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
                             
                     elif subopcion_registro == 'b':  # Listar Registros de Vista
                         print("\nContenido registrado:")
-                        registros_ordenados = sorted(matriz_registro_vistas, key=lambda x: x[2])# Ordenar la lista por apellido
-
-                        # Imprimir matriz
-                        encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Clasificacion"]
-                        registros = [dict(zip(encabezado_registros, fila)) for fila in registros_ordenados]
-                        
-                        for vistas in registros: # Imprimir los diccionarios
-                            print(vistas)
-                        print()
+                        modulo_registro_vistas.listar_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'c':  # Actualizar Registro de Vista
                         print("\nActualizar contenido:")
-
-                        modulo_registro_vistas.actualizar_contenido_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
-
+                        modulo_registro_vistas.actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
                         print("\nContenido actualizado:")
-                        modulo_registro_vistas.leer_contenido_registro_vistas(matriz_registro_vistas)
+                        modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'd':  # Eliminar Registro de Vista
-                        modulo_registro_vistas.eliminar_contenido_registro_vistas(matriz_registro_vistas)
-
+                        modulo_registro_vistas.eliminar_matriz_registro_vistas(matriz_registro_vistas)
                         print("\nContenido después de la eliminación:")
-                        modulo_registro_vistas.leer_contenido_registro_vistas(matriz_registro_vistas)
+                        modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
-                    elif subopcion_registro == 'e':  # Generar Reporte
+                    elif subopcion_registro == 'e': # Generar Reporte
                         modulo_registro_vistas.imprimir_matriz_registro_vistas(matriz_registro_vistas)
-                        print()
                     
-                    elif subopcion_registro == 'f':# Volver al menú principal
+                    elif subopcion_registro == 'f': # Volver al menú principal
                         submenu_activo = False  # Salir del submenú volviendo al menú principal
 
                     else:
