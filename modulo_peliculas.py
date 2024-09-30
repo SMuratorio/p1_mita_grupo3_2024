@@ -1,4 +1,4 @@
-import validar
+import validar, menu
 
 def crear_matriz_peliculas(matriz_peliculas):
     agregar_pelicula=validar.obtener_opcion()
@@ -34,40 +34,37 @@ def leer_matriz_peliculas(contenido):
         print(f"Duración: {duracion}")
         print("-" * 30)
 
-def actualizar_matriz_peliculas(contenido_peliculas):
-    actualizar_pelicula=validar.obtener_opcion()
+def actualizar_matriz_peliculas(matriz_peliculas):
+    opcion_seleccionada=validar.obtener_opcion()
   
-    while actualizar_pelicula == 's':
-        actualizar_id_pelicula = input("Ingrese el ID de la pelicula a actualizar: ").strip()
-        while not actualizar_id_pelicula.isdigit() or not validar.si_existe_id(int(actualizar_id_pelicula), contenido_peliculas):
-            actualizar_id_pelicula = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
+    while opcion_seleccionada == 's':
+        id_pelicula = input("Ingrese el ID de la pelicula/serie a actualizar: ").strip()
+        while not id_pelicula.isdigit() or not validar.si_existe_id(int(id_pelicula), matriz_peliculas):
+            id_pelicula = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
-        actualizar_id_pelicula = int(actualizar_id_pelicula)
+        id_pelicula = int(id_pelicula)
 
-        for item in contenido_peliculas:
-            if item[0] == actualizar_id_pelicula:
-                print("Ingrese los nuevos datos (deje en blanco si no desea cambiar un campo).")
-                def validar_dato(dato, funcion_validar, obtener_funcion, actual):
-                    return validar.manejar_error(f"{dato} no válido. Reintentando...", obtener_funcion) if dato and not funcion_validar(dato) else dato or actual
+        dic_pelicula_actualizar = obtener_pelicula(id_pelicula, matriz_peliculas)
+        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_pelicula_actualizar.keys()))
+        nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_pelicula_actualizar[opcion_actualizar]} : ")
+        dic_pelicula_actualizar[opcion_actualizar] = nuevo_valor
+        actualizar_pelicula(id_pelicula, matriz_peliculas, dic_pelicula_actualizar)
+        print(f" El {opcion_actualizar}: {nuevo_valor} con ID {id_pelicula} ha sido actualizado.")
+        opcion_seleccionada = validar.obtener_opcion(False)
 
-                nuevo_titulo = validar_dato(input("Nuevo titulo: ").strip().capitalize(), validar.validar_strings, validar.obtener_titulo, item[1])
-                nuevo_tipo = validar_dato(input("Nuevo tipo: ").strip(). lower(), validar.validar_tipo, validar.obtener_tipo, item[2])
-                nuevo_genero = validar_dato(input("Nuevo genero: ").strip(). capitalize(), validar.validar_strings, validar.obtener_genero, item[3])
-                nuevo_anio = validar_dato(input("Nuevo año: ").strip(), validar.validar_anio, validar.obtener_anio, item[4])
+def obtener_pelicula(id_pelicula, matriz_peliculas):
+    for fila in matriz_peliculas:
+        if fila[0] == id_pelicula:
+            return {"Titulo":fila[1], "Tipo": fila[2], "Genero": fila[3], "Año": fila[4]}
 
-                # Validar duración solo si el tipo es válido
-                nuevo_duracion = None
-                if nuevo_tipo and validar.validar_tipo(nuevo_tipo):
-                    nuevo_duracion = validar.validar_duracion(nuevo_tipo)
-                else:
-                    nuevo_duracion = item[5]  # Mantener la duración existente si no se actualiza el tipo
-
-
-                item[1], item[2], item[3], item[4], item[5] = nuevo_titulo, nuevo_tipo, nuevo_genero, nuevo_anio, nuevo_duracion
-                print(f"{nuevo_titulo} {nuevo_tipo} con ID {actualizar_id_pelicula} ha sido actualizado.")
-                actualizar_pelicula = validar.obtener_opcion(primera_consulta=False)
-                
-                return
+def actualizar_pelicula(id_pelicula, matriz_peliculas, pelicula_actualizar):
+    for fila in matriz_peliculas:
+        if fila[0] == id_pelicula:
+            fila[1] = pelicula_actualizar["Titulo"]
+            fila[2] = pelicula_actualizar["Tipo"]
+            fila[3] = pelicula_actualizar["Genero"]
+            fila[4] = pelicula_actualizar["Año"]
+            return
 
 def eliminar_matriz_peliculas(contenido_peliculas):
     eliminar_pelicula = validar.obtener_opcion()
@@ -100,22 +97,18 @@ def imprimir_matriz_peliculas(contenido_peliculas):
         pelicula[4] = int(pelicula[4])  # Convertir el año de estreno a entero
                             
     peliculas_ordenadas = sorted(contenido_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
-    
-    ids_peliculas=[item[1] for item in peliculas_ordenadas]  # Nombres de las películas/series
     encabezado = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
 
     # Imprimir el encabezado
-    print(" " * 12, end="")  # Espacio para alinear los encabezados
     for i in encabezado:
-        print(f"{i:>20}", end="") 
+        print(f"{i:<20}", end="") 
     print()   
 
     # Imprimir cada fila con el nombre de la pelicula/serie
     for i in range(len(peliculas_ordenadas)):
-        print(f"{ids_peliculas[i]:<12}", end="")
         for j in range(len(peliculas_ordenadas[i])):
             valor = str(peliculas_ordenadas[i][j]).capitalize() #mayuscula
-            print(f"{valor:>20}", end="")
+            print(f"{valor:<20}", end="")
         print()
     print()
     

@@ -1,5 +1,4 @@
-#Matriz registro vistas
-import validar
+import validar, menu
 
 def crear_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
     agregar_registro=validar.obtener_opcion()
@@ -38,52 +37,34 @@ def leer_matriz_registro_vistas(contenido_registro_vistas):
         print(f"Calificacion: {calificacion}")
         print("-" * 30)
 
-def actualizar_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas): 
-    actualizar_registro_vistas = validar.obtener_opcion()
-    while actualizar_registro_vistas == 's':
-        actualizar_id_registro = input("Ingrese el ID del registro a actualizar: ").strip()
-        while not actualizar_id_registro.isdigit() or not validar.si_existe_id(int(actualizar_id_registro), contenido_registro_vistas):
-            actualizar_id_registro = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
+def actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas): 
+    opcion_seleccionada = validar.obtener_opcion()
+    while opcion_seleccionada == 's':
+        id_registro = input("Ingrese el ID del registro a actualizar: ").strip()
+        while not id_registro.isdigit() or not validar.si_existe_id(int(id_registro), matriz_registro_vistas):
+            id_registro = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
-        actualizar_id_registro = int(actualizar_id_registro)
-        for item in contenido_registro_vistas:
-            if item[0] == actualizar_id_registro:
-                print("Ingrese los nuevos datos (deje en blanco si no desea cambiar un campo).")
-                def validar_dato(dato, funcion_validar, obtener_funcion, actual):
-                    return validar.manejar_error(f"{dato} no válido. Reintentando...", obtener_funcion) if dato and not funcion_validar(dato) else dato or actual
-                
-                
-                nuevo_id_usuario = validar.validar_usuario_id(contenido_usuarios, permitir_vacio=True)
-                if nuevo_id_usuario is not None:  # Asegúrate de que no sea None antes de asignar
-                    nuevo_apellido=validar.obtener_apellido_usuario(contenido_usuarios, nuevo_id_usuario)  
-                    item[1], item[2]=nuevo_id_usuario, nuevo_apellido # Actualiza item[1] con el nuevo ID de usuario y el item[2] con nuevo apellido
-                else:
-                    nuevo_id_usuario,nuevo_apellido = item[1], item[2]
+        id_registro = int(id_registro)
 
-                nuevo_id_pelicula = validar.validar_pelicula_id(contenido_peliculas, permitir_vacio=True)
-                if nuevo_id_pelicula is not None:  # Asegúrate de que no sea None antes de asignar
-                    nuevo_titulo=validar.obtener_titulo_pelicula(contenido_peliculas, nuevo_id_pelicula)
-                    item[3], item[4] = nuevo_id_pelicula, nuevo_titulo 
-                else:
-                    nuevo_id_pelicula,nuevo_titulo=item[3],item[4]
+        dic_registro_actualizar = obtener_registro(id_registro, matriz_registro_vistas)
+        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_registro_actualizar.keys()))
+        nuevo_valor = input(f"Ingrese nuevo/a {opcion_actualizar}, valor anterior {dic_registro_actualizar[opcion_actualizar]}: ")
+        dic_registro_actualizar[opcion_actualizar] = nuevo_valor
+        actualizar_registro(id_registro, matriz_registro_vistas, dic_registro_actualizar)
+        print(f"{nuevo_valor} con ID {id_registro} ha sido actualizado.")
+        opcion_seleccionada = validar.obtener_opcion(False)
 
-                nuevo_estado = validar_dato(input("Nuevo estado: ").strip(). lower(), validar.validar_estado, validar.obtener_estado, item[5])
-
-                # Si el estado fue actualizado, se requiere gestionar la calificación
-                nuevo_calificacion=item[6]
-                if nuevo_estado != item[5]:  # Solo si hay un cambio en el estado
-                    if nuevo_estado == "terminada":
-                        calificacion_input = input("Ingrese la calificación: ").strip()
-                        nuevo_calificacion = validar_dato(calificacion_input, validar.validar_calificacion, validar.obtener_calificacion, item[6])
-                    elif nuevo_estado in ["en curso", "pendiente"]:
-                        nuevo_calificacion = 0  # Reinicia la calificación
-                
-
-                item[1], item[2], item[3], item[4], item[5], item[6]= nuevo_id_usuario,nuevo_apellido, nuevo_id_pelicula,nuevo_titulo, nuevo_estado, nuevo_calificacion
-                print(f"ID {actualizar_id_registro} ha sido actualizado")
-                actualizar_registro_vistas = validar.obtener_opcion(primera_consulta=False)
-                
-                return         
+def obtener_registro(id_registro, matriz_registro_vistas):
+    for fila in matriz_registro_vistas:
+        if fila[0] == id_registro:
+            return {"Estado": fila[5], "Calificación": fila[6]}
+        
+def actualizar_registro(id_registro, matriz_registro_vistas, registro_actualizar):
+    for fila in matriz_registro_vistas:
+        if fila[0] == id_registro:
+            fila[5] = registro_actualizar["Estado"]
+            fila[6] = registro_actualizar["Calificación"]
+            return
 
 def eliminar_matriz_registro_vistas(contenido_registro_vistas):
     eliminar_registro = validar.obtener_opcion()
@@ -112,29 +93,25 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
         contenido_registro_vistas[i][4] = contenido_registro_vistas[i][4][:8]# Recortar los títulos a un máximo de 8 caracteres
                     
     registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[1]) # Ordenar la matriz por apellido
-
-    ids_registro = [item[2] for item in registros_ordenados]  # Apellidos de los usuarios
-    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Clasificacion"]
+    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Calificacion"]
 
     # Imprimir el encabezado
-    print(" " * 12, end="")  # Espacio para alinear con los nombres
     for i in encabezado_registros:
-        print(f"{i:>20}", end="") 
+        print(f"{i:<20}", end="") 
     print()   
 
     # Imprimir cada fila con el nombre de la pelicula/serie
     for i in range(len(registros_ordenados)):
-        print(f"{ids_registro[i]:<12}", end="")
         for j in range(len(registros_ordenados[i])):
             valor = str(registros_ordenados[i][j]).capitalize() #mayuscula
-            print(f"{valor:>20}", end="")
+            print(f"{valor:<20}", end="")
         print()
     print()
 
 def listar_matriz_registro_vistas(matriz_registro_vistas):
     registros_ordenados = sorted(matriz_registro_vistas, key=lambda x: x[2])# Ordenar la lista por apellido
     # Imprimir matriz
-    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Clasificacion"]
+    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Calificacion"]
     registros = [dict(zip(encabezado_registros, fila)) for fila in registros_ordenados]
     
     for vistas in registros: # Imprimir los diccionarios

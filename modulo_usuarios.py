@@ -45,11 +45,11 @@ def actualizar_matriz_usuarios(matriz_usuarios):
         
         id_usuario = int(id_usuario)
 
-        usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
-        opcion_actualizar = menu.mostrar_submenu_actualizar()
-        nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {usuario_actualizar[opcion_actualizar]} : ")
-        usuario_actualizar[opcion_actualizar] = nuevo_valor
-        actualizar_usuario(id_usuario, matriz_usuarios, usuario_actualizar)
+        dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
+        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys()))
+        nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_usuario_actualizar[opcion_actualizar]}: ")
+        dic_usuario_actualizar[opcion_actualizar] = nuevo_valor
+        actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar)
         print(f"{nuevo_valor} con ID {id_usuario} ha sido actualizado.")
         opcion_seleccionada = validar.obtener_opcion(False)
 

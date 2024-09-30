@@ -32,22 +32,17 @@ def mostrar_submenu(opcion):
         print("e. Generar reporte")
         print("f. Volver al Menú Principal")
 
-def mostrar_submenu_actualizar():
+def mostrar_submenu_actualizar(opciones):
     print("Seleccione la opción que desea actualizar: ")
-    print("(N)ombre")
-    print("(A)pellido")
-    print("(D)NI")
-    print("(C)orreo")
-    opcion=input("Opción: ")
-    if opcion.lower() == "n":
-        return "Nombre"
-    elif opcion.lower() == "a":
-        return "Apellido"
-    elif opcion.lower() == "d":
-        return "D.N.I"
-    elif opcion.lower() == "c":
-        return "Correo"
+    for opcion in opciones:
+        id = opciones.index(opcion)+1
+        print(f"({id}) {opcion}")
+    opcion_seleccionada = int(input("Opción: "))
+    for opcion in opciones:
+        id = opciones.index(opcion)+1
+        if id == opcion_seleccionada:
+            return opcion
 
-    
-    
+
+
     
