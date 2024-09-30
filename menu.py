@@ -31,3 +31,23 @@ def mostrar_submenu(opcion):
         print("d. Eliminar Registro")
         print("e. Generar reporte")
         print("f. Volver al Menú Principal")
+
+def mostrar_submenu_actualizar():
+    print("Seleccione la opción que desea actualizar: ")
+    print("(N)ombre")
+    print("(A)pellido")
+    print("(D)NI")
+    print("(C)orreo")
+    opcion=input("Opción: ")
+    if opcion.lower() == "n":
+        return "Nombre"
+    elif opcion.lower() == "a":
+        return "Apellido"
+    elif opcion.lower() == "d":
+        return "D.N.I"
+    elif opcion.lower() == "c":
+        return "Correo"
+
+    
+    
+    

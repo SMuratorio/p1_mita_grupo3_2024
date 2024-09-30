@@ -1,7 +1,7 @@
 import validar
 
 def crear_matriz_peliculas(matriz_peliculas):
-    agregar_pelicula=validar.validar_continuacion()
+    agregar_pelicula=validar.obtener_opcion()
     while agregar_pelicula=="s":
         proximo_id_peliculas=len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
@@ -16,7 +16,7 @@ def crear_matriz_peliculas(matriz_peliculas):
         item = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
         matriz_peliculas.append(item)
 
-        agregar_pelicula=validar.validar_continuacion(primera_consulta=False)
+        agregar_pelicula=validar.obtener_opcion(primera_consulta=False)
 
 def leer_matriz_peliculas(contenido):
     if not contenido:
@@ -35,7 +35,7 @@ def leer_matriz_peliculas(contenido):
         print("-" * 30)
 
 def actualizar_matriz_peliculas(contenido_peliculas):
-    actualizar_pelicula=validar.validar_continuacion()
+    actualizar_pelicula=validar.obtener_opcion()
   
     while actualizar_pelicula == 's':
         actualizar_id_pelicula = input("Ingrese el ID de la pelicula a actualizar: ").strip()
@@ -65,12 +65,12 @@ def actualizar_matriz_peliculas(contenido_peliculas):
 
                 item[1], item[2], item[3], item[4], item[5] = nuevo_titulo, nuevo_tipo, nuevo_genero, nuevo_anio, nuevo_duracion
                 print(f"{nuevo_titulo} {nuevo_tipo} con ID {actualizar_id_pelicula} ha sido actualizado.")
-                actualizar_pelicula = validar.validar_continuacion(primera_consulta=False)
+                actualizar_pelicula = validar.obtener_opcion(primera_consulta=False)
                 
                 return
 
 def eliminar_matriz_peliculas(contenido_peliculas):
-    eliminar_pelicula = validar.validar_continuacion()
+    eliminar_pelicula = validar.obtener_opcion()
     
     while eliminar_pelicula == 's':
         print("\nEliminar contenido:")
@@ -90,7 +90,7 @@ def eliminar_matriz_peliculas(contenido_peliculas):
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"La pelicula/serie con ID {eliminar_id_pelicula} ha sido eliminado.")
         
-        eliminar_pelicula = validar.validar_continuacion(primera_consulta=False)
+        eliminar_pelicula = validar.obtener_opcion(primera_consulta=False)
     
 def imprimir_matriz_peliculas(contenido_peliculas):
     for i in range(len(contenido_peliculas)):

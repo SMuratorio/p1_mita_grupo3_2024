@@ -2,7 +2,7 @@
 import validar
 
 def crear_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
-    agregar_registro=validar.validar_continuacion()
+    agregar_registro=validar.obtener_opcion()
     while agregar_registro=="s":
         proximo_id_registro=len(contenido_registro_vistas)+1
         print("\nAgregar registro:")
@@ -19,7 +19,7 @@ def crear_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, 
         item = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
         contenido_registro_vistas.append(item)
 
-        agregar_registro=validar.validar_continuacion(primera_consulta=False)
+        agregar_registro=validar.obtener_opcion(primera_consulta=False)
     
 def leer_matriz_registro_vistas(contenido_registro_vistas):
     if not contenido_registro_vistas:
@@ -39,7 +39,7 @@ def leer_matriz_registro_vistas(contenido_registro_vistas):
         print("-" * 30)
 
 def actualizar_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas): 
-    actualizar_registro_vistas = validar.validar_continuacion()
+    actualizar_registro_vistas = validar.obtener_opcion()
     while actualizar_registro_vistas == 's':
         actualizar_id_registro = input("Ingrese el ID del registro a actualizar: ").strip()
         while not actualizar_id_registro.isdigit() or not validar.si_existe_id(int(actualizar_id_registro), contenido_registro_vistas):
@@ -81,12 +81,12 @@ def actualizar_matriz_registro_vistas(contenido_registro_vistas, contenido_usuar
 
                 item[1], item[2], item[3], item[4], item[5], item[6]= nuevo_id_usuario,nuevo_apellido, nuevo_id_pelicula,nuevo_titulo, nuevo_estado, nuevo_calificacion
                 print(f"ID {actualizar_id_registro} ha sido actualizado")
-                actualizar_registro_vistas = validar.validar_continuacion(primera_consulta=False)
+                actualizar_registro_vistas = validar.obtener_opcion(primera_consulta=False)
                 
                 return         
 
 def eliminar_matriz_registro_vistas(contenido_registro_vistas):
-    eliminar_registro = validar.validar_continuacion()
+    eliminar_registro = validar.obtener_opcion()
     
     while eliminar_registro == 's':
         print("\nEliminar contenido:")
@@ -105,7 +105,7 @@ def eliminar_matriz_registro_vistas(contenido_registro_vistas):
         contenido_registro_vistas[:] = [item for item in contenido_registro_vistas if item[0] != eliminar_id_registro] #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"El registro con ID {eliminar_id_registro} ha sido eliminado.")
         
-        eliminar_registro= validar.validar_continuacion(primera_consulta=False)
+        eliminar_registro= validar.obtener_opcion(primera_consulta=False)
 
 def imprimir_matriz_registro_vistas(contenido_registro_vistas):
     for i in range(len(contenido_registro_vistas)):

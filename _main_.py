@@ -28,27 +28,22 @@ def _main_():
                     menu.mostrar_submenu(opcion)
                     subopcion_usuarios = input("Seleccione una opción del submenú de Usuarios: ").strip().lower()
 
-                    if subopcion_usuarios =='a':  # Agregar Usuario
+                    if subopcion_usuarios == 'a': # Agregar Usuario
                         modulo_usuarios.crear_matriz_usuarios(matriz_usuarios)
-                        print("\nUsuario agregado con éxito.")
-                        print("\nContenido registrado:")
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
                         
-                    elif subopcion_usuarios == 'b':  # Listar Usuarios
-                        print("\nContenido registrado:")
+                    elif subopcion_usuarios == 'b': # Listar Usuarios
                         modulo_usuarios.listar_matriz_usuarios(matriz_usuarios)
 
-                    elif subopcion_usuarios == 'c':  # Actualizar Usuario
+                    elif subopcion_usuarios == 'c': # Actualizar Usuario
                         modulo_usuarios.actualizar_matriz_usuarios(matriz_usuarios)
-                        print("\nContenido actualizado:")
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
 
-                    elif subopcion_usuarios == 'd':  # Eliminar Usuarios
+                    elif subopcion_usuarios == 'd': # Eliminar Usuarios
                         modulo_usuarios.eliminar_matriz_usuarios(matriz_usuarios)
-                        print("\nContenido después de la eliminación:")
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
 
-                    elif subopcion_usuarios == 'e': #Generar reporte
+                    elif subopcion_usuarios == 'e': # Generar reporte
                         modulo_usuarios.imprimir_matriz_usuarios(matriz_usuarios)
                     
                     elif subopcion_usuarios == 'f': # Volver al menú principal

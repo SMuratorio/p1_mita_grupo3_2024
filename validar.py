@@ -196,7 +196,7 @@ def validar_usuario_id(contenido_usuarios, permitir_vacio=False):
     return int(usuario_id)  # Convertimos a entero solo después de validar
 
 #Otros
-def validar_continuacion(primera_consulta=True):
+def obtener_opcion(primera_consulta=True):
     while True:
         if primera_consulta:
             respuesta = "s"
