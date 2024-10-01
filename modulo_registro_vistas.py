@@ -1,32 +1,31 @@
-import validar, menu
+import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input
 
-def crear_matriz_registro_vistas(contenido_registro_vistas, contenido_usuarios, contenido_peliculas):
-    agregar_registro=validar.obtener_opcion()
-    while agregar_registro=="s":
-        proximo_id_registro=len(contenido_registro_vistas)+1
+def crear_matriz_registro_vistas(contenido_registro_vistas, matriz_usuarios, matriz_peliculas):
+    opcion_seleccionada = modulo_validar.obtener_opcion()
+    while opcion_seleccionada == "s":
+        proximo_id_registro = len(contenido_registro_vistas)+1
         print("\nAgregar registro:")
-        usuario_id = validar.validar_usuario_id(contenido_usuarios)
-        pelicula_id = validar.validar_pelicula_id(contenido_peliculas)
-        estado = validar.obtener_estado()
-        calificacion = validar.obtener_calificacion() if estado == "Terminada" else 0
-        
-        apellido = validar.obtener_apellido_usuario(contenido_usuarios, usuario_id)
-        titulo = validar.obtener_titulo_pelicula(contenido_peliculas, pelicula_id)
+        usuario_id = modulo_validar.validar_usuario_id(matriz_usuarios)
+        pelicula_id = modulo_validar.validar_pelicula_id(matriz_peliculas)
+        estado, calificacion = modulo_input.obtener_registro()
+        apellido = modulo_usuarios.obtener_usuario(usuario_id, matriz_usuarios)["Apellido"]
+        titulo = modulo_peliculas.obtener_pelicula(pelicula_id, matriz_peliculas)["Titulo"]
 
         print(f"El usuario {usuario_id} ha actualizado el estado de la película/serie '{titulo}' con ID {pelicula_id}.")
     
-        item = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
-        contenido_registro_vistas.append(item)
-
-        agregar_registro=validar.obtener_opcion(primera_consulta=False)
+        fila = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
+        contenido_registro_vistas.append(fila)
+        print("\nRegistro agregado con éxito.")
+        opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
     
-def leer_matriz_registro_vistas(contenido_registro_vistas):
-    if not contenido_registro_vistas:
+def leer_matriz_registro_vistas(matriz_registro_vistas):
+    if not matriz_registro_vistas:
         print("No hay contenido disponible.")
         print()
         return
     
-    for item in contenido_registro_vistas:
+    print("\nContenido registrado:")
+    for item in matriz_registro_vistas:
         registro_id,usuario_id,apellido, pelicula_id, titulo, estado, calificacion = item
         print(f"ID del registro: {registro_id}")
         print(f"ID del usuario: {usuario_id}")
@@ -38,21 +37,21 @@ def leer_matriz_registro_vistas(contenido_registro_vistas):
         print("-" * 30)
 
 def actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas): 
-    opcion_seleccionada = validar.obtener_opcion()
+    opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == 's':
         id_registro = input("Ingrese el ID del registro a actualizar: ").strip()
-        while not id_registro.isdigit() or not validar.si_existe_id(int(id_registro), matriz_registro_vistas):
-            id_registro = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
+        while not id_registro.isdigit() or not modulo_validar.si_existe_id(int(id_registro), matriz_registro_vistas):
+            id_registro = modulo_validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
         id_registro = int(id_registro)
 
         dic_registro_actualizar = obtener_registro(id_registro, matriz_registro_vistas)
-        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_registro_actualizar.keys()))
+        opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_registro_actualizar.keys()))
         nuevo_valor = input(f"Ingrese nuevo/a {opcion_actualizar}, valor anterior {dic_registro_actualizar[opcion_actualizar]}: ")
         dic_registro_actualizar[opcion_actualizar] = nuevo_valor
         actualizar_registro(id_registro, matriz_registro_vistas, dic_registro_actualizar)
         print(f"{nuevo_valor} con ID {id_registro} ha sido actualizado.")
-        opcion_seleccionada = validar.obtener_opcion(False)
+        opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_registro(id_registro, matriz_registro_vistas):
     for fila in matriz_registro_vistas:
@@ -67,13 +66,13 @@ def actualizar_registro(id_registro, matriz_registro_vistas, registro_actualizar
             return
 
 def eliminar_matriz_registro_vistas(contenido_registro_vistas):
-    eliminar_registro = validar.obtener_opcion()
+    eliminar_registro = modulo_validar.obtener_opcion()
     
     while eliminar_registro == 's':
         print("\nEliminar contenido:")
         eliminar_id_registro = input("Ingrese el ID del registro a eliminar: ").strip()
 
-        while not eliminar_id_registro.isdigit() or not validar.si_existe_id(int(eliminar_id_registro), contenido_registro_vistas):
+        while not eliminar_id_registro.isdigit() or not modulo_validar.si_existe_id(int(eliminar_id_registro), contenido_registro_vistas):
             if not eliminar_id_registro.isdigit():
                 print("Por favor, ingrese un número válido.")
             else:
@@ -86,7 +85,7 @@ def eliminar_matriz_registro_vistas(contenido_registro_vistas):
         contenido_registro_vistas[:] = [item for item in contenido_registro_vistas if item[0] != eliminar_id_registro] #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"El registro con ID {eliminar_id_registro} ha sido eliminado.")
         
-        eliminar_registro= validar.obtener_opcion(primera_consulta=False)
+        eliminar_registro= modulo_validar.obtener_opcion(primera_consulta=False)
 
 def imprimir_matriz_registro_vistas(contenido_registro_vistas):
     for i in range(len(contenido_registro_vistas)):

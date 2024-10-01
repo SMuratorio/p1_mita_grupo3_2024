@@ -1,31 +1,28 @@
-import validar, menu
+import modulo_validar, modulo_menu, modulo_input
 
 def crear_matriz_peliculas(matriz_peliculas):
-    agregar_pelicula=validar.obtener_opcion()
-    while agregar_pelicula=="s":
-        proximo_id_peliculas=len(matriz_peliculas)+1
+    opcion_seleccionada = modulo_validar.obtener_opcion()
+    while opcion_seleccionada == "s":
+        proximo_id_peliculas = len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
-        titulo=validar.obtener_titulo()
-        tipo = validar.obtener_tipo()
-        genero=validar.obtener_genero()
-        anio = validar.obtener_anio()
-        duracion = validar.validar_duracion(tipo)
+        titulo, tipo, genero, anio, duracion = modulo_input.obtener_pelicula()
 
         print(f"La {tipo} '{titulo}' creada con ID {proximo_id_peliculas}.")
 
-        item = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
-        matriz_peliculas.append(item)
+        fila = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
+        matriz_peliculas.append(fila)
+        print("\nPelícula/Serie agregada con éxito.")
+        opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
 
-        agregar_pelicula=validar.obtener_opcion(primera_consulta=False)
-
-def leer_matriz_peliculas(contenido):
-    if not contenido:
+def leer_matriz_peliculas(matriz_peliculas):
+    if not matriz_peliculas:
         print("No hay contenido disponible.")
         print()
         return
     
-    for item in contenido:
-        proximo_id, titulo, tipo, genero, año, duracion = item
+    print("\nContenido registrado:")
+    for fila in matriz_peliculas:
+        proximo_id, titulo, tipo, genero, año, duracion = fila
         print(f"ID: {proximo_id}")
         print(f"Título: {titulo}")
         print(f"Tipo: {tipo}")
@@ -35,22 +32,22 @@ def leer_matriz_peliculas(contenido):
         print("-" * 30)
 
 def actualizar_matriz_peliculas(matriz_peliculas):
-    opcion_seleccionada=validar.obtener_opcion()
+    opcion_seleccionada=modulo_validar.obtener_opcion()
   
     while opcion_seleccionada == 's':
         id_pelicula = input("Ingrese el ID de la pelicula/serie a actualizar: ").strip()
-        while not id_pelicula.isdigit() or not validar.si_existe_id(int(id_pelicula), matriz_peliculas):
-            id_pelicula = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
+        while not id_pelicula.isdigit() or not modulo_validar.si_existe_id(int(id_pelicula), matriz_peliculas):
+            id_pelicula = modulo_validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
         id_pelicula = int(id_pelicula)
 
         dic_pelicula_actualizar = obtener_pelicula(id_pelicula, matriz_peliculas)
-        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_pelicula_actualizar.keys()))
+        opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_pelicula_actualizar.keys()))
         nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_pelicula_actualizar[opcion_actualizar]} : ")
         dic_pelicula_actualizar[opcion_actualizar] = nuevo_valor
         actualizar_pelicula(id_pelicula, matriz_peliculas, dic_pelicula_actualizar)
         print(f" El {opcion_actualizar}: {nuevo_valor} con ID {id_pelicula} ha sido actualizado.")
-        opcion_seleccionada = validar.obtener_opcion(False)
+        opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_pelicula(id_pelicula, matriz_peliculas):
     for fila in matriz_peliculas:
@@ -67,13 +64,13 @@ def actualizar_pelicula(id_pelicula, matriz_peliculas, pelicula_actualizar):
             return
 
 def eliminar_matriz_peliculas(contenido_peliculas):
-    eliminar_pelicula = validar.obtener_opcion()
+    eliminar_pelicula = modulo_validar.obtener_opcion()
     
     while eliminar_pelicula == 's':
         print("\nEliminar contenido:")
         eliminar_id_pelicula = input("Ingrese el ID de la pelicula/serie a eliminar: ").strip()
 
-        while not eliminar_id_pelicula.isdigit() or not validar.si_existe_id(int(eliminar_id_pelicula), contenido_peliculas):
+        while not eliminar_id_pelicula.isdigit() or not modulo_validar.si_existe_id(int(eliminar_id_pelicula), contenido_peliculas):
             if not eliminar_id_pelicula.isdigit():
                 print("Por favor, ingrese un número válido.")
             else:
@@ -87,7 +84,7 @@ def eliminar_matriz_peliculas(contenido_peliculas):
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"La pelicula/serie con ID {eliminar_id_pelicula} ha sido eliminado.")
         
-        eliminar_pelicula = validar.obtener_opcion(primera_consulta=False)
+        eliminar_pelicula = modulo_validar.obtener_opcion(primera_consulta=False)
     
 def imprimir_matriz_peliculas(contenido_peliculas):
     for i in range(len(contenido_peliculas)):
@@ -114,6 +111,7 @@ def imprimir_matriz_peliculas(contenido_peliculas):
     
 def listar_matriz_peliculas(matriz_peliculas):
     # Convertir el año a entero si está en formato de cadena
+    print("\nContenido registrado:")
     for pelicula in matriz_peliculas:
         pelicula[4] = int(pelicula[4])  # Convertir el año de estreno a entero
 

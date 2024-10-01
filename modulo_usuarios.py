@@ -1,14 +1,11 @@
-import validar, menu
+import modulo_validar, modulo_menu, modulo_input
 
 def crear_matriz_usuarios(matriz_usuarios):
-    opcion_seleccionada = validar.obtener_opcion()
+    opcion_seleccionada = modulo_validar.obtener_opcion()
 
     while opcion_seleccionada == "s":
         print("\nAgregar usuario:")
-        nombre = validar.obtener_nombre()
-        apellido = validar.obtener_apellido()
-        dni = validar.obtener_dni()
-        correo = validar.obtener_email()
+        nombre, apellido, dni, correo = modulo_input.obtener_usuario()
         proximo_id_usuario = len(matriz_usuarios)+1
 
         print(f"El usuario {nombre} {apellido} con el DNI '{dni}' creado con ID {proximo_id_usuario}.")
@@ -17,7 +14,7 @@ def crear_matriz_usuarios(matriz_usuarios):
         matriz_usuarios.append(sublista)
         print("\nUsuario agregado con éxito.")
 
-        opcion_seleccionada = validar.obtener_opcion(primera_consulta=False)
+        opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
         
 def leer_matriz_usuarios(matriz_usuarios):
     if not matriz_usuarios:
@@ -36,22 +33,22 @@ def leer_matriz_usuarios(matriz_usuarios):
         print("-" * 30)
 
 def actualizar_matriz_usuarios(matriz_usuarios):
-    opcion_seleccionada = validar.obtener_opcion()
+    opcion_seleccionada = modulo_validar.obtener_opcion()
   
     while opcion_seleccionada == 's':
         id_usuario = input("Ingrese el ID del usuario a actualizar: ").strip()
-        while not id_usuario.isdigit() or not validar.si_existe_id(int(id_usuario), matriz_usuarios):
-            id_usuario = validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
+        while not id_usuario.isdigit() or not modulo_validar.si_existe_id(int(id_usuario), matriz_usuarios):
+            id_usuario = modulo_validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
         
         id_usuario = int(id_usuario)
 
         dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
-        opcion_actualizar = menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys()))
+        opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys()))
         nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_usuario_actualizar[opcion_actualizar]}: ")
         dic_usuario_actualizar[opcion_actualizar] = nuevo_valor
         actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar)
         print(f"{nuevo_valor} con ID {id_usuario} ha sido actualizado.")
-        opcion_seleccionada = validar.obtener_opcion(False)
+        opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_usuario(id_usuario, matriz_usuarios):
     for fila in matriz_usuarios:
@@ -68,13 +65,13 @@ def actualizar_usuario(id_usuario, matriz_usuarios, usuario_actualizar):
             return
 
 def eliminar_matriz_usuarios(matriz_usuarios):
-    opcion_seleccionada = validar.obtener_opcion()
+    opcion_seleccionada = modulo_validar.obtener_opcion()
     
     while opcion_seleccionada == 's':
         print("\nEliminar contenido:")
         id_usuario = input("Ingrese el ID del usuario a eliminar: ").strip()
 
-        while not id_usuario.isdigit() or not validar.si_existe_id(int(id_usuario), matriz_usuarios):
+        while not id_usuario.isdigit() or not modulo_validar.si_existe_id(int(id_usuario), matriz_usuarios):
             if not id_usuario.isdigit():
                 print("Por favor, ingrese un número válido.")
             else:
@@ -88,7 +85,7 @@ def eliminar_matriz_usuarios(matriz_usuarios):
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"El usuario con ID {id_usuario} ha sido eliminado.")
         
-        opcion_seleccionada = validar.obtener_opcion(primera_consulta=False)
+        opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
 
 def imprimir_matriz_usuarios(matriz_usuarios):
     len_matriz_usuarios=len(matriz_usuarios)

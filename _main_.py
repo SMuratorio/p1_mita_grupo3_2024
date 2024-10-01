@@ -1,4 +1,4 @@
-import menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas
+import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas
 
 def _main_():
     matriz_usuarios = [
@@ -18,14 +18,14 @@ def _main_():
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
     salir=True
     while salir:
-        menu.mostrar_menu()
+        modulo_menu.mostrar_menu()
         opcion = input("Seleccione una opción del menú principal: ")
         if opcion in dic_opciones:
 
             if dic_opciones[opcion] == "usuarios":  # Menú de Usuarios
                 submenu_activo = True  # Bandera para controlar el bucle del submenú de usuarios
                 while submenu_activo:
-                    menu.mostrar_submenu(opcion)
+                    modulo_menu.mostrar_submenu(opcion)
                     subopcion_usuarios = input("Seleccione una opción del submenú de Usuarios: ").strip().lower()
 
                     if subopcion_usuarios == 'a': # Agregar Usuario
@@ -55,27 +55,22 @@ def _main_():
             elif dic_opciones[opcion] == "peliculas y series": #Menu de peliculas/series
                 submenu_activo = True  # Bandera para controlar el bucle del submenú
                 while submenu_activo:
-                    menu.mostrar_submenu(opcion)
+                    modulo_menu.mostrar_submenu(opcion)
                     subopcion_peliculas = input("Seleccione una opción del submenú de Películas/Series: ").strip().lower()
 
                     if subopcion_peliculas == 'a': #Agregar peliculas
                         modulo_peliculas.crear_matriz_peliculas(matriz_peliculas)
-                        print("\nPelícula/Serie agregada con éxito.")
-                        print("\nContenido registrado:")
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'b': #Listar películas/series
-                        print("\nContenido registrado:")
                         modulo_peliculas.listar_matriz_peliculas(matriz_peliculas)
                         
                     elif subopcion_peliculas == 'c': #Actualizar
                         modulo_peliculas.actualizar_matriz_peliculas(matriz_peliculas)
-                        print("\nContenido actualizado:")
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'd': #Eliminar
                         modulo_peliculas.eliminar_matriz_peliculas(matriz_peliculas)
-                        print("\nContenido después de la eliminación:")
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'e': #Mostrar reporte
@@ -90,28 +85,22 @@ def _main_():
             elif dic_opciones[opcion] == "registros vistas": #Menu registro vistas
                 submenu_activo = True  # Bandera para controlar el bucle del submenú
                 while submenu_activo:
-                    menu.mostrar_submenu(opcion)
+                    modulo_menu.mostrar_submenu(opcion)
                     subopcion_registro = input("Seleccione una opción del submenú de Registro: ").strip().lower()
 
                     if subopcion_registro == 'a':  # Agregar Registro de Vistas
                         modulo_registro_vistas.crear_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
-                        print("\nRegistro agregado con éxito.")
-                        print("\nContenido registrado:")
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
                             
                     elif subopcion_registro == 'b':  # Listar Registros de Vista
-                        print("\nContenido registrado:")
                         modulo_registro_vistas.listar_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'c':  # Actualizar Registro de Vista
-                        print("\nActualizar contenido:")
                         modulo_registro_vistas.actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
-                        print("\nContenido actualizado:")
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'd':  # Eliminar Registro de Vista
                         modulo_registro_vistas.eliminar_matriz_registro_vistas(matriz_registro_vistas)
-                        print("\nContenido después de la eliminación:")
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'e': # Generar Reporte
