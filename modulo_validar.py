@@ -60,6 +60,14 @@ def validar_usuario_id(matriz_usuarios, permitir_vacio=False):
 
     return int(usuario_id)  # Convertimos a entero solo después de validar
 
+def validar_id_usuario(id_usuario, dic_parametros):
+    if str(id_usuario).isdigit():
+        matriz_usuarios = dic_parametros["matriz_usuarios"]
+        for fila in matriz_usuarios:
+            if fila[0] == int(id_usuario):
+                return True
+    return False
+
 def obtener_opcion(primera_consulta=True):
     while True:
         if primera_consulta:

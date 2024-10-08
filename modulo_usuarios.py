@@ -36,12 +36,7 @@ def actualizar_matriz_usuarios(matriz_usuarios):
     opcion_seleccionada = modulo_validar.obtener_opcion()
   
     while opcion_seleccionada == 's':
-        id_usuario = input("Ingrese el ID del usuario a actualizar: ").strip()
-        while not id_usuario.isdigit() or not modulo_validar.si_existe_id(int(id_usuario), matriz_usuarios):
-            id_usuario = modulo_validar.manejar_error("ID no válido. Reintentando...", lambda: input("Ingrese un ID válido: "))
-        
-        id_usuario = int(id_usuario)
-
+        id_usuario = int(modulo_input.obtener_id_usuario(matriz_usuarios))
         dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
         opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys()))
         nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_usuario_actualizar[opcion_actualizar]}: ")
@@ -53,15 +48,15 @@ def actualizar_matriz_usuarios(matriz_usuarios):
 def obtener_usuario(id_usuario, matriz_usuarios):
     for fila in matriz_usuarios:
         if fila[0] == id_usuario:
-            return {"Nombre":fila[1], "Apellido": fila[2], "D.N.I": fila[3], "Correo": fila[4]}
+            return {"Nombre":fila[1], "Apellido": fila[2], "D.N.I": fila[3], "Correo": fila[4]} #Diccionario
 
-def actualizar_usuario(id_usuario, matriz_usuarios, usuario_actualizar):
+def actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar):
     for fila in matriz_usuarios:
         if fila[0] == id_usuario:
-            fila[1] = usuario_actualizar["Nombre"]
-            fila[2] = usuario_actualizar["Apellido"]
-            fila[3] = usuario_actualizar["D.N.I"]
-            fila[4] = usuario_actualizar["Correo"]
+            fila[1] = dic_usuario_actualizar["Nombre"]
+            fila[2] = dic_usuario_actualizar["Apellido"]
+            fila[3] = dic_usuario_actualizar["D.N.I"]
+            fila[4] = dic_usuario_actualizar["Correo"]
             return
 
 def eliminar_matriz_usuarios(matriz_usuarios):

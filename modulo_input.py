@@ -8,6 +8,14 @@ def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion):
         else:
             print(mensaje_output)
 
+def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion, parametros):
+    while True:
+        dato = input(mensaje_input).strip(). lower()
+        if funcion_validacion(dato, parametros):
+            return dato
+        else:
+            print(mensaje_output)
+
 def obtener_usuario():
     nuevo_nombre = obtener_dinamico("Ingrese el nombre del usuario: ", "Nombre de usuario no válido. ", modulo_validar.validar_strings)
     nuevo_apellido = obtener_dinamico("Ingrese el apellido del usuario: ", "Apellido de usuario no válido. ", modulo_validar.validar_strings)
@@ -31,4 +39,7 @@ def obtener_registro():
     nuevo_estado = obtener_dinamico("Ingrese el estado (en curso, pendiente, o terminada): ", "Estado no válido. Debe ser 'en curso', 'pendiente' o 'terminada'. Intente nuevamente.", modulo_validar.validar_estado)
     nueva_calificacion = obtener_dinamico("Ingrese la calificación (entero entre 1 y 10): ", "Calificación no válida. Debe ser un número entero entre 1 y 10. Intente nuevamente.", modulo_validar. validar_calificacion) if nuevo_estado.lower() == "terminada" else 0
     return (nuevo_estado, nueva_calificacion) #Uso de tupla
-    
+
+def obtener_id_usuario(matriz_usuarios):
+    id = obtener_dinamico("Ingrese el ID del usuario a actualizar: ", "ID no válido. Reintentando...", modulo_validar.validar_id_usuario, {"matriz_usuarios": matriz_usuarios})
+    return id
