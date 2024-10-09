@@ -59,15 +59,3 @@ def obtener_opcion(primera_consulta=True):
             return respuesta
         else:
             print("Entrada no válida. Por favor, ingrese 's' o 'n'.")
-
-def obtener_titulo_pelicula(contenindo_peliculas, pelicula_id):
-    for pelicula in contenindo_peliculas:
-        if pelicula[0] == pelicula_id:
-            return pelicula[1]  # El título está en la columna 1
-    return None  # No se encontró el ID
-
-def obtener_apellido_usuario(contenido_usuarios, usuario_id):
-    for usuario in contenido_usuarios:
-        if usuario[0] == usuario_id:
-            return usuario[2]  # El apellido está en la columna 2
-    return None  # No se encontró el ID

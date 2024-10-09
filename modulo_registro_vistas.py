@@ -80,10 +80,12 @@ def validar_y_actualizar_registro(opcion_actualizar, dic_registro_actualizar, id
             dic_registro_actualizar["Calificación"] = "0"  # Reinicia la calificación a 0
     
     elif opcion_actualizar== "Usuario ID":
-        dic_registro_actualizar["Apellido"] = modulo_validar.obtener_apellido_usuario( matriz_usuarios,int(nuevo_valor)) # Obtener datos del usuario actualizado
+        apellido = modulo_usuarios.obtener_usuario(int(nuevo_valor), matriz_usuarios)["Apellido"]
+        dic_registro_actualizar["Apellido"]=apellido
 
     elif opcion_actualizar== "Pelicula/Serie ID":
-        dic_registro_actualizar["Titulo"] = modulo_validar.obtener_titulo_pelicula(matriz_peliculas,int(nuevo_valor))
+        titulo = modulo_peliculas.obtener_pelicula(int(nuevo_valor), matriz_peliculas)["Titulo"]
+        dic_registro_actualizar["Titulo"] = titulo
 
     dic_registro_actualizar[opcion_actualizar] = nuevo_valor
     print(f"{nuevo_valor} con ID {id_registro} ha sido actualizado.") 
@@ -117,5 +119,3 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
         for j in range(len(registros_ordenados[i])):
             valor = str(registros_ordenados[i][j]).capitalize() #mayuscula
             print(f"{valor:<20}", end="")
-        print()
-    print()
