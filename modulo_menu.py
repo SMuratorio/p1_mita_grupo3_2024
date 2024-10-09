@@ -31,3 +31,18 @@ def mostrar_submenu(opcion):
         print("d. Eliminar Registro")
         print("e. Generar reporte")
         print("f. Volver al Menú Principal")
+
+def mostrar_submenu_actualizar(opciones):
+    print("Seleccione la opción que desea actualizar: ")
+    for opcion in opciones:
+        id = opciones.index(opcion)+1
+        print(f"({id}) {opcion}")
+    opcion_seleccionada = int(input("Opción: "))
+    for opcion in opciones:
+        id = opciones.index(opcion)+1
+        if id == opcion_seleccionada:
+            return opcion
+
+
+
+    
