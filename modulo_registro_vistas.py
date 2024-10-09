@@ -1,7 +1,7 @@
-import validar
+import modulo_validar
 def crear_contenido_registro_vistas(contenido_registro_vistas, usuario_id,pelicula_id, estado, calificacion, contenido_peliculas, contenido_usuarios):
-    apellido = validar.obtener_apellido_usuario(contenido_usuarios, usuario_id)
-    titulo = validar.obtener_titulo_pelicula(contenido_peliculas, pelicula_id)
+    apellido = modulo_validar.obtener_apellido_usuario(contenido_usuarios, usuario_id)
+    titulo = modulo_validar.obtener_titulo_pelicula(contenido_peliculas, pelicula_id)
     
     item = [usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
     contenido_registro_vistas.append(item)
@@ -40,7 +40,7 @@ def eliminar_contenido_registro_vistas(contenido_regidtro_vistas):
         if eliminar_id_registro.isdigit():
             eliminar_id_registro = int(eliminar_id_registro)
             # Verifica si el ID existe en el contenido
-            if validar.si_existe_id_usuario(eliminar_id_registro, contenido_regidtro_vistas):
+            if modulo_validar.si_existe_id_usuario(eliminar_id_registro, contenido_regidtro_vistas):
                 # Proceder a eliminar el contenido con el ID válido
                 for item in contenido_regidtro_vistas:
                     if item[0] == eliminar_id_registro:

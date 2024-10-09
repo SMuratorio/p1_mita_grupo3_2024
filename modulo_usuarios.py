@@ -1,4 +1,4 @@
-import validar
+import modulo_validar
 
 def crear_contenido_usuarios(contenido_usuarios, proximo_id_usuarios, nombre, apellido, dni, correo):
     item = [proximo_id_usuarios, nombre, apellido, dni, correo]
@@ -40,7 +40,7 @@ def eliminar_contenido_usuarios(contenido_usuarios):
         if eliminar_id_usuarios.isdigit():
             eliminar_id_usuarios = int(eliminar_id_usuarios)
             # Verifica si el ID existe en el contenido
-            if validar.si_existe_id_usuario(eliminar_id_usuarios, contenido_usuarios):
+            if modulo_validar.si_existe_id_usuario(eliminar_id_usuarios, contenido_usuarios):
                 # Proceder a eliminar el contenido con el ID válido
                 for item in contenido_usuarios:
                     if item[0] == eliminar_id_usuarios:
