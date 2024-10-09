@@ -8,23 +8,35 @@ def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion):
         else:
             print(mensaje_output)
 
-def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion, parametros):
+def obtener_unico(mensaje_input, mensaje_error_unico, mensaje_error_validacion, validar_funcion, existentes): #para correos y dnis
     while True:
-        dato = input(mensaje_input).strip(). lower()
-        if funcion_validacion(dato, parametros):
-            return dato
+        nuevo_valor = input(mensaje_input).strip()
+        
+        if nuevo_valor in existentes:
+            print(mensaje_error_unico)
+        elif not validar_funcion(nuevo_valor):
+            print(mensaje_error_validacion)
         else:
-            print(mensaje_output)
+            existentes.add(nuevo_valor)
+            return nuevo_valor
 
-def obtener_usuario():
+def obtener_usuario(dnis_existentes, correos_existentes):
     nuevo_nombre = obtener_dinamico("Ingrese el nombre del usuario: ", "Nombre de usuario no válido. ", modulo_validar.validar_strings)
     nuevo_apellido = obtener_dinamico("Ingrese el apellido del usuario: ", "Apellido de usuario no válido. ", modulo_validar.validar_strings)
-    nuevo_dni = obtener_dinamico("Ingrese el DNI del usuario (con puntos, formato XX.XXX.XXX): ", "El DNI ingresado no es válido. Intente nuevamente.",  modulo_validar.validar_dni)
-    nuevo_mail = obtener_dinamico("Ingrese su correo electrónico: ", "Correo no válido. Intente nuevamente.", modulo_validar.validar_email)
+    nuevo_dni = obtener_unico("Ingrese el DNI del usuario (con puntos, formato XX.XXX.XXX): ", 
+                              "El DNI ingresado ya existe. Por favor, ingrese un DNI único.", 
+                              "El DNI ingresado no es válido. Intente nuevamente.", 
+                               modulo_validar.validar_dni, 
+                               dnis_existentes)
+    nuevo_mail = obtener_unico("Ingrese el correo electrónico: ", 
+                               "El correo ya existe. Por favor, ingrese un correo único.", 
+                               "El correo ingresado no es válido. Intente nuevamente.", 
+                                modulo_validar.validar_email, 
+                                correos_existentes)
     return (nuevo_nombre, nuevo_apellido, nuevo_dni, nuevo_mail) #Uso de tupla
 
 def obtener_pelicula():
-    nuevo_titulo = obtener_dinamico("Ingrese el título de la serie/película: ", "Entrada no válida. Inténtelo de nuevo.", modulo_validar.validar_strings)
+    nuevo_titulo = obtener_dinamico("Ingrese el título de la serie/película: ", "Entrada no válida. Inténtelo de nuevo.", modulo_validar.validar_titulo)
     nuevo_tipo = obtener_dinamico("Ingrese el tipo (serie/película): ", "Entrada no válida. Por favor, ingrese 'serie' o 'película'.", modulo_validar.validar_tipo)
     nuevo_genero = obtener_dinamico("Ingrese el género: ", "Tipo de género no válido. ", modulo_validar.validar_strings)
     nuevo_anio = obtener_dinamico("Ingrese el año de estreno (formato YYYY): ", "Año no válido. Intente nuevamente.", modulo_validar.validar_anio)
@@ -40,6 +52,20 @@ def obtener_registro():
     nueva_calificacion = obtener_dinamico("Ingrese la calificación (entero entre 1 y 10): ", "Calificación no válida. Debe ser un número entero entre 1 y 10. Intente nuevamente.", modulo_validar. validar_calificacion) if nuevo_estado.lower() == "terminada" else 0
     return (nuevo_estado, nueva_calificacion) #Uso de tupla
 
-def obtener_id_usuario(matriz_usuarios):
-    id = obtener_dinamico("Ingrese el ID del usuario a actualizar: ", "ID no válido. Reintentando...", modulo_validar.validar_id_usuario, {"matriz_usuarios": matriz_usuarios})
+def obtener_id_dinamico(mensaje_input, mensaje_output, funcion_validacion, parametros): #para obtener_id
+    while True:
+        dato = input(mensaje_input).strip(). lower()
+        if funcion_validacion(dato, parametros):
+            return dato
+        else:
+            print(mensaje_output)
+
+def obtener_id(matriz, tipo_contenido): #Para actualizar(puede usarse para las tres matrices)
+    id = obtener_id_dinamico(f"Ingrese el ID del {tipo_contenido} a actualizar: ", "ID no válido. Reintentando...", modulo_validar.validar_id_actualizar, {"matriz": matriz})
     return id
+
+def obtener_nuevo_valor(opcion_actualizar, dic_actualizar, validadores): #para actualizar datos de las tres matrices
+    nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_actualizar[opcion_actualizar]}: ")
+    while not validadores[opcion_actualizar](nuevo_valor):
+        nuevo_valor = input(f"Dato no válido o {opcion_actualizar} existente. Ingrese un nuevo {opcion_actualizar}: ")
+    return nuevo_valor

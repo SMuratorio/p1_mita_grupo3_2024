@@ -111,6 +111,5 @@ def imprimir_matriz_usuarios(matriz_usuarios):
         for j in range(len(matriz_usuarios_ordenados[encabezado])): #recorre las columnas de cada usuario
             valor = str(matriz_usuarios_ordenados[encabezado][j]).capitalize() #mayuscula en la 1er letra
             print(f"{valor:<25}", end="") #Imprime cada valor con un ancho de 25 caracteres, alineado a la derecha (:>25)
-        print()
-        
+        print()   
     print()
