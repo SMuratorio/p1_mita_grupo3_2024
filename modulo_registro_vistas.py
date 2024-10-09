@@ -1,4 +1,4 @@
-import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input
+import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input, modulo_varios
 
 def crear_matriz_registro_vistas(contenido_registro_vistas, matriz_usuarios, matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()
@@ -106,16 +106,18 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
     for i in range(len(contenido_registro_vistas)):
         contenido_registro_vistas[i][4] = contenido_registro_vistas[i][4][:8]# Recortar los títulos a un máximo de 8 caracteres
                     
-    registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[2]) # Ordenar la matriz por apellido
+    matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[2]) # Ordenar la matriz por apellido
     encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Calificacion"]
 
-    # Imprimir el encabezado
-    for i in encabezado_registros:
-        print(f"{i:<20}", end="") 
-    print()   
+    ancho_columna=20 
+    modulo_varios.imprimir_linea("superior", len(encabezado_registros), ancho_columna)# Imprimir la línea superior del cuadro
+    
+    print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_registros]) + "|")  # Imprimir el encabezado
+    
+    modulo_varios.imprimir_linea("interior", len(encabezado_registros), ancho_columna)    # Imprimir la línea interior del cuadro
+    
+    for fila in matriz_registros_ordenados:    # Imprimir cada fila de la matriz
+        print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
 
-    # Imprimir cada fila con el nombre de la pelicula/serie
-    for i in range(len(registros_ordenados)):
-        for j in range(len(registros_ordenados[i])):
-            valor = str(registros_ordenados[i][j]).capitalize() #mayuscula
-            print(f"{valor:<20}", end="")
+    modulo_varios.imprimir_linea("inferior", len(encabezado_registros), ancho_columna) # Imprimir la línea inferior del cuadro
+    

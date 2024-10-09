@@ -8,21 +8,21 @@ def mostrar_menu():
 
 def mostrar_submenu(opcion):
     if opcion == '1':
-        print("Usuarios")
+        print("\nUsuarios")
         print("a. Agregar Usuario")
         print("b. Actualizar Usuario")
         print("c. Eliminar Usuario")
         print("d. Generar reporte")
         print("e. Volver al Menú Principal")
     elif opcion == '2':
-        print("Películas/Series")
+        print("\nPelículas/Series")
         print("a. Agregar Película/Serie")
         print("b. Actualizar Película/Serie")
         print("c. Eliminar Película/Serie")
         print("d. Generar reporte")
         print("e. Volver al Menú Principal")
     elif opcion == '3':
-        print("Registros Vistos")
+        print("\nRegistros Vistos")
         print("a. Agregar Registro")
         print("b. Actualizar Registro")
         print("c. Eliminar Registro")
@@ -43,6 +43,3 @@ def mostrar_submenu_actualizar(opciones):
                 print(f"Error: El número debe estar entre 1 y {len(opciones)}.")
         except ValueError:
             print("Error: Debe ingresar un número válido.")
-
-
-    

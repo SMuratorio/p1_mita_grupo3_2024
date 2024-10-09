@@ -1,4 +1,4 @@
-import modulo_validar, modulo_menu, modulo_input
+import modulo_validar, modulo_menu, modulo_varios, modulo_input
 
 def crear_matriz_peliculas(matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()
@@ -99,19 +99,18 @@ def imprimir_matriz_peliculas(contenido_peliculas):
     for pelicula in contenido_peliculas:  # Convertir el año a entero si está en formato de cadena
         pelicula[4] = int(pelicula[4])  # Convertir el año de estreno a entero
                             
-    peliculas_ordenadas = sorted(contenido_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
-    encabezado = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
+    matriz_peliculas_ordenadas = sorted(contenido_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
+    encabezado_pelilculas = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
 
-    # Imprimir el encabezado
-    for i in encabezado:
-        print(f"{i:<20}", end="") 
-    print()   
-
-    # Imprimir cada fila con el nombre de la pelicula/serie
-    for i in range(len(peliculas_ordenadas)):
-        for j in range(len(peliculas_ordenadas[i])):
-            valor = str(peliculas_ordenadas[i][j]).capitalize() #mayuscula
-            print(f"{valor:<20}", end="")
-        print()
-    print()
+    ancho_columna=25 
+    modulo_varios.imprimir_linea("superior", len(encabezado_pelilculas), ancho_columna)# Imprimir la línea superior del cuadro
+    
+    print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_pelilculas]) + "|")  # Imprimir el encabezado
+    
+    modulo_varios.imprimir_linea("interior", len(encabezado_pelilculas), ancho_columna)    # Imprimir la línea interior del cuadro
+    
+    for fila in matriz_peliculas_ordenadas:    # Imprimir cada fila de la matriz
+        print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
+    
+    modulo_varios.imprimir_linea("inferior", len(encabezado_pelilculas), ancho_columna) # Imprimir la línea inferior del cuadro
     

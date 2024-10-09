@@ -4,8 +4,7 @@ def validar_strings(strings): #valida apellido, genero y nombre
     patron = r'^[A-Za-z]{3,}$'
     return re.match(patron, strings) is not None
 
-def validar_titulo(titulo):
-    # Permite letras, números y signos especiales; no hay mínimo de letras
+def validar_titulo(titulo):# Permite letras, números y signos especiales; no hay mínimo de letras
     patron = r'^[A-Za-z0-9\W]*$'  # \W permite todos los caracteres no alfanuméricos
     return re.match(patron, titulo) is not None
 
@@ -17,8 +16,7 @@ def validar_dni(dni):
     patron = r'^\d{2}\.\d{3}\.\d{3}$'  # Expresión regular para el formato XX.XXX.XXX
     return re.match(patron, dni) is not None
 
-def validar_anio(anio):
-    # Expresión regular para validar un año en formato YYYY (de 1900 a 2099)
+def validar_anio(anio): #Expresión regular para validar un año en formato YYYY (de 1900 a 2099)
     patron = r'^(19|20)\d{2}$'
     return re.match(patron, anio) is not None
 
@@ -27,7 +25,6 @@ def validar_tipo(tipo):
     return tipo in opciones_validas
 
 def es_entero_positivo(entrada): #para validar duracion
-    """Función auxiliar para verificar si la entrada es un entero positivo."""
     if entrada.isdigit():
         return int(entrada) > 0
     return False

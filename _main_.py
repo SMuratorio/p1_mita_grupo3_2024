@@ -2,18 +2,34 @@ import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas
 
 def _main_():
     matriz_usuarios = [
-    [1, "Juan", "Pérez","12.345.678", "juan.perez@gmail.com"],
-    [2, "Ana", "García","23.456.789", "ana.garcia@yahoo.com"],
-    [3, "Luis", "Martínez","34.567.890", "luis.martinez@hotmail.com"],
-    [4, "Laura", "López","45.678.901", "laura.lopez@gmail.com"]]
-    matriz_peliculas =[
-    [1, "El Señor de los Anillos","Película", "Fantasía", 2001,"178 minutos"],
-    [2, "Breaking Bad", "Serie",  "Drama", 2008 , "5 temporadas"], 
-    [3, "Matrix", "Película", "Ciencia Ficción", 1999, "136 minutos"],
-    [4, "Stranger Things", "Serie", "Terror", 2016, "4 temporadas"] ]
-    matriz_registro_vistas=[
-    [1, 4, 'López', 1, 'El Señor de los Anillos', 'En curso', 0],
-    [2, 2, 'García', 3, 'Matrix', 'Terminada', 9]]
+    [1, "Juan", "Pérez", "12.345.678", "juan.perez@gmail.com"],
+    [2, "Ana", "García", "23.456.789", "ana.garcia@yahoo.com"],
+    [3, "Luis", "Martínez", "34.567.890", "luis.martinez@hotmail.com"],
+    [4, "Laura", "López", "45.678.901", "laura.lopez@gmail.com"],
+    [5, "Carlos", "Ramírez", "56.789.012", "carlos.ramirez@outlook.com"],
+    [6, "María", "Sánchez", "67.890.123", "maria.sanchez@gmail.com"],
+    [7, "Pedro", "Gómez", "78.901.234", "pedro.gomez@icloud.com"],
+    [8, "Sofía", "Torres", "89.012.345", "sofia.torres@gmail.com"]]
+
+    matriz_peliculas = [
+        [1, "El Señor de los Anillos", "Película", "Fantasía", 2001, "178 minutos"],
+        [2, "Breaking Bad", "Serie", "Drama", 2008, "5 temporadas"],
+        [3, "Matrix", "Película", "Ciencia Ficción", 1999, "136 minutos"],
+        [4, "Stranger Things", "Serie", "Terror", 2016, "4 temporadas"],
+        [5, "Inception", "Película", "Acción", 2010, "148 minutos"],
+        [6, "The Crown", "Serie", "Histórico", 2016, "5 temporadas"],
+        [7, "Interstellar", "Película", "Ciencia Ficción", 2014, "169 minutos"],
+        [8, "La Casa de Papel", "Serie", "Crimen", 2017, "5 temporadas"]]
+
+    matriz_registro_vistas = [
+        [1, 4, 'López', 1, 'El Señor de los Anillos', 'En curso', 0],
+        [2, 2, 'García', 3, 'Matrix', 'Terminada', 9],
+        [3, 5, 'Ramírez', 5, 'Inception', 'En curso', 4],
+        [4, 6, 'Sánchez', 6, 'The Crown', 'Terminada', 10],
+        [5, 1, 'Pérez', 2, 'Breaking Bad', 'Terminada', 10],
+        [6, 3, 'Martínez', 4, 'Stranger Things', 'En curso', 2],
+        [7, 7, 'Gómez', 7, 'Interstellar', 'En curso', 1],
+        [8, 8, 'Torres', 8, 'La Casa de Papel', 'Terminada', 8]]
 
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
     dnis_existentes = {usuario[3] for usuario in matriz_usuarios} # Conjunto para almacenar DNIs existentes
@@ -36,10 +52,12 @@ def _main_():
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
                         
                     elif subopcion_usuarios == 'b':# Actualizar Usuario
+                        modulo_usuarios.imprimir_matriz_usuarios(matriz_usuarios)
                         modulo_usuarios.actualizar_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existentes)
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
 
                     elif subopcion_usuarios == 'c': # Eliminar Usuarios
+                        modulo_usuarios.imprimir_matriz_usuarios(matriz_usuarios)
                         modulo_usuarios.eliminar_matriz_usuarios(matriz_usuarios)
                         modulo_usuarios.leer_matriz_usuarios(matriz_usuarios)
 
@@ -63,10 +81,12 @@ def _main_():
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'b': #Actualizar
+                        modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
                         modulo_peliculas.actualizar_matriz_peliculas(matriz_peliculas)
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'c': #Eliminar
+                        modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
                         modulo_peliculas.eliminar_matriz_peliculas(matriz_peliculas)
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
@@ -90,10 +110,12 @@ def _main_():
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'b':  # Actualizar Registro de Vista
+                        modulo_registro_vistas.imprimir_matriz_registro_vistas(matriz_registro_vistas)
                         modulo_registro_vistas.actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 
                     elif subopcion_registro == 'c':  # Eliminar Registro de Vista
+                        modulo_registro_vistas.imprimir_matriz_registro_vistas(matriz_registro_vistas)
                         modulo_registro_vistas.eliminar_matriz_registro_vistas(matriz_registro_vistas)
                         modulo_registro_vistas.leer_matriz_registro_vistas(matriz_registro_vistas)
 

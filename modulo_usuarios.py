@@ -1,11 +1,11 @@
-import modulo_validar, modulo_menu, modulo_input
+import modulo_validar, modulo_menu, modulo_input, modulo_varios
 
-def crear_matriz_usuarios(matriz_usuarios):
+def crear_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existentes):
     opcion_seleccionada = modulo_validar.obtener_opcion()
 
     while opcion_seleccionada == "s":
         print("\nAgregar usuario:")
-        nombre, apellido, dni, correo = modulo_input.obtener_usuario()
+        nombre, apellido, dni, correo = modulo_input.obtener_usuario(dnis_existentes, correos_existentes)
         proximo_id_usuario = len(matriz_usuarios)+1
 
         print(f"El usuario {nombre} {apellido} con el DNI '{dni}' creado con ID {proximo_id_usuario}.")
@@ -101,15 +101,14 @@ def imprimir_matriz_usuarios(matriz_usuarios):
     matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])# Ordenar la lista por apellido
     encabezado_usuarios = ["ID", "Nombre", "Apellido", "DNI", "Correo"]  # Atributos de cada contenido
 
-    # Imprimir el encabezado
-    for encabezado in encabezado_usuarios: #recorre cada uno de los elementos de la lista 
-        print(f"{encabezado:<25}", end="") #mprime i con un mínimo de 25 espacios y alinéalo a la derecha
-    print()   
-
-    # Imprimir cada fila 
-    for encabezado in range(len_matriz_usuarios): #devuelve el número de filas
-        for j in range(len(matriz_usuarios_ordenados[encabezado])): #recorre las columnas de cada usuario
-            valor = str(matriz_usuarios_ordenados[encabezado][j]).capitalize() #mayuscula en la 1er letra
-            print(f"{valor:<25}", end="") #Imprime cada valor con un ancho de 25 caracteres, alineado a la derecha (:>25)
-        print()   
-    print()
+    ancho_columna=30  
+    modulo_varios.imprimir_linea("superior", len(encabezado_usuarios), ancho_columna)# Imprimir la línea superior del cuadro
+    
+    print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_usuarios]) + "|")  # Imprimir el encabezado
+    
+    modulo_varios.imprimir_linea("interior", len(encabezado_usuarios), ancho_columna)    # Imprimir la línea interior del cuadro
+    
+    for fila in matriz_usuarios_ordenados:    # Imprimir cada fila de la matriz
+        print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
+    
+    modulo_varios.imprimir_linea("inferior", len(encabezado_usuarios), ancho_columna) # Imprimir la línea inferior del cuadro

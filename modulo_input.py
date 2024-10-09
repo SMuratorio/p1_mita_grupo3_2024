@@ -52,7 +52,7 @@ def obtener_registro():
     nueva_calificacion = obtener_dinamico("Ingrese la calificación (entero entre 1 y 10): ", "Calificación no válida. Debe ser un número entero entre 1 y 10. Intente nuevamente.", modulo_validar. validar_calificacion) if nuevo_estado.lower() == "terminada" else 0
     return (nuevo_estado, nueva_calificacion) #Uso de tupla
 
-def obtener_id_dinamico(mensaje_input, mensaje_output, funcion_validacion, parametros): #para obtener_id
+def obtener_id_dinamico(mensaje_input, mensaje_output, funcion_validacion, parametros): #para obtener_id ya sea para actualizar o eliminar
     while True:
         dato = input(mensaje_input).strip(). lower()
         if funcion_validacion(dato, parametros):
@@ -60,7 +60,7 @@ def obtener_id_dinamico(mensaje_input, mensaje_output, funcion_validacion, param
         else:
             print(mensaje_output)
 
-def obtener_id(matriz, tipo_contenido): #Para actualizar(puede usarse para las tres matrices)
+def obtener_id(matriz, tipo_contenido): #Para actualizar o eliminar un determinado ID
     id = obtener_id_dinamico(f"Ingrese el ID del {tipo_contenido} a actualizar: ", "ID no válido. Reintentando...", modulo_validar.validar_id_actualizar, {"matriz": matriz})
     return id
 
