@@ -24,12 +24,13 @@ def _main_():
     matriz_registro_vistas = [
         [1, 4, 'López', 1, 'El Señor de los Anillos', 'En curso', 0],
         [2, 2, 'García', 3, 'Matrix', 'Terminada', 9],
-        [3, 5, 'Ramírez', 5, 'Inception', 'En curso', 4],
+        [3, 5, 'Ramírez', 5, 'Inception', 'Pendiente', 0],
         [4, 6, 'Sánchez', 6, 'The Crown', 'Terminada', 10],
         [5, 1, 'Pérez', 2, 'Breaking Bad', 'Terminada', 10],
-        [6, 3, 'Martínez', 4, 'Stranger Things', 'En curso', 2],
-        [7, 7, 'Gómez', 7, 'Interstellar', 'En curso', 1],
+        [6, 3, 'Martínez', 4, 'Stranger Things', 'En curso', 0],
+        [7, 7, 'Gómez', 7, 'Interstellar', 'Pendiente', 0],
         [8, 8, 'Torres', 8, 'La Casa de Papel', 'Terminada', 8]]
+
 
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
     dnis_existentes = {usuario[3] for usuario in matriz_usuarios} # Conjunto para almacenar DNIs existentes

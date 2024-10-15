@@ -47,12 +47,15 @@ def validar_id_actualizar(id, dic_parametros):
 
 def obtener_opcion(primera_consulta=True):
     while True:
-        if primera_consulta:
-            respuesta = "s"
-        else:
-            respuesta = input("\n¿Desea continuar? (s/n): ").strip().lower()
-        
-        if respuesta in ['s', 'n']:
+        try:
+            if primera_consulta:
+                respuesta = "s"
+            else:
+                respuesta = input("\n¿Desea continuar? (s/n): ").strip().lower()
+            
+            if respuesta not in ['s', 'n']:
+                raise ValueError("Entrada no válida. Por favor, ingrese 's' o 'n'.")
+            
             return respuesta
-        else:
-            print("Entrada no válida. Por favor, ingrese 's' o 'n'.")
+        except ValueError as e:
+            print(e)
