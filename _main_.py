@@ -1,4 +1,4 @@
-import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas
+import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis
 
 def _main_():
     matriz_usuarios = [
@@ -12,7 +12,7 @@ def _main_():
     [8, "Sofía", "Torres", "89.012.345", "sofia.torres@gmail.com"]]
 
     matriz_peliculas = [
-        [1, "El Señor de los Anillos", "Película", "Fantasía", 2001, "178 minutos"],
+        [1, "El Señor de Los Anillos", "Película", "Fantasía", 2001, "178 minutos"],
         [2, "Breaking Bad", "Serie", "Drama", 2008, "5 temporadas"],
         [3, "Matrix", "Película", "Ciencia Ficción", 1999, "136 minutos"],
         [4, "Stranger Things", "Serie", "Terror", 2016, "4 temporadas"],
@@ -31,10 +31,10 @@ def _main_():
         [7, 7, 'Gómez', 7, 'Interstellar', 'Pendiente', 0],
         [8, 8, 'Torres', 8, 'La Casa de Papel', 'Terminada', 8]]
 
-
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
     dnis_existentes = {usuario[3] for usuario in matriz_usuarios} # Conjunto para almacenar DNIs existentes
     correos_existentes={usuario[4] for usuario in matriz_usuarios} #conjunto de correo
+    titulos_existentes={titulo[1] for titulo in matriz_peliculas}
 
     salir=True
     while salir:
@@ -78,12 +78,12 @@ def _main_():
                     subopcion_peliculas = input("Seleccione una opción del submenú de Películas/Series: ").strip().lower()
 
                     if subopcion_peliculas == 'a': #Agregar peliculas
-                        modulo_peliculas.crear_matriz_peliculas(matriz_peliculas)
+                        modulo_peliculas.crear_matriz_peliculas(matriz_peliculas, titulos_existentes)
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'b': #Actualizar
                         modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
-                        modulo_peliculas.actualizar_matriz_peliculas(matriz_peliculas)
+                        modulo_peliculas.actualizar_matriz_peliculas(matriz_peliculas, titulos_existentes)
                         modulo_peliculas.leer_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == 'c': #Eliminar
@@ -93,8 +93,11 @@ def _main_():
 
                     elif subopcion_peliculas == 'd': #Mostrar reporte
                         modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
+
+                    elif subopcion_peliculas == "e":
+                        modulo_sinopsis.leer_sinopsis("sinopsis.txt", matriz_peliculas)
                     
-                    elif subopcion_peliculas == 'e': #Volver al menú principal
+                    elif subopcion_peliculas == 'f': #Volver al menú principal
                         submenu_activo = False  #Bandera para salir del bucle del submenú
 
                     else:

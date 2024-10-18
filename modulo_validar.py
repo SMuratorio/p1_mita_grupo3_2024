@@ -5,7 +5,7 @@ def validar_strings(strings): #valida apellido, genero y nombre
     return re.match(patron, strings) is not None
 
 def validar_titulo(titulo):# Permite letras, números y signos especiales; no hay mínimo de letras
-    patron = r'^[A-Za-z0-9\W]*$'  # \W permite todos los caracteres no alfanuméricos
+    patron = r'^[A-Za-z0-9\W]{1,}$'  # \W permite todos los caracteres no alfanuméricos
     return re.match(patron, titulo) is not None
 
 def validar_email(mail):

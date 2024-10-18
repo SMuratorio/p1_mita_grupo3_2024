@@ -107,9 +107,9 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
         contenido_registro_vistas[i][4] = contenido_registro_vistas[i][4][:8]# Recortar los títulos a un máximo de 8 caracteres
                     
     matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[2]) # Ordenar la matriz por apellido
-    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID P/S", "Titulo", "Estado", "Calificacion"]
+    encabezado_registros = ["ID registro","ID usuario", "Apellido", "ID Pelicula/Serie", "Titulo", "Estado", "Calificacion"]
 
-    ancho_columna=20 
+    ancho_columna=20
     modulo_varios.imprimir_linea("superior", len(encabezado_registros), ancho_columna)# Imprimir la línea superior del cuadro
     
     print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_registros]) + "|")  # Imprimir el encabezado
@@ -118,6 +118,7 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
     
     for fila in matriz_registros_ordenados:    # Imprimir cada fila de la matriz
         print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
-
+    
     modulo_varios.imprimir_linea("inferior", len(encabezado_registros), ancho_columna) # Imprimir la línea inferior del cuadro
+
     
