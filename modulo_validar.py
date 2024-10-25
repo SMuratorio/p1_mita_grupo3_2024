@@ -1,6 +1,6 @@
-import re
+import re, modulo_genero
 
-def validar_strings(strings): #valida apellido, genero y nombre   
+def validar_strings(strings): #valida apellido y nombre   
     patron = r'^[A-Za-z]{3,}$'
     return re.match(patron, strings) is not None
 
@@ -59,3 +59,7 @@ def obtener_opcion(primera_consulta=True):
             return respuesta
         except ValueError as e:
             print(e)
+
+def validar_genero(genero):
+    """Valida que el género no esté vacío y que no exista ya en el diccionario."""
+    return len(genero) > 3 and genero not in modulo_genero.dic_genero.values()  and genero.isalpha()

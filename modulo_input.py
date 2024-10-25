@@ -1,4 +1,4 @@
-import modulo_validar, modulo_varios
+import modulo_validar, modulo_varios, modulo_genero
 
 def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion, capitalizar=True):
     while True:
@@ -39,7 +39,7 @@ def obtener_pelicula(titulos_existentes):
                                  "El titulo ingresado no es válido. Intente nuevamente.", modulo_validar.validar_titulo, titulos_existentes, es_pelicula_serie=True)
     nuevo_tipo = obtener_dinamico("Ingrese el tipo (serie/película): ", "Entrada no válida. Por favor, ingrese 'serie' o 'película'.", 
                                   modulo_validar.validar_tipo, capitalizar=False)
-    nuevo_genero = obtener_dinamico("Ingrese el género: ", "Tipo de género no válido. ", modulo_validar.validar_strings)
+    nuevo_genero =modulo_genero.seleccionar_genero(modulo_genero.dic_genero, "Seleccione un género", modulo_validar.validar_genero)
     nuevo_anio = obtener_dinamico("Ingrese el año de estreno (formato YYYY): ", "Año no válido. Intente nuevamente.", modulo_validar.validar_anio)
     nueva_duracion = None
     if nuevo_tipo in ['película', 'pelicula']: 

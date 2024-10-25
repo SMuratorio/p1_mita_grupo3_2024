@@ -120,5 +120,3 @@ def imprimir_matriz_registro_vistas(contenido_registro_vistas):
         print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
     
     modulo_varios.imprimir_linea("inferior", len(encabezado_registros), ancho_columna) # Imprimir la línea inferior del cuadro
-
-    

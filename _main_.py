@@ -14,11 +14,11 @@ def _main_():
     matriz_peliculas = [
         [1, "El Señor de Los Anillos", "Película", "Fantasía", 2001, "178 minutos"],
         [2, "Breaking Bad", "Serie", "Drama", 2008, "5 temporadas"],
-        [3, "Matrix", "Película", "Ciencia Ficción", 1999, "136 minutos"],
+        [3, "Matrix", "Película", "Ciencia ficción", 1999, "136 minutos"],
         [4, "Stranger Things", "Serie", "Terror", 2016, "4 temporadas"],
         [5, "Inception", "Película", "Acción", 2010, "148 minutos"],
         [6, "The Crown", "Serie", "Histórico", 2016, "5 temporadas"],
-        [7, "Interstellar", "Película", "Ciencia Ficción", 2014, "169 minutos"],
+        [7, "Interstellar", "Película", "Ciencia ficción", 2014, "169 minutos"],
         [8, "La Casa de Papel", "Serie", "Crimen", 2017, "5 temporadas"]]
 
     matriz_registro_vistas = [
@@ -95,7 +95,7 @@ def _main_():
                         modulo_peliculas.imprimir_matriz_peliculas(matriz_peliculas)
 
                     elif subopcion_peliculas == "e":
-                        modulo_sinopsis.leer_sinopsis("sinopsis.txt", matriz_peliculas)
+                        modulo_menu.submenu_sinopsis("sinopsis.txt", matriz_peliculas)
                     
                     elif subopcion_peliculas == 'f': #Volver al menú principal
                         submenu_activo = False  #Bandera para salir del bucle del submenú

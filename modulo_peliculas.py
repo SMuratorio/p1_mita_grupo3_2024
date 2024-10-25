@@ -1,12 +1,15 @@
-import modulo_validar, modulo_menu, modulo_varios, modulo_input
+import modulo_validar, modulo_menu, modulo_varios, modulo_input, modulo_genero, modulo_sinopsis
 
 def crear_matriz_peliculas(matriz_peliculas, titulos_existentes):
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
         proximo_id_peliculas = len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
-        #titulo, tipo, genero, anio, duracion = modulo_input.obtener_pelicula(matriz_peliculas)
         titulo, tipo, genero, anio, duracion = modulo_input.obtener_pelicula(titulos_existentes)
+
+        sinopsis_formateada=modulo_sinopsis.formatear_sinopsis(titulo)  # Obtener sinopsis formateada
+        modulo_sinopsis.guardar_sinopsis_en_archivo(sinopsis_formateada)
+
         print(f"La {tipo} '{titulo}' creada con ID {proximo_id_peliculas}.")
 
         fila = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
@@ -60,11 +63,19 @@ def actualizar_pelicula(id_pelicula, matriz_peliculas, pelicula_actualizar):
 def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id_pelicula, titulos_existentes):
     validadores = {"Titulo": lambda titulo: modulo_validar.validar_titulo(titulo) and modulo_varios.capitalizar_titulo(titulo) not in titulos_existentes, 
                    "Tipo": modulo_validar.validar_tipo,
-                   "Genero": modulo_validar.validar_strings,
+                   "Genero": lambda genero: True,
                    "Año": modulo_validar.validar_anio}
 
-    titulo_actual = dic_pelicula_actualizar.get("Titulo")
-    nuevo_valor = modulo_input.obtener_nuevo_valor(opcion_actualizar, dic_pelicula_actualizar, validadores).capitalize()
+    titulo_actual = dic_pelicula_actualizar.get("Titulo")  
+    valor_actual = dic_pelicula_actualizar.get(opcion_actualizar)   
+    
+    if opcion_actualizar == "Genero":
+        print(f"Va a actualizar el campo 'Genero' cuyo valor actual es: '{valor_actual}'.")
+        genero_seleccionado = modulo_genero.seleccionar_genero(modulo_genero.dic_genero,"Seleccione un género por número: ","Género no válido.",
+                                                                         modulo_validar.validar_strings, modulo_genero.leer_generos, modulo_genero.agregar_genero)
+        nuevo_valor = genero_seleccionado
+    else:
+        nuevo_valor = modulo_input.obtener_nuevo_valor(opcion_actualizar, dic_pelicula_actualizar, validadores).capitalize()
 
     if opcion_actualizar == "Tipo":  # Se verifica si se está actualizando el tipo
         if nuevo_valor in ["película", "pelicula"]:
@@ -78,7 +89,7 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
     
     if opcion_actualizar == "Titulo":
         titulos_existentes.discard(titulo_actual);titulos_existentes.add(nuevo_valor)
-
+    
     dic_pelicula_actualizar[opcion_actualizar] = nuevo_valor #diccionario que almacena la información de un usuario.
     print(f"{nuevo_valor} con ID {id_pelicula} ha sido actualizado.") #Movi el print aca
     return dic_pelicula_actualizar

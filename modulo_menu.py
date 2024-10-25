@@ -1,3 +1,5 @@
+import modulo_sinopsis, modulo_validar
+
 def mostrar_menu():
     print("\nAplicación de Seguimiento de Películas y Series Vistas")
     print("Menú Principal")
@@ -20,7 +22,7 @@ def mostrar_submenu(opcion):
         print("b. Actualizar Película/Serie")
         print("c. Eliminar Película/Serie")
         print("d. Generar reporte")
-        print("e. Leer sinopsis")
+        print("e. Manejar sinopsis")
         print("f. Volver al Menú Principal")
     elif opcion == '3':
         print("\nRegistros Vistos")
@@ -44,4 +46,25 @@ def mostrar_submenu_actualizar(opciones):
                 print(f"Error: El número debe estar entre 1 y {len(opciones)}.")
         except ValueError:
             print("Error: Debe ingresar un número válido.")
+
+def submenu_sinopsis(archivo, matriz_peliculas):
+    opcion_seleccionada = modulo_validar.obtener_opcion()
+    while opcion_seleccionada == "s":
+        print("Opciones de Sinopsis")
+        print("1. Leer Sinopsis")
+        print("2. Actualizar Sinopsis")
+        print("0. Regresar al menu principal")
+            
+        opcion_sub = input("Seleccione una opción: ").strip()
+        if opcion_sub == '1':
+            modulo_sinopsis.leer_sinopsis(archivo, matriz_peliculas)
+            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)  # Llamar a la función para leer sinopsis
+        elif opcion_sub == '2':
+            modulo_sinopsis.actualizar_sinopsis(archivo, matriz_peliculas) 
+            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False) # Llamar a la función para actualizar sinopsis
+        elif opcion_sub == '0':
+            print("Regresando al menú principal.")
+            opcion_seleccionada="n"
+        else:
+            print("Opción no válida. Intente nuevamente.")
             
