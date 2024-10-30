@@ -35,6 +35,7 @@ def _main_():
     dnis_existentes = {usuario[3] for usuario in matriz_usuarios} # Conjunto para almacenar DNIs existentes
     correos_existentes={usuario[4] for usuario in matriz_usuarios} #conjunto de correo
     titulos_existentes={titulo[1] for titulo in matriz_peliculas}
+    modulo_sinopsis.eliminar_sinopsis_no_existentes("sinopsis.txt", matriz_peliculas)
 
     salir=True
     while salir:
@@ -134,6 +135,7 @@ def _main_():
             
             elif opcion == '4':  # Salir del programa
                 print("\nSaliendo del programa")
+                #modulo_sinopsis.eliminar_sinopsis_no_existentes("sinopsis.txt", matriz_peliculas)
                 salir=False
         else:
             print("\nOpción inválida. Intente nuevamenete")

@@ -64,7 +64,6 @@ def formatear_sinopsis(titulo, max_longitud=80):
     sinopsis_formateada = f"{titulo}\n" + "\n".join(lineas) + "\n"
     return sinopsis_formateada
 
-
 def actualizar_sinopsis(archivo, matriz_peliculas):
     try:
         titulo, id_pelicula = leer_sinopsis(archivo, matriz_peliculas)
@@ -95,3 +94,4 @@ def escribir_lineas_actualizadas(file, lineas, titulo, nueva_sinopsis_formateada
         else:
             file.write(lineas[i])  # Escribir las demás líneas
             i += 1
+            

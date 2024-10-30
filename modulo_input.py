@@ -71,3 +71,4 @@ def obtener_nuevo_valor(opcion_actualizar, dic_actualizar, validadores): #para a
         nuevo_valor = input(f"Dato no válido o {opcion_actualizar} existente. Ingrese un nuevo {opcion_actualizar}: ")
     return nuevo_valor
     
+    

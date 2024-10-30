@@ -67,4 +67,3 @@ def guardar_generos_en_json(dic_genero, archivo_definiciones, archivo_json):#Gen
     
     with open(archivo_json, "w", encoding="UTF-8") as archivo:
         json.dump(resultado, archivo, ensure_ascii=False, indent=4)
-        
