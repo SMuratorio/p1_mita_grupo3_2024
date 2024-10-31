@@ -1,4 +1,4 @@
-import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis, modulo_calificaciones
+import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis
 
 def _main_():
     matriz_usuarios = [
@@ -138,7 +138,6 @@ def _main_():
             
             elif opcion == '4':  # Salir del programa
                 print("\nSaliendo del programa")
-                #modulo_sinopsis.eliminar_sinopsis_no_existentes("sinopsis.txt", matriz_peliculas)
                 salir=False
         else:
             print("\nOpción inválida. Intente nuevamenete")
