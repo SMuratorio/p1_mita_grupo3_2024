@@ -9,7 +9,7 @@ def validar_titulo(titulo):# Permite letras, números y signos especiales; no ha
     return re.match(patron, titulo) is not None
 
 def validar_email(mail):
-    patron = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+$'
     return re.match(patron, mail) is not None
 
 def validar_dni(dni):
