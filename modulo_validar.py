@@ -62,4 +62,4 @@ def obtener_opcion(primera_consulta=True):
 
 def validar_genero(genero):
     """Valida que el género no esté vacío y que no exista ya en el diccionario."""
-    return len(genero) > 3 and genero not in modulo_genero.dic_genero.values()  and genero.isalpha()
+    return len(genero) > 3 and genero not in modulo_genero.dic_genero and genero.isalpha()

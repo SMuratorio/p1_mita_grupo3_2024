@@ -1,4 +1,4 @@
-import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis
+import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis, modulo_calificaciones
 
 def _main_():
     matriz_usuarios = [
@@ -99,6 +99,9 @@ def _main_():
                         modulo_menu.submenu_sinopsis("sinopsis.txt", matriz_peliculas)
                     
                     elif subopcion_peliculas == 'f': #Volver al menú principal
+                        modulo_menu.submenu_calificaciones(matriz_peliculas, matriz_registro_vistas)
+                        
+                    elif subopcion_peliculas=="g":
                         submenu_activo = False  #Bandera para salir del bucle del submenú
 
                     else:

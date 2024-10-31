@@ -23,7 +23,9 @@ def leer_sinopsis(archivo, matriz_peliculas):
             print(f"Sinopsis de '{titulo}':\n\n{sinopsis}")
         else:
             print(f"No se encontró la sinopsis para '{titulo}' en el archivo.")
-            
+            #agregar_sinopsis_si_no_existe(archivo, matriz_peliculas)
+            sinopsis_formateada=formatear_sinopsis(titulo)
+            guardar_sinopsis_en_archivo(sinopsis_formateada)
     except FileNotFoundError:
         print("El archivo de sinopsis no existe.")
     except OSError:
@@ -94,4 +96,57 @@ def escribir_lineas_actualizadas(file, lineas, titulo, nueva_sinopsis_formateada
         else:
             file.write(lineas[i])  # Escribir las demás líneas
             i += 1
-            
+
+def eliminar_sinopsis(archivo, matriz_peliculas):
+    try:
+        titulo, id_pelicula = leer_sinopsis(archivo, matriz_peliculas)
+        # Leer el archivo actual y almacenar las líneas que no se eliminarán
+        lineas_filtradas = []
+        with open(archivo, "r", encoding="utf-8") as file:
+            linea = file.readline()
+            while linea:
+                if linea.strip() == titulo: # Si encontramos el título, saltamos todas las líneas de la sinopsis
+                    while linea.strip() != "": # Avanzar hasta la siguiente sinopsis
+                        linea = file.readline()
+                    # Continuar para leer las siguientes sinopsis (ya saltamos la actual)
+                else:# Guardamos la línea si no es la sinopsis que queremos eliminar
+                    lineas_filtradas.append(linea)
+                    linea = file.readline()
+
+        with open(archivo, "w", encoding="utf-8") as file:# Reescribir el archivo solo con las sinopsis restantes
+            file.writelines(lineas_filtradas)
+            print(f"\nLa sinopsis de '{titulo}' ha sido eliminada del archivo.")
+    except FileNotFoundError:
+        print("El archivo de sinopsis no existe.")
+    except KeyError:
+        print("El título ingresado no existe en la matriz de películas.")
+    except Exception as e:
+        print(f"Error al eliminar la sinopsis: {e}")
+
+def eliminar_sinopsis_no_existentes(archivo, matriz_peliculas): #para que se reinicie cuando arranca el programa nuevamente
+    try:
+        titulos_existentes = {pelicula[1] for pelicula in matriz_peliculas}
+        lineas_filtradas = []
+
+        with open(archivo, "r", encoding="utf-8") as file:
+            linea = file.readline()  # Leer la primera línea
+            while linea:  # Continuar mientras haya líneas por leer
+                if linea.strip() in titulos_existentes:  # Agregar el título existente
+                    lineas_filtradas.append(linea)  # Agregar el título
+                    linea = file.readline()  # Leer la siguiente línea
+
+                    while linea.strip() != "":  # Agregar las líneas de la sinopsis hasta encontrar una línea vacía
+                        lineas_filtradas.append(linea)
+                        linea = file.readline()  # Leer la siguiente línea
+
+                    lineas_filtradas.append("\n")  # Agregar una línea vacía para separar sinopsis
+                else:
+                    while linea.strip() != "":  # Si no es un título existente, avanzar hasta la siguiente línea vacía
+                        linea = file.readline()  # Leer la siguiente línea
+
+                linea = file.readline()  # Leer la siguiente línea para el siguiente ciclo
+
+        with open(archivo, "w", encoding="utf-8") as file:  # Sobrescribir el archivo con las sinopsis filtradas
+            file.writelines(lineas_filtradas)
+    except Exception as e:
+        print(f"Error al actualizar el archivo de sinopsis: {e}")

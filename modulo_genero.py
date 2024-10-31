@@ -1,69 +1,117 @@
-import json, modulo_validar
+import json, modulo_validar, modulo_menu
 
-dic_genero={
-     0: "Otro",
-     1:"Fantasía", 
-     2:"Drama",
-     3:"Ciencia ficción",
-     4: "Terror",
-     5: "Acción",
-     6: "Histórico",
-     7: "Crimen"}
+dic_genero = {
+    0: "Otro",
+    1: "Fantasía", 
+    2: "Drama",
+    3: "Ciencia ficción",
+    4: "Terror",
+    5: "Acción",
+    6: "Histórico",
+    7: "Crimen"}
 
-def imprimir_generos_con_definicion(dic_genero):
-    definiciones = leer_definiciones("genero.txt")  # Leer las definiciones desde el archivo
-    print("\nLista de géneros disponibles con definiciones:")
-    for clave, genero in dic_genero.items():
-        definicion = definiciones.get(genero, "Definición no disponible")
-        print(f"{clave}: {genero} - {definicion}")
+archivo_json = 'definiciones_generos.json'
 
-def leer_definiciones(arch):
-    with open(arch, "r", encoding="UTF-8") as file:
-        return {clave.strip(): valor.strip() for linea in file if ':' in linea for clave, valor in [linea.split(':', 1)]}
-    
-def seleccionar_genero(dic, mensaje_input, funcion_validacion):
-    while True:
-        imprimir_generos_con_definicion(dic)  # Mostrar los géneros actuales
-        try:
-            opcion = int(input(f"{mensaje_input} (Ingrese 0 para agregar un nuevo género): ").strip()) 
-            if opcion == 0: 
-                nuevo_genero = input("Ingrese el nuevo género: ").strip().capitalize()
-                while not nuevo_genero:  # Validar que el nuevo género no esté vacío
-                    nuevo_genero=input("El género no puede estar vacío. Por favor, ingrese un género válido: ").strip().capitalize()
-                
-                agregar_genero(dic, nuevo_genero)  # Agregar el nuevo género al diccionario
+def cargar_json():
+    """Carga el archivo JSON y maneja errores."""
+    try:
+        with open(archivo_json, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except FileNotFoundError:
+        print("El archivo JSON no fue encontrado. Se utilizará un diccionario vacío.")
+        return {}
+    except json.JSONDecodeError:
+        print("Error al decodificar el archivo JSON. Se utilizará un diccionario vacío.")
+        return {}
 
-            elif opcion in dic:
-                return dic[opcion]  # Retorna el género si la opción existe en el diccionario
+def guardar_json(data):
+    """Guarda el diccionario en un archivo JSON."""
+    try:
+        with open(archivo_json, 'w', encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+    except OSError:
+        print("Error al guardar el archivo JSON.")
+
+def seleccionar_genero():
+    opcion=modulo_validar.obtener_opcion()
+    while opcion=='s':
+        json_data = cargar_json()  # Cargar descripciones desde JSON
+        print("Seleccione un género:")
+        for clave, genero in dic_genero.items():
+            descripcion = json_data.get(genero, "Descripción no disponible.")  # Obtener la descripción
+            print(f"{clave}: {genero} - {descripcion}")  # Mostrar género con descripción
+
+        seleccion = input("Ingrese el número del género: ")
+
+        if seleccion.isdigit():
+            seleccion = int(seleccion)
+            if seleccion == 0:
+                modulo_menu.submenu_genero()
+            elif seleccion in dic_genero:
+                opcion='n'
             else:
-                print(f"No existe un género con el número {opcion}. Por favor, ingrese un número válido.")
-        except ValueError:
-            print("Por favor, ingrese un número válido.")
+                print("Selección no válida. Intente de nuevo.")
+        else:
+            print("Entrada no válida. Debe ser un número.")
+    return genero
+    
+def agregar_genero(dic):
+    nuevo_genero = input("Ingrese el nuevo género: ").strip().capitalize()
+    
+    if modulo_validar.validar_genero(nuevo_genero):
+        nueva_clave = max(dic.keys()) + 1
+        dic[nueva_clave] = nuevo_genero
+        
+        definicion = ""
+        while not definicion:
+            definicion = input("Ingrese la definición del nuevo género: ").strip().capitalize()
+            if not definicion:
+                print("La definición no puede estar vacía. Por favor, ingrese una definición válida.")
 
-def agregar_genero(dic, nuevo_genero): #Agrega un nuevo género al diccionario con una nueva clave, validando el género ingresado.
-    if modulo_validar.validar_genero(nuevo_genero):  # Validar el nuevo género
-        nueva_clave = max(dic.keys()) + 1  # Obtener la nueva clave incrementando la más alta
-        dic[nueva_clave] = nuevo_genero  # Agregar el nuevo género al diccionario
-        nueva_definicion = obtener_definicion()
-        
-        with open("genero.txt", "a", encoding="UTF-8") as archivo:
-            archivo.write(f"{nuevo_genero}: {nueva_definicion}\n")
-        
+        definiciones = cargar_json()
+        definiciones[nuevo_genero] = definicion
+        guardar_json(definiciones)
         print(f"Género '{nuevo_genero}' agregado con clave {nueva_clave}.")
-        guardar_generos_en_json(dic_genero, "genero.txt", "definiciones_generos.json")
     else:
         print("El género ingresado no es válido.")
 
-def obtener_definicion(): #Solicita y valida la definición del nuevo género.
-    while True:
-        definicion = input("Ingrese la definición del nuevo género: ").strip().capitalize()
-        if definicion:
-            return definicion
-        print("La definición no puede estar vacía. Por favor, ingrese una definición válida.")
+def actualizar_genero():
+    genero = input("Ingrese el nombre del género a actualizar: ").capitalize()
+   
+    if genero in dic_genero.values():
+        claves_a_actualizar = [k for k, v in dic_genero.items() if v == genero]
+        if claves_a_actualizar:
+            clave_a_actualizar = claves_a_actualizar[0]  # Obtener la primera clave
 
-def guardar_generos_en_json(dic_genero, archivo_definiciones, archivo_json):#Genera un archivo JSON con los géneros y sus definiciones.
-    definiciones = leer_definiciones(archivo_definiciones)
-    resultado = {genero: definiciones.get(genero) for genero in dic_genero.values()}
+            nueva_descripcion = input("Ingrese la nueva definición: ").capitalize()
+
+            definiciones = cargar_json()
+            definiciones[genero] = nueva_descripcion
+            guardar_json(definiciones)
+            print(f"Género '{genero}' actualizado.")
+    else:
+        print(f"Género '{genero}' no encontrado en el diccionario.")
+
+def leer_genero(genero):
+    json_data = cargar_json()
+    print(f"{genero}: {json_data.get(genero, 'Género no encontrado.')}")
+
+def eliminar_genero():
+    genero = input("Ingrese el nombre del género a eliminar: ").capitalize()
     
-    with open(archivo_json, "w", encoding="UTF-8") as archivo:
-        json.dump(resultado, archivo, ensure_ascii=False, indent=4)
+    if genero in dic_genero.values():
+        for clave, valor in dic_genero.items(): # Encontrar la clave del género a eliminar
+            if valor == genero:
+                dic_genero.pop(clave)  # Elimina del diccionario
+                
+                json_data = cargar_json() # Cargar las definiciones desde el archivo JSON
+                
+                if genero in json_data:
+                    json_data.pop(genero)  # Elimina directamente la entrada del JSON
+                    guardar_json(json_data)  # Guarda los cambios en el archivo JSON
+                    print(f"Género '{genero}' eliminado.")
+                else:
+                    print(f"Género '{genero}' no encontrado en el archivo JSON.")
+                return  # Salir de la función después de eliminar
+    else:
+        print(f"Género '{genero}' no existe en el diccionario.")

@@ -1,4 +1,4 @@
-import modulo_sinopsis, modulo_validar
+import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero
 
 def mostrar_menu():
     print("\nAplicación de Seguimiento de Películas y Series Vistas")
@@ -23,7 +23,8 @@ def mostrar_submenu(opcion):
         print("c. Eliminar Película/Serie")
         print("d. Generar reporte")
         print("e. Manejar sinopsis")
-        print("f. Volver al Menú Principal")
+        print("f. Promedios de calificaciones")
+        print("g. Volver al Menú Principal")
     elif opcion == '3':
         print("\nRegistros Vistos")
         print("a. Agregar Registro")
@@ -50,9 +51,10 @@ def mostrar_submenu_actualizar(opciones):
 def submenu_sinopsis(archivo, matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
-        print("Opciones de Sinopsis")
+        print("\nOpciones de Sinopsis")
         print("1. Leer Sinopsis")
         print("2. Actualizar Sinopsis")
+        print("3. Eliminar sinopsis")
         print("0. Regresar al menu principal")
             
         opcion_sub = input("Seleccione una opción: ").strip()
@@ -62,8 +64,55 @@ def submenu_sinopsis(archivo, matriz_peliculas):
         elif opcion_sub == '2':
             modulo_sinopsis.actualizar_sinopsis(archivo, matriz_peliculas) 
             opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False) # Llamar a la función para actualizar sinopsis
+        elif opcion_sub=='3':
+            modulo_sinopsis.eliminar_sinopsis(archivo, matriz_peliculas)
+            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
         elif opcion_sub == '0':
             print("Regresando al menú principal.")
+            opcion_seleccionada="n"
+        else:
+            print("Opción no válida. Intente nuevamente.")
+        
+def submenu_calificaciones(matriz_peliculas, matriz_registros_vistas):
+    opcion_seleccionada=modulo_validar.obtener_opcion()
+    while opcion_seleccionada=="s":
+        print("\nOpciones de Promedios de calificaciones")
+        print("1. Calificiones por genero")
+        print("2. Calificaciones por titulo")
+        print("0. Regresar al menu principal")
+
+        opcion_sub = input("Seleccione una opción: ").strip()
+        if opcion_sub == '1':
+            modulo_calificaciones.imprimir_promedios(matriz_peliculas, matriz_registros_vistas, modulo_calificaciones.promedio_por_genero, "Promedios de Calificación por Género")
+            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
+        elif opcion_sub == '2':
+            modulo_calificaciones.imprimir_promedios(matriz_peliculas, matriz_registros_vistas, modulo_calificaciones.promedio_peliculas, "Promedios de Calificación por Película")  
+            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
+        elif opcion_sub == '0':
+            print("Regresando al menú principal.")
+            opcion_seleccionada="n"
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+def submenu_genero():
+    opcion_seleccionada=modulo_validar.obtener_opcion()
+    while opcion_seleccionada=="s":
+        print("\nSubmenú de gestión de géneros")
+        print("1: Agregar un nuevo género")
+        print("2: Actualizar un género existente")
+        print("3: Eliminar un género")
+        print("4: Volver al submenú de generos")
+        
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == '1':
+            modulo_genero.agregar_genero(modulo_genero.dic_genero)
+        elif opcion == '3':
+            modulo_genero.eliminar_genero()
+        elif opcion == '2':
+            modulo_genero.actualizar_genero()
+        elif opcion == '4':
+            print("Regresando...")
             opcion_seleccionada="n"
         else:
             print("Opción no válida. Intente nuevamente.")

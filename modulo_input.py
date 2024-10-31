@@ -39,7 +39,7 @@ def obtener_pelicula(titulos_existentes):
                                  "El titulo ingresado no es válido. Intente nuevamente.", modulo_validar.validar_titulo, titulos_existentes, es_pelicula_serie=True)
     nuevo_tipo = obtener_dinamico("Ingrese el tipo (serie/película): ", "Entrada no válida. Por favor, ingrese 'serie' o 'película'.", 
                                   modulo_validar.validar_tipo, capitalizar=False)
-    nuevo_genero =modulo_genero.seleccionar_genero(modulo_genero.dic_genero, "Seleccione un género", modulo_validar.validar_genero)
+    nuevo_genero =modulo_genero.seleccionar_genero()
     nuevo_anio = obtener_dinamico("Ingrese el año de estreno (formato YYYY): ", "Año no válido. Intente nuevamente.", modulo_validar.validar_anio)
     nueva_duracion = None
     if nuevo_tipo in ['película', 'pelicula']: 
@@ -70,5 +70,4 @@ def obtener_nuevo_valor(opcion_actualizar, dic_actualizar, validadores): #para a
     while not validadores[opcion_actualizar](nuevo_valor):
         nuevo_valor = input(f"Dato no válido o {opcion_actualizar} existente. Ingrese un nuevo {opcion_actualizar}: ")
     return nuevo_valor
-    
     

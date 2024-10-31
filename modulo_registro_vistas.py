@@ -5,7 +5,7 @@ def crear_matriz_registro_vistas(contenido_registro_vistas, matriz_usuarios, mat
     while opcion_seleccionada == "s":
         proximo_id_registro = len(contenido_registro_vistas)+1
         print("\nAgregar registro:")
-        usuario_id = modulo_input.obtener_id(matriz_usuarios, "usuarios")
+        usuario_id = int(modulo_input.obtener_id(matriz_usuarios, "usuarios"))
         pelicula_id=int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))
         estado, calificacion = modulo_input.obtener_registro()
         apellido = modulo_usuarios.obtener_usuario(usuario_id, matriz_usuarios)["Apellido"]

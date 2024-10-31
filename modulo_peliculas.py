@@ -71,9 +71,8 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
     
     if opcion_actualizar == "Genero":
         print(f"Va a actualizar el campo 'Genero' cuyo valor actual es: '{valor_actual}'.")
-        genero_seleccionado = modulo_genero.seleccionar_genero(modulo_genero.dic_genero,"Seleccione un género por número: ","Género no válido.",
-                                                                         modulo_validar.validar_strings, modulo_genero.leer_generos, modulo_genero.agregar_genero)
-        nuevo_valor = genero_seleccionado
+        nuevo_valor= modulo_genero.seleccionar_genero()
+        
     else:
         nuevo_valor = modulo_input.obtener_nuevo_valor(opcion_actualizar, dic_pelicula_actualizar, validadores).capitalize()
 
