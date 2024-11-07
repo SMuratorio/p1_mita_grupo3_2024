@@ -24,6 +24,8 @@ def leer_sinopsis(archivo, matriz_peliculas):
         else:
             print(f"No se encontró la sinopsis para '{titulo}' en el archivo.")
             guardar_sinopsis_en_archivo(formatear_sinopsis(titulo))
+            print(f"Sinopsis de '{titulo}' guardada correctamente.")
+            
     except FileNotFoundError:
         print("El archivo de sinopsis no existe.")
     except OSError:
@@ -121,30 +123,3 @@ def eliminar_sinopsis(archivo, matriz_peliculas):
     except Exception as e:
         print(f"Error al eliminar la sinopsis: {e}")
 
-def eliminar_sinopsis_no_existentes(archivo, matriz_peliculas): #para que se reinicie cuando arranca el programa nuevamente
-    try:
-        titulos_existentes = {pelicula[1] for pelicula in matriz_peliculas}
-        lineas_filtradas = []
-
-        with open(archivo, "r", encoding="utf-8") as file:
-            linea = file.readline()  # Leer la primera línea
-            while linea:  # Continuar mientras haya líneas por leer
-                if linea.strip() in titulos_existentes:  # Agregar el título existente
-                    lineas_filtradas.append(linea)  # Agregar el título
-                    linea = file.readline()  # Leer la siguiente línea
-
-                    while linea.strip() != "":  # Agregar las líneas de la sinopsis hasta encontrar una línea vacía
-                        lineas_filtradas.append(linea)
-                        linea = file.readline()  # Leer la siguiente línea
-
-                    lineas_filtradas.append("\n")  # Agregar una línea vacía para separar sinopsis
-                else:
-                    while linea.strip() != "":  # Si no es un título existente, avanzar hasta la siguiente línea vacía
-                        linea = file.readline()  # Leer la siguiente línea
-
-                linea = file.readline()  # Leer la siguiente línea para el siguiente ciclo
-
-        with open(archivo, "w", encoding="utf-8") as file:  # Sobrescribir el archivo con las sinopsis filtradas
-            file.writelines(lineas_filtradas)
-    except Exception as e:
-        print(f"Error al actualizar el archivo de sinopsis: {e}")

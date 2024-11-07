@@ -56,24 +56,29 @@ def submenu_sinopsis(archivo, matriz_peliculas):
         print("2. Actualizar Sinopsis")
         print("3. Eliminar sinopsis")
         print("0. Regresar al menu principal")
+
+        try:
+            opcion_sub = int(input("Seleccione una opción: ").strip())
+            if opcion_sub not in range(0, 4):
+                raise ValueError  # Lanza una excepción si el número está fuera del rango
             
-        opcion_sub = input("Seleccione una opción: ").strip()
-        if opcion_sub == '1':
-            modulo_sinopsis.leer_sinopsis(archivo, matriz_peliculas)
-            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)  # Llamar a la función para leer sinopsis
-        elif opcion_sub == '2':
-            modulo_sinopsis.actualizar_sinopsis(archivo, matriz_peliculas) 
-            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False) # Llamar a la función para actualizar sinopsis
-        elif opcion_sub=='3':
-            modulo_sinopsis.eliminar_sinopsis(archivo, matriz_peliculas)
-            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-        elif opcion_sub == '0':
-            print("Regresando al menú principal.")
-            opcion_seleccionada="n"
-        else:
-            print("Opción no válida. Intente nuevamente.")
+            if opcion_sub == 1:
+                modulo_sinopsis.leer_sinopsis(archivo, matriz_peliculas)
+                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
+            elif opcion_sub == 2:
+                modulo_sinopsis.actualizar_sinopsis(archivo, matriz_peliculas)
+                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
+            elif opcion_sub == 3:
+                modulo_sinopsis.eliminar_sinopsis(archivo, matriz_peliculas)
+                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
+            elif opcion_sub == 0:
+                print("Regresando al menú principal.")
+                opcion_seleccionada = "n"
         
-def submenu_calificaciones(matriz_peliculas, matriz_registros_vistas):
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
+        
+def submenu_calificaciones():
     opcion_seleccionada=modulo_validar.obtener_opcion()
     while opcion_seleccionada=="s":
         print("\nOpciones de Promedios de calificaciones")
@@ -81,18 +86,24 @@ def submenu_calificaciones(matriz_peliculas, matriz_registros_vistas):
         print("2. Calificaciones por titulo")
         print("0. Regresar al menu principal")
 
-        opcion_sub = input("Seleccione una opción: ").strip()
-        if opcion_sub == '1':
-            modulo_calificaciones.imprimir_promedios(matriz_peliculas, matriz_registros_vistas, modulo_calificaciones.promedio_por_genero, "Promedios de Calificación por Género")
-            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-        elif opcion_sub == '2':
-            modulo_calificaciones.imprimir_promedios(matriz_peliculas, matriz_registros_vistas, modulo_calificaciones.promedio_peliculas, "Promedios de Calificación por Película")  
-            opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-        elif opcion_sub == '0':
-            print("Regresando al menú principal.")
-            opcion_seleccionada="n"
-        else:
-            print("Opción no válida. Intente nuevamente.")
+        try:
+            opcion_sub = int(input("Seleccione una opción: ").strip())
+            if opcion_sub not in range(0, 3):
+                raise ValueError  # Lanza una excepción si el número está fuera del rango
+            
+            if opcion_sub == 1:
+                modulo_calificaciones.imprimir_promedios(modulo_calificaciones.promedio_por_genero, "Promedios de Calificación por Género")
+                opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
+            elif opcion_sub == 2:
+                modulo_calificaciones.imprimir_promedios(modulo_calificaciones.promedio_peliculas, "Promedios de Calificación por Película")  
+                opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
+            elif opcion_sub == 0:
+                print("Regresando al menú principal.")
+                opcion_seleccionada="n"
+        
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número entre 0 y 2.")
+
 
 def submenu_genero():
     opcion_seleccionada=modulo_validar.obtener_opcion()
@@ -101,19 +112,23 @@ def submenu_genero():
         print("1: Agregar un nuevo género")
         print("2: Actualizar un género existente")
         print("3: Eliminar un género")
-        print("4: Volver al submenú de generos")
+        print("0: Volver al submenú de generos")
         
-        opcion = input("Seleccione una opción: ")
+        try:
+            opcion_sub = int(input("Seleccione una opción: ").strip())
+            if opcion_sub not in range(0, 3):
+                raise ValueError  # Lanza una excepción si el número está fuera del rango      
+    
         
-        if opcion == '1':
-            modulo_genero.agregar_genero(modulo_genero.dic_genero)
-        elif opcion == '3':
-            modulo_genero.eliminar_genero()
-        elif opcion == '2':
-            modulo_genero.actualizar_genero()
-        elif opcion == '4':
-            print("Regresando...")
-            opcion_seleccionada="n"
-        else:
-            print("Opción no válida. Intente nuevamente.")
-            
+            if opcion_sub == 1:
+                modulo_genero.agregar_genero(modulo_genero.dic_genero)
+            elif opcion_sub == 2:
+                modulo_genero.actualizar_genero()
+            elif opcion_sub == 3:
+                modulo_genero.eliminar_genero()
+            elif opcion_sub == 0:
+                print("Regresando...")
+                opcion_seleccionada="n"
+    
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")

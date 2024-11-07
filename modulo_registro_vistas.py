@@ -1,9 +1,13 @@
-import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input, modulo_varios
+import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input, modulo_varios, modulo_matriz
 
-def crear_matriz_registro_vistas(contenido_registro_vistas, matriz_usuarios, matriz_peliculas):
+def crear_matriz_registro_vistas():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
-        proximo_id_registro = len(contenido_registro_vistas)+1
+        proximo_id_registro = len(matriz_registro_vistas)+1
         print("\nAgregar registro:")
         usuario_id = int(modulo_input.obtener_id(matriz_usuarios, "usuarios"))
         pelicula_id=int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))
@@ -14,11 +18,15 @@ def crear_matriz_registro_vistas(contenido_registro_vistas, matriz_usuarios, mat
         print(f"El usuario {usuario_id} ha actualizado el estado de la película/serie '{titulo}' con ID {pelicula_id}.")
     
         fila = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
-        contenido_registro_vistas.append(fila)
+        matriz_registro_vistas.append(fila)
         print("\nRegistro agregado con éxito.")
+
+        modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
     
-def leer_matriz_registro_vistas(matriz_registro_vistas):
+def leer_matriz_registro_vistas():
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
     if not matriz_registro_vistas:
         print("No hay contenido disponible.")
         print()
@@ -36,7 +44,11 @@ def leer_matriz_registro_vistas(matriz_registro_vistas):
         print(f"Calificacion: {calificacion}")
         print("-" * 30)
 
-def actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, matriz_peliculas): 
+def actualizar_matriz_registro_vistas(): 
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == 's':
         id_registro = int(modulo_input.obtener_id(matriz_registro_vistas, "registro"))
@@ -45,6 +57,8 @@ def actualizar_matriz_registro_vistas(matriz_registro_vistas, matriz_usuarios, m
         # Llamada a la nueva función para validar y actualizar el valor
         dic_registro_actualizar = validar_y_actualizar_registro(opcion_actualizar,dic_registro_actualizar, id_registro, matriz_usuarios, matriz_peliculas)
         actualizar_registro(id_registro, matriz_registro_vistas, dic_registro_actualizar)
+        modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+
         opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_registro(id_registro, matriz_registro_vistas):
@@ -91,7 +105,8 @@ def validar_y_actualizar_registro(opcion_actualizar, dic_registro_actualizar, id
     print(f"{nuevo_valor} con ID {id_registro} ha sido actualizado.") 
     return dic_registro_actualizar
 
-def eliminar_matriz_registro_vistas(matriz_registro_vistas):
+def eliminar_matriz_registro_vistas():
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
     eliminar_registro = modulo_validar.obtener_opcion()
     
     while eliminar_registro == 's':
@@ -99,6 +114,7 @@ def eliminar_matriz_registro_vistas(matriz_registro_vistas):
         id_registro = int(modulo_input.obtener_id(matriz_registro_vistas, "registro"))
         matriz_registro_vistas[:] = [item for item in matriz_registro_vistas if item[0] != id_registro]
         print(f"El registro con ID {id_registro} ha sido eliminado.")
+        modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
         
         eliminar_registro= modulo_validar.obtener_opcion(primera_consulta=False)
 

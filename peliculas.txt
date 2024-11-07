@@ -1,0 +1,14 @@
+1;El Señor de los anillos;Película;Fantasía;2001;178 minutos
+2;Breaking Bad;Serie;Drama;2008;5 temporadas
+3;Matrix;Película;Ciencia ficción;1999;136 minutos
+4;Stranger Things;Serie;Terror;2016;4 temporadas
+5;Inception;Película;Acción;2010;148 minutos
+6;The Crown;Serie;Histórico;2016;5 temporadas
+7;Interstellar;Película;Ciencia ficción;2014;169 minutos
+8;La Casa de papel;Serie;Crimen;2017;5 temporadas
+9;The Mandalorian;Serie;Ciencia ficción;2019;3 temporadas
+10;Gladiado;Película;Acción;2000;155 minutos
+11;Los Sopranos;Serie;Drama;1999;6 temporadas
+12;El Gran Budapest Hotel;Película;Fantasía;2003;125 minutos
+13;Dark;Serie;Ciencia ficción;2017;3 temporadas
+14;El Padrino;Película;Crimen;1972;175 minutos

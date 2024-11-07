@@ -1,7 +1,10 @@
-import modulo_validar, modulo_menu, modulo_varios, modulo_input, modulo_genero, modulo_sinopsis
+import modulo_validar, modulo_menu, modulo_varios, modulo_input, modulo_genero, modulo_sinopsis, modulo_matriz
 
-def crear_matriz_peliculas(matriz_peliculas, titulos_existentes):
+def crear_matriz_peliculas():
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    titulos_existentes={titulo[1] for titulo in matriz_peliculas}
     opcion_seleccionada = modulo_validar.obtener_opcion()
+
     while opcion_seleccionada == "s":
         proximo_id_peliculas = len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
@@ -15,9 +18,13 @@ def crear_matriz_peliculas(matriz_peliculas, titulos_existentes):
         fila = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
         matriz_peliculas.append(fila)
         print("\nPelícula/Serie agregada con éxito.")
+
+        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+
         opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
 
-def leer_matriz_peliculas(matriz_peliculas):
+def leer_matriz_peliculas():
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("usuarios.txt")
     if not matriz_peliculas:
         print("No hay contenido disponible.")
         print()
@@ -34,7 +41,9 @@ def leer_matriz_peliculas(matriz_peliculas):
         print(f"Duración: {duracion}")
         print("-" * 30)
 
-def actualizar_matriz_peliculas(matriz_peliculas, titulos_existentes):
+def actualizar_matriz_peliculas():
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    titulos_existentes={titulo[1] for titulo in matriz_peliculas}
     opcion_seleccionada = modulo_validar.obtener_opcion()
      
     while opcion_seleccionada == 's':
@@ -44,6 +53,8 @@ def actualizar_matriz_peliculas(matriz_peliculas, titulos_existentes):
         # Llamada a la nueva función para validar y actualizar el valor
         dic_pelicula_actualizar = validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id_pelicula, titulos_existentes)
         actualizar_pelicula(id_pelicula, matriz_peliculas, dic_pelicula_actualizar)
+        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+        
         opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_pelicula(id_pelicula, matriz_peliculas):
@@ -93,7 +104,8 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
     print(f"{nuevo_valor} con ID {id_pelicula} ha sido actualizado.") #Movi el print aca
     return dic_pelicula_actualizar
 
-def eliminar_matriz_peliculas(matriz_peliculas):
+def eliminar_matriz_peliculas():
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
     eliminar_pelicula = modulo_validar.obtener_opcion()
     
     while eliminar_pelicula == 's':
@@ -103,6 +115,7 @@ def eliminar_matriz_peliculas(matriz_peliculas):
         matriz_peliculas[:] = [item for item in matriz_peliculas if item[0] != id_pelicula] 
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"La pelicula/serie con ID {id_pelicula} ha sido eliminado.")
+        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
         
         eliminar_pelicula = modulo_validar.obtener_opcion(primera_consulta=False)
     

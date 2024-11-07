@@ -1,6 +1,9 @@
-import modulo_validar, modulo_menu, modulo_input, modulo_varios
+import modulo_validar, modulo_menu, modulo_input, modulo_varios, modulo_matriz
 
-def crear_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existentes):
+def crear_matriz_usuarios():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    dnis_existentes = {usuario[3] for usuario in matriz_usuarios}
+    correos_existentes={usuario[4] for usuario in matriz_usuarios}
     opcion_seleccionada = modulo_validar.obtener_opcion()
 
     while opcion_seleccionada == "s":
@@ -14,9 +17,12 @@ def crear_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existentes):
         matriz_usuarios.append(sublista)
         print("\nUsuario agregado con éxito.")
 
+        modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
         
-def leer_matriz_usuarios(matriz_usuarios):
+def leer_matriz_usuarios():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
     if not matriz_usuarios:
         print("No hay contenido disponible.")
         print()
@@ -32,7 +38,11 @@ def leer_matriz_usuarios(matriz_usuarios):
         print(f"Correo: {correo}")
         print("-" * 30)
 
-def actualizar_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existentes):
+def actualizar_matriz_usuarios():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    dnis_existentes = {usuario[3] for usuario in matriz_usuarios}
+    correos_existentes={usuario[4] for usuario in matriz_usuarios}
+
     opcion_seleccionada = modulo_validar.obtener_opcion()
      
     while opcion_seleccionada == 's':
@@ -42,6 +52,8 @@ def actualizar_matriz_usuarios(matriz_usuarios, dnis_existentes, correos_existen
         # Llamada a la nueva función para validar y actualizar el valor
         dic_usuario_actualizar = validar_y_actualizar_usuarios(opcion_actualizar,dic_usuario_actualizar, dnis_existentes, correos_existentes, id_usuario)
         actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar)
+
+        modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
         opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_usuario(id_usuario, matriz_usuarios):
@@ -80,7 +92,8 @@ def validar_y_actualizar_usuarios(opcion_actualizar, dic_usuario_actualizar, dni
     print(f"{nuevo_valor} con ID {id_usuario} ha sido actualizado.") #Movi el print aca
     return dic_usuario_actualizar
 
-def eliminar_matriz_usuarios(matriz_usuarios):
+def eliminar_matriz_usuarios():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
     opcion_seleccionada = modulo_validar.obtener_opcion()
     
     while opcion_seleccionada == 's':
@@ -90,6 +103,8 @@ def eliminar_matriz_usuarios(matriz_usuarios):
         matriz_usuarios[:] = [fila for fila in matriz_usuarios if fila[0] != id_usuario] 
         #[:] evita la creación de una nueva lista y modifica la lista existente.
         print(f"El usuario con ID {id_usuario} ha sido eliminado.")
+
+        modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
         
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
 

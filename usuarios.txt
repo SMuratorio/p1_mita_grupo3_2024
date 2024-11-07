@@ -1,0 +1,14 @@
+1;Juan;Pérez;12.345.678;juan.perez@gmail.com
+2;Ana;García;23.456.789;ana.garcia@yahoo.com
+3;Luis;Martínez;34.567.890;luis.martinez@hotmail.com
+4;Laura;López;45.678.901;laura.lopez@gmail.com
+5;Carlos;Ramírez;56.789.012;carlos.ramirez@outlook.com
+6;María;Sánchez;67.890.123;maria.sanchez@gmail.com
+7;Pedro;Gómez;78.901.234;pedro.gomez@icloud.com
+8;Sofía;Torres;89.012.345;sofia.torres@gmail.com
+9;Fernando;Díaz;90.123.456;fernando.diaz@gmail.com
+10;Lucía;Vargas;01.234.567;lucia.vargas@hotmail.com
+11;Jorge;Ortega;12.345.678;jorge.ortega@yahoo.com
+12;Paula;Mendoza;23.456.789;paula.mendoza@gmail.com
+13;Manuel;Reyes;34.567.890;manuel.reyes@outlook.com
+14;Clara;Núñez;45.678.901;clara.nunez@gmail.com

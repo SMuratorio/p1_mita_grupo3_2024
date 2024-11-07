@@ -1,0 +1,14 @@
+1;4;López;1;El Señor de los Anillos;En curso;0
+2;2;García;3;Matrix;Terminada;9
+3;5;Ramírez;5;Inception;Pendiente;0
+4;6;Sánchez;6;The Crown;Terminada;10
+5;1;Pérez;2;Breaking Bad;Terminada;10
+6;3;Martínez;4;Stranger Things;En curso;0
+7;7;Gómez;7;Interstellar;Pendiente;0
+8;8;Torres;8;La Casa de Papel;Terminada;8
+9;9;Díaz;9;The Mandalorian;En curso;0
+10;10;Vargas;10;Gladiador;Terminada;9
+11;11;Ortega;11;Los Sopranos;Terminada;10
+12;12;Mendoza;12;The Grand Budapest Hotel;Pendiente;0
+13;13;Reyes;13;Dark;Terminada;10
+14;14;Núñez;14;El padrino;Terminada;9
