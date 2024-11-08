@@ -17,23 +17,18 @@ def crear_matriz_registro_vistas():
 
         print(f"El usuario {usuario_id} ha actualizado el estado de la película/serie '{titulo}' con ID {pelicula_id}.")
     
-        fila = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
-        matriz_registro_vistas.append(fila)
+        sublista = [proximo_id_registro, usuario_id, apellido, pelicula_id, titulo, estado, calificacion]
+        matriz_registro_vistas.append(sublista)
         print("\nRegistro agregado con éxito.")
 
         modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+        leer_matriz_registro_vistas([sublista])
 
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
     
-def leer_matriz_registro_vistas():
-    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
-    if not matriz_registro_vistas:
-        print("No hay contenido disponible.")
-        print()
-        return
-    
+def leer_matriz_registro_vistas(registros):
     print("\nContenido registrado:")
-    for item in matriz_registro_vistas:
+    for item in registros:
         registro_id,usuario_id,apellido, pelicula_id, titulo, estado, calificacion = item
         print(f"ID del registro: {registro_id}")
         print(f"ID del usuario: {usuario_id}")

@@ -15,23 +15,18 @@ def crear_matriz_peliculas():
 
         print(f"La {tipo} '{titulo}' creada con ID {proximo_id_peliculas}.")
 
-        fila = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
-        matriz_peliculas.append(fila)
+        sublista = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
+        matriz_peliculas.append(sublista)
         print("\nPelícula/Serie agregada con éxito.")
 
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+        leer_matriz_peliculas([sublista])
 
         opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
 
-def leer_matriz_peliculas():
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    if not matriz_peliculas:
-        print("No hay contenido disponible.")
-        print()
-        return
-    
+def leer_matriz_peliculas(peliculas):
     print("\nContenido registrado:")
-    for fila in matriz_peliculas:
+    for fila in peliculas:
         proximo_id, titulo, tipo, genero, año, duracion = fila
         print(f"ID: {proximo_id}")
         print(f"Título: {titulo}")

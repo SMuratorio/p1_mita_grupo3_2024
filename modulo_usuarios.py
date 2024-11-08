@@ -18,18 +18,13 @@ def crear_matriz_usuarios():
         print("\nUsuario agregado con éxito.")
 
         modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+        leer_matriz_usuarios([sublista])
 
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
         
-def leer_matriz_usuarios():
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    if not matriz_usuarios:
-        print("No hay contenido disponible.")
-        print()
-        return
-    
+def leer_matriz_usuarios(usuarios):
     print("\nContenido registrado:")
-    for fila in matriz_usuarios:
+    for fila in usuarios:
         proximo_id_usuario, nombre, apellido, dni, correo = fila #Desempaquetado
         print(f"ID: {proximo_id_usuario}")
         print(f"Nombre: {nombre}")
