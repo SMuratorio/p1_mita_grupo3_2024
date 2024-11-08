@@ -100,26 +100,31 @@ def escribir_lineas_actualizadas(file, lineas, titulo, nueva_sinopsis_formateada
 def eliminar_sinopsis(archivo, matriz_peliculas):
     try:
         titulo, id_pelicula = leer_sinopsis(archivo, matriz_peliculas)
-        # Leer el archivo actual y almacenar las líneas que no se eliminarán
-        lineas_filtradas = []
-        with open(archivo, "r", encoding="utf-8") as file:
-            linea = file.readline()
-            while linea:
-                if linea.strip() == titulo: # Si encontramos el título, saltamos todas las líneas de la sinopsis
-                    while linea.strip() != "": # Avanzar hasta la siguiente sinopsis
-                        linea = file.readline()
-                    # Continuar para leer las siguientes sinopsis (ya saltamos la actual)
-                else:# Guardamos la línea si no es la sinopsis que queremos eliminar
-                    lineas_filtradas.append(linea)
-                    linea = file.readline()
 
-        with open(archivo, "w", encoding="utf-8") as file:# Reescribir el archivo solo con las sinopsis restantes
+        # Leer todas las líneas del archivo a la vez
+        with open(archivo, "r", encoding="utf-8") as file:
+            lineas = file.readlines()
+
+        # Filtrar las líneas que no correspondan a la sinopsis que queremos eliminar
+        lineas_filtradas = []
+        saltar_lineas = False
+
+        for linea in lineas:
+            if linea.strip() == titulo:  # Detecta el inicio de la sinopsis
+                saltar_lineas = True
+            elif saltar_lineas and linea.strip() == "":  # Fin de la sinopsis
+                saltar_lineas = False
+            elif not saltar_lineas:
+                lineas_filtradas.append(linea)  # Guarda las líneas que no se eliminarán
+
+        # Sobrescribir el archivo con las sinopsis restantes
+        with open(archivo, "w", encoding="utf-8") as file:
             file.writelines(lineas_filtradas)
             print(f"\nLa sinopsis de '{titulo}' ha sido eliminada del archivo.")
+
     except FileNotFoundError:
         print("El archivo de sinopsis no existe.")
     except KeyError:
         print("El título ingresado no existe en la matriz de películas.")
     except Exception as e:
         print(f"Error al eliminar la sinopsis: {e}")
-
