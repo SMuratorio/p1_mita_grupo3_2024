@@ -8,7 +8,10 @@ dic_genero = {
     4: "Terror",
     5: "Acción",
     6: "Histórico",
-    7: "Crimen"}
+    7: "Crimen",
+    8: "Comedia",
+    9: "Misterio",
+    10: "Animación"}
 
 archivo_json = 'definiciones_generos.json'
 

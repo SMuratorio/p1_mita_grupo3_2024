@@ -2,14 +2,21 @@ import modulo_input, modulo_peliculas
 
 def buscar_sinopsis(file, titulo):
     sinopsis = []
+    encontrado = False  # Indica si el título ha sido encontrado
+    
     for linea in file:
         if linea.startswith(titulo):  # Cuando encuentra el título
+            encontrado = True
             sinopsis.append(linea.strip())
-            for siguiente_linea in file:
-                if siguiente_linea == "\n":  # Cuando encuentra la línea en blanco, termina
-                    return "\n".join(sinopsis)  # Devuelve la sinopsis formateada
-                sinopsis.append(siguiente_linea.strip())  # Agrega cada línea de sinopsis
-    return None  # Retorna None si no encuentra la sinopsis
+        elif encontrado:
+            if linea == "\n":  # Si encuentra una línea en blanco, termina la sinopsis
+                encontrado = False  # Marcamos que la sinopsis ha terminado
+            else:
+                sinopsis.append(linea.strip())  # Agrega la línea a la sinopsis
+
+    return "\n".join(sinopsis) if sinopsis else None  # Devuelve la sinopsis o None si no se encuentra
+
+
 
 def leer_sinopsis(archivo, matriz_peliculas):
     try:

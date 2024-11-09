@@ -11,4 +11,20 @@
 11;11;Ortega;11;Los Sopranos;Terminada;10
 12;12;Mendoza;12;The Grand Budapest Hotel;Pendiente;0
 13;13;Reyes;13;Dark;Terminada;10
-14;14;Núñez;14;El padrino;Terminada;9
+14;14;Núñez;14;El Padrino;Terminada;9
+15;15;Castro;1;El Señor de los Anillos;En curso;0
+16;16;Rojas;17;El Exorcista;Terminada;9
+17;17;Flores;12;The Grand Budapest Hotel;Pendiente;0
+18;18;Peña;24;Chernobyl;En curso;0
+19;19;Morales;6;The Crown;Terminada;10
+20;20;Herrera;27;Toy Story;Pendiente;0
+21;21;Romero;11;Los Sopranos;Terminada;9
+22;22;Vera;28;The Witcher;En curso;0
+23;23;Silva;3;Matrix;Terminada;10
+24;24;Iglesias;7;Interstellar;Pendiente;0
+25;25;Molina;19;Forrest Gump;Terminada;8
+26;26;Soto;13;Dark;En curso;0
+27;27;Rubio;21;El Club de la Pelea;Pendiente;0
+28;28;Cruz;4;Stranger Things;Terminada;9
+29;29;Navarro;29;Harry Potter y la Piedra Filosofal;En curso;0
+30;30;Campos;2;Breaking Bad;Terminada;10
