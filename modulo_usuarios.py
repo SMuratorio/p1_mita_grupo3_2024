@@ -1,11 +1,11 @@
 import modulo_validar, modulo_menu, modulo_input, modulo_varios, modulo_matriz
 
-def crear_matriz_usuarios():
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    dnis_existentes = {usuario[3] for usuario in matriz_usuarios}
-    correos_existentes={usuario[4] for usuario in matriz_usuarios}
-    opcion_seleccionada = modulo_validar.obtener_opcion()
+matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+dnis_existentes = {usuario[3] for usuario in matriz_usuarios}
+correos_existentes={usuario[4] for usuario in matriz_usuarios}
 
+def crear_matriz_usuarios():
+    opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
         print("\nAgregar usuario:")
         nombre, apellido, dni, correo = modulo_input.obtener_usuario(dnis_existentes, correos_existentes)
@@ -34,12 +34,7 @@ def leer_matriz_usuarios(usuarios):
         print("-" * 30)
 
 def actualizar_matriz_usuarios():
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    dnis_existentes = {usuario[3] for usuario in matriz_usuarios}
-    correos_existentes={usuario[4] for usuario in matriz_usuarios}
-
     opcion_seleccionada = modulo_validar.obtener_opcion()
-     
     while opcion_seleccionada == 's':
         id_usuario = int(modulo_input.obtener_id(matriz_usuarios, "usuario"))
         dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
@@ -88,9 +83,7 @@ def validar_y_actualizar_usuarios(opcion_actualizar, dic_usuario_actualizar, dni
     return dic_usuario_actualizar
 
 def eliminar_matriz_usuarios():
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
     opcion_seleccionada = modulo_validar.obtener_opcion()
-    
     while opcion_seleccionada == 's':
         print("\nEliminar contenido:")
         id_usuario = int(modulo_input.obtener_id(matriz_usuarios, "usuario"))
@@ -122,3 +115,4 @@ def imprimir_matriz_usuarios(matriz_usuarios):
         print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
     
     modulo_varios.imprimir_linea("inferior", len(encabezado_usuarios), ancho_columna) # Imprimir la línea inferior del cuadro
+    

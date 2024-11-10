@@ -1,10 +1,10 @@
 import modulo_validar, modulo_menu, modulo_usuarios, modulo_peliculas, modulo_input, modulo_varios, modulo_matriz
 
-def crear_matriz_registro_vistas():
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
-    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
 
+def crear_matriz_registro_vistas():
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
         proximo_id_registro = len(matriz_registro_vistas)+1
@@ -40,10 +40,6 @@ def leer_matriz_registro_vistas(registros):
         print("-" * 30)
 
 def actualizar_matriz_registro_vistas(): 
-    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
-    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
-
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == 's':
         id_registro = int(modulo_input.obtener_id(matriz_registro_vistas, "registro"))
@@ -73,8 +69,8 @@ def actualizar_registro(id_registro, matriz_registro_vistas, registro_actualizar
             return
 
 def validar_y_actualizar_registro(opcion_actualizar, dic_registro_actualizar, id_registro, matriz_usuarios, matriz_peliculas):
-    validadores = {"Usuario ID":  lambda id_usuario: modulo_validar.validar_id_actualizar(id_usuario, {"matriz":matriz_usuarios}),
-                   "Pelicula/Serie ID": lambda id_pelicula: modulo_validar.validar_id_actualizar(id_pelicula, {"matriz": matriz_peliculas}),
+    validadores = {"Usuario ID":  lambda id_usuario: modulo_validar.validar_id(id_usuario, {"matriz":matriz_usuarios}),
+                   "Pelicula/Serie ID": lambda id_pelicula: modulo_validar.validar_id(id_pelicula, {"matriz": matriz_peliculas}),
                    "Estado": modulo_validar.validar_estado,
                    "Calificación": modulo_validar.validar_calificacion}
     
@@ -101,9 +97,7 @@ def validar_y_actualizar_registro(opcion_actualizar, dic_registro_actualizar, id
     return dic_registro_actualizar
 
 def eliminar_matriz_registro_vistas():
-    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
     eliminar_registro = modulo_validar.obtener_opcion()
-    
     while eliminar_registro == 's':
         print("\nEliminar contenido:")
         id_registro = int(modulo_input.obtener_id(matriz_registro_vistas, "registro"))

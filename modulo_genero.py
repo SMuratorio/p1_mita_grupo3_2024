@@ -40,7 +40,7 @@ def seleccionar_genero():
     while opcion=='s':
         json_data = cargar_json()  # Cargar descripciones desde JSON
         print("Seleccione un género:")
-        for clave, genero in dic_genero.items():
+        for clave, genero in dic_genero.items(): #clave: nro de cada genero 
             descripcion = json_data.get(genero, "Descripción no disponible.")  # Obtener la descripción
             print(f"{clave}: {genero} - {descripcion}")  # Mostrar género con descripción
 
@@ -58,12 +58,16 @@ def seleccionar_genero():
             print("Entrada no válida. Debe ser un número.")
     return genero
     
-def agregar_genero(dic):
+def agregar_genero():
     nuevo_genero = input("Ingrese el nuevo género: ").strip().capitalize()
     
+    if nuevo_genero in dic_genero.values():
+        print("Este género ya existe en el diccionario.")
+        return  # Salimos si el género ya existe
+
     if modulo_validar.validar_genero(nuevo_genero):
-        nueva_clave = max(dic.keys()) + 1
-        dic[nueva_clave] = nuevo_genero
+        nueva_clave = max(dic_genero.keys()) + 1
+        dic_genero[nueva_clave] = nuevo_genero
         
         definicion = ""
         while not definicion:

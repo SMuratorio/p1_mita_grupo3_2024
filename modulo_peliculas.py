@@ -1,10 +1,10 @@
 import modulo_validar, modulo_menu, modulo_varios, modulo_input, modulo_genero, modulo_sinopsis, modulo_matriz
 
-def crear_matriz_peliculas():
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
-    titulos_existentes={titulo[1] for titulo in matriz_peliculas}
-    opcion_seleccionada = modulo_validar.obtener_opcion()
+matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+titulos_existentes={titulo[1] for titulo in matriz_peliculas}
 
+def crear_matriz_peliculas():
+    opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
         proximo_id_peliculas = len(matriz_peliculas)+1
         print("\nAgregar pelicula o serie:")
@@ -37,10 +37,7 @@ def leer_matriz_peliculas(peliculas):
         print("-" * 30)
 
 def actualizar_matriz_peliculas():
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
-    titulos_existentes={titulo[1] for titulo in matriz_peliculas}
     opcion_seleccionada = modulo_validar.obtener_opcion()
-     
     while opcion_seleccionada == 's':
         id_pelicula = int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))
         dic_pelicula_actualizar = obtener_pelicula(id_pelicula, matriz_peliculas)
@@ -85,11 +82,11 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
     if opcion_actualizar == "Tipo":  # Se verifica si se está actualizando el tipo
         if nuevo_valor in ["película", "pelicula"]:
             duracion = modulo_input.obtener_dinamico("Ingrese la duración de la película (en minutos): ","Duración no válida. Por favor, ingrese un número entero positivo.",
-                                                      modulo_validar.es_entero_positivo)
+                                                      modulo_validar.validar_duracion)
             dic_pelicula_actualizar["Duracion"] = f"{duracion} minutos"  # Actualizar duración para película
         elif nuevo_valor == "serie":
             duracion = modulo_input.obtener_dinamico("Ingrese la cantidad de temporadas: ","Cantidad no válida. Por favor, ingrese un número entero positivo.",
-                                                      modulo_validar.es_entero_positivo)
+                                                      modulo_validar.validar_duracion)
             dic_pelicula_actualizar["Duracion"] = f"{duracion} temporadas"  # Actualizar duración para serie
     
     if opcion_actualizar == "Titulo":
@@ -100,9 +97,7 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
     return dic_pelicula_actualizar
 
 def eliminar_matriz_peliculas():
-    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
     eliminar_pelicula = modulo_validar.obtener_opcion()
-    
     while eliminar_pelicula == 's':
         print("\nEliminar contenido:")
         id_pelicula = int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))

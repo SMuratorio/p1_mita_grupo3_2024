@@ -1,4 +1,4 @@
-import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_sinopsis, modulo_matriz
+import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_matriz
 
 def _main_():
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
