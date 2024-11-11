@@ -99,10 +99,6 @@ def actualizar_genero():
     else:
         print(f"Género '{genero}' no encontrado en el diccionario.")
 
-def leer_genero(genero):
-    json_data = cargar_json()
-    print(f"{genero}: {json_data.get(genero, 'Género no encontrado.')}")
-
 def eliminar_genero():
     genero = input("Ingrese el nombre del género a eliminar: ").capitalize()
     

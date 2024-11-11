@@ -81,8 +81,11 @@ def validar_y_actualizar_registro(opcion_actualizar, dic_registro_actualizar, id
     nuevo_valor = modulo_input.obtener_nuevo_valor(opcion_actualizar, dic_registro_actualizar, validadores).capitalize()
 
     if opcion_actualizar == "Estado":# Verificamos el nuevo estado y actualizamos la calificación en consecuencia
-        if nuevo_valor in ["En curso", "Pendiente"] or (nuevo_valor == "Terminada" and dic_registro_actualizar["Estado"] in ["En curso", "Pendiente"]):
+        if nuevo_valor in ["En curso", "Pendiente"]:
             dic_registro_actualizar["Calificación"] = "0"  # Reinicia la calificación a 0
+        elif nuevo_valor == "Terminada":
+            nueva_calificacion=modulo_input.obtener_dinamico("Ingrese la calificación (entero entre 1 y 10): ", "Calificación no válida. Debe ser un número entero entre 1 y 10. Intente nuevamente.", modulo_validar. validar_calificacion)
+            dic_registro_actualizar["Calificación"]=nueva_calificacion
     
     elif opcion_actualizar== "Usuario ID":
         apellido = modulo_usuarios.obtener_usuario(int(nuevo_valor), matriz_usuarios)["Apellido"]
