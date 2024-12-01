@@ -1,4 +1,5 @@
 import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero
+import tkinter as tk
 
 def mostrar_menu():
     print("\nAplicación de Seguimiento de Películas y Series Vistas")
@@ -7,6 +8,35 @@ def mostrar_menu():
     print("2. Películas/Series")
     print("3. Registros Vistos")
     print("4. Salir")
+
+def mostrar_menu_tkinter():
+    # Crear la ventana principal
+    root = tk.Tk()
+    root.title("Aplicación de Seguimiento de Películas y Series Vistas")
+    root.geometry("600x300")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú Principal", font=("Arial", 16))
+    titulo.pack(pady=20)
+
+    # Botón para "Usuarios"
+    btn_usuarios = tk.Button(root, text="Usuarios", font=("Arial", 14), width=20, command=lambda: print("Usuarios seleccionados"))
+    btn_usuarios.pack(pady=5)
+
+    # Botón para "Películas/Series"
+    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: print("Películas/Series seleccionados"))
+    btn_peliculas_series.pack(pady=5)
+
+    # Botón para "Registros Vistos"
+    btn_registros_vistos = tk.Button(root, text="Registros Vistos", font=("Arial", 14), width=20, command=lambda: print("Registros Vistos seleccionados"))
+    btn_registros_vistos.pack(pady=5)
+
+    # Botón para "Salir"
+    btn_salir = tk.Button(root, text="Salir", font=("Arial", 14), width=20, command=root.quit)
+    btn_salir.pack(pady=20)
+
+    # Iniciar el bucle de eventos
+    root.mainloop()
 
 def mostrar_submenu(opcion):
     if opcion == '1':
@@ -103,7 +133,6 @@ def submenu_calificaciones():
         
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número entre 0 y 2.")
-
 
 def submenu_genero():
     opcion_seleccionada=modulo_validar.obtener_opcion()
