@@ -1,10 +1,5 @@
-def imprimir_linea(tipo, num_columnas, ancho_columna): #Para imprimir cuadro de la matriz
-    if tipo == "superior":
-        print("+" + "+".join(["-" * ancho_columna] * num_columnas) + "+")
-    elif tipo == "inferior":
-        print("+" + "+".join(["-" * ancho_columna] * num_columnas) + "+")
-    else:
-        print("+" + "+".join(["-" * ancho_columna] * num_columnas) + "+")
+def imprimir_linea(num_columnas, ancho_columna):
+    print("+" + "+".join(["-" * ancho_columna] * num_columnas) + "+")
 
 def capitalizar_titulo(titulo):
      # Capitaliza la primera letra del título y cada palabra que tenga 3 letras o más

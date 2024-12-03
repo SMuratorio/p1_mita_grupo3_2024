@@ -24,7 +24,7 @@ def validar_tipo(tipo):
     opciones_validas = ["serie", "película", "pelicula"]
     return tipo in opciones_validas
 
-def es_entero_positivo(entrada): #para validar duracion
+def validar_duracion(entrada): #para validar duracion
     if entrada.isdigit():
         return int(entrada) > 0
     return False
@@ -37,7 +37,11 @@ def validar_estado(estado):
     estados_validos = ["en curso", "pendiente", "terminada"]    # Lista de estados válidos
     return estado.lower() in estados_validos # Verifica si el estado ingresado está en la lista de estados válidos
 
-def validar_id_actualizar(id, dic_parametros):
+def validar_genero(genero):
+    """Valida que el género no esté vacío y que no exista ya en el diccionario."""
+    return len(genero) > 3 and genero not in modulo_genero.dic_genero and genero.isalpha()
+
+def validar_id(id, dic_parametros):
     if str(id).isdigit():
         matriz = dic_parametros["matriz"]
         for fila in matriz:
@@ -59,7 +63,3 @@ def obtener_opcion(primera_consulta=True):
             return respuesta
         except ValueError as e:
             print(e)
-
-def validar_genero(genero):
-    """Valida que el género no esté vacío y que no exista ya en el diccionario."""
-    return len(genero) > 3 and genero not in modulo_genero.dic_genero and genero.isalpha()

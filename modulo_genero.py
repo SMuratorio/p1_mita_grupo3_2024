@@ -26,14 +26,8 @@ def cargar_json():
     except json.JSONDecodeError:
         print("Error al decodificar el archivo JSON. Se utilizará un diccionario vacío.")
         return {}
-
-def guardar_json(data):
-    """Guarda el diccionario en un archivo JSON."""
-    try:
-        with open(archivo_json, 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
-    except OSError:
-        print("Error al guardar el archivo JSON.")
+    except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")
 
 def seleccionar_genero():
     opcion=modulo_validar.obtener_opcion()
@@ -85,17 +79,24 @@ def agregar_genero():
 def actualizar_genero():
     genero = input("Ingrese el nombre del género a actualizar: ").capitalize()
    
-    if genero in dic_genero.values():
-        claves_a_actualizar = [k for k, v in dic_genero.items() if v == genero]
-        if claves_a_actualizar:
-            clave_a_actualizar = claves_a_actualizar[0]  # Obtener la primera clave
+     # Buscar la clave asociada al género
+    clave_a_actualizar = None
+    for clave, valor in dic_genero.items():
+        if valor == genero:
+            clave_a_actualizar = clave
+            # dejamos que el ciclo continúe, pero ya tenemos la clave
 
+    if clave_a_actualizar is not None:  # Verificar si el género existe
+        nueva_descripcion = ""
+        while not nueva_descripcion.strip():  # Validar que no esté vacío o solo espacios
             nueva_descripcion = input("Ingrese la nueva definición: ").capitalize()
-
-            definiciones = cargar_json()
-            definiciones[genero] = nueva_descripcion
-            guardar_json(definiciones)
-            print(f"Género '{genero}' actualizado.")
+            if not nueva_descripcion.strip():
+                print("La definición no puede estar vacía. Intente nuevamente.")
+        
+        definiciones = cargar_json()
+        definiciones[genero] = nueva_descripcion
+        guardar_json(definiciones)
+        print(f"Género '{genero}' actualizado.")
     else:
         print(f"Género '{genero}' no encontrado en el diccionario.")
 
@@ -118,3 +119,6 @@ def eliminar_genero():
                 return  # Salir de la función después de eliminar
     else:
         print(f"Género '{genero}' no existe en el diccionario.")
+
+def guardar_json(data):
+    """Guarda el diccionario en un archivo JSON."""

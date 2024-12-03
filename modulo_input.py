@@ -35,7 +35,7 @@ def obtener_usuario(dnis_existentes, correos_existentes):
     return (nuevo_nombre, nuevo_apellido, nuevo_dni, nuevo_mail) #Uso de tupla
 
 def obtener_pelicula(titulos_existentes):
-    nuevo_titulo = obtener_unico("Ingrese el titulo: ", "El titulo ya existe. Por favor, ingrese un correo único.", 
+    nuevo_titulo = obtener_unico("Ingrese el titulo: ", "El titulo ya existe. Por favor, ingrese un título único.", 
                                  "El titulo ingresado no es válido. Intente nuevamente.", modulo_validar.validar_titulo, titulos_existentes, es_pelicula_serie=True)
     nuevo_tipo = obtener_dinamico("Ingrese el tipo (serie/película): ", "Entrada no válida. Por favor, ingrese 'serie' o 'película'.", 
                                   modulo_validar.validar_tipo, capitalizar=False)
@@ -43,9 +43,9 @@ def obtener_pelicula(titulos_existentes):
     nuevo_anio = obtener_dinamico("Ingrese el año de estreno (formato YYYY): ", "Año no válido. Intente nuevamente.", modulo_validar.validar_anio)
     nueva_duracion = None
     if nuevo_tipo in ['película', 'pelicula']: 
-        nueva_duracion = obtener_dinamico("Ingrese la duración de la película (en minutos): ", "Duración no válida. Por favor, ingrese un número entero positivo.", modulo_validar.es_entero_positivo) + " minutos"
+        nueva_duracion = obtener_dinamico("Ingrese la duración de la película (en minutos): ", "Duración no válida. Por favor, ingrese un número entero positivo.", modulo_validar.validar_duracion) + " minutos"
     elif nuevo_tipo == 'serie':
-        nueva_duracion = obtener_dinamico("Ingrese la cantidad de temporadas: ", "Cantidad no válida. Por favor, ingrese un número entero positivo.", modulo_validar.es_entero_positivo) + " temporadas"
+        nueva_duracion = obtener_dinamico("Ingrese la cantidad de temporadas: ", "Cantidad no válida. Por favor, ingrese un número entero positivo.", modulo_validar.validar_duracion) + " temporadas"
     return (nuevo_titulo, nuevo_tipo, nuevo_genero, nuevo_anio, nueva_duracion) #Uso de tupla
 
 def obtener_registro():
@@ -62,12 +62,12 @@ def obtener_id_dinamico(mensaje_input, mensaje_output, funcion_validacion, param
             print(mensaje_output)
 
 def obtener_id(matriz, tipo_contenido): #Para actualizar o eliminar un determinado ID
-    id = obtener_id_dinamico(f"Ingrese el ID de {tipo_contenido}: ", "ID no válido. Reintentando...", modulo_validar.validar_id_actualizar, {"matriz": matriz})
+    id = obtener_id_dinamico(f"Ingrese el ID de {tipo_contenido}: ", "ID no válido. Reintentando...", modulo_validar.validar_id, {"matriz": matriz})
     return id
 
 def obtener_nuevo_valor(opcion_actualizar, dic_actualizar, validadores): #para actualizar datos de las tres matrices
     nuevo_valor = input(f"Ingrese el nuevo {opcion_actualizar}, valor anterior {dic_actualizar[opcion_actualizar]}: ")
-    while not validadores[opcion_actualizar](nuevo_valor):
+    while not validadores[opcion_actualizar](nuevo_valor): #se accede a validadores a la opcion que se quiere actualizar con el nuevo valor
         nuevo_valor = input(f"Dato no válido o {opcion_actualizar} existente. Ingrese un nuevo {opcion_actualizar}: ")
     return nuevo_valor
     

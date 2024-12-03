@@ -77,6 +77,8 @@ def mostrar_submenu_actualizar(opciones):
                 print(f"Error: El número debe estar entre 1 y {len(opciones)}.")
         except ValueError:
             print("Error: Debe ingresar un número válido.")
+        except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")
 
 def submenu_sinopsis(archivo, matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()
@@ -107,6 +109,8 @@ def submenu_sinopsis(archivo, matriz_peliculas):
         
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
+        except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")
         
 def submenu_calificaciones():
     opcion_seleccionada=modulo_validar.obtener_opcion()
@@ -133,6 +137,8 @@ def submenu_calificaciones():
         
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número entre 0 y 2.")
+        except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")
 
 def submenu_genero():
     opcion_seleccionada=modulo_validar.obtener_opcion()
@@ -161,3 +167,5 @@ def submenu_genero():
     
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
+        except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")

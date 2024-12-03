@@ -70,7 +70,7 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
                    "Año": modulo_validar.validar_anio}
 
     titulo_actual = dic_pelicula_actualizar.get("Titulo")  
-    valor_actual = dic_pelicula_actualizar.get(opcion_actualizar)   
+    valor_actual = dic_pelicula_actualizar.get(opcion_actualizar) #obtiene valor asociado a esa clave 
     
     if opcion_actualizar == "Genero":
         print(f"Va a actualizar el campo 'Genero' cuyo valor actual es: '{valor_actual}'.")
@@ -101,9 +101,11 @@ def eliminar_matriz_peliculas():
     while eliminar_pelicula == 's':
         print("\nEliminar contenido:")
         id_pelicula = int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))
+        titulo = obtener_pelicula(id_pelicula, matriz_peliculas)["Titulo"]
         # Eliminar el pelicula
-        matriz_peliculas[:] = [item for item in matriz_peliculas if item[0] != id_pelicula] 
-        #[:] evita la creación de una nueva lista y modifica la lista existente.
+        matriz_peliculas[:] = [item for item in matriz_peliculas if item[0] != id_pelicula] #[:] evita la creación de una nueva lista y modifica la lista existente.
+        modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", titulo) # Eliminar la sinopsis asociada a la película
+        
         print(f"La pelicula/serie con ID {id_pelicula} ha sido eliminado.")
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
         
@@ -120,13 +122,13 @@ def imprimir_matriz_peliculas(contenido_peliculas):
     encabezado_pelilculas = ["ID", "Título", "Tipo", "Género", "Año", "Duración"]  # Atributos de cada contenido
 
     ancho_columna=25  
-    modulo_varios.imprimir_linea("superior", len(encabezado_pelilculas), ancho_columna)# Imprimir la línea superior del cuadro
+    modulo_varios.imprimir_linea(len(encabezado_pelilculas), ancho_columna)# Imprimir la línea superior del cuadro
     
     print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_pelilculas]) + "|")  # Imprimir el encabezado
     
-    modulo_varios.imprimir_linea("interior", len(encabezado_pelilculas), ancho_columna)    # Imprimir la línea interior del cuadro
+    modulo_varios.imprimir_linea(len(encabezado_pelilculas), ancho_columna)    # Imprimir la línea interior del cuadro
     
     for fila in matriz_peliculas_ordenadas:    # Imprimir cada fila de la matriz
         print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
     
-    modulo_varios.imprimir_linea("inferior", len(encabezado_pelilculas), ancho_columna) # Imprimir la línea inferior del cuadro
+    modulo_varios.imprimir_linea(len(encabezado_pelilculas), ancho_columna) # Imprimir la línea inferior del cuadro
