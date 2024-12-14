@@ -1,4 +1,8 @@
 import modulo_validar, modulo_menu, modulo_input, modulo_varios, modulo_matriz
+import tkinter as tk
+from tkinter import simpledialog
+from tkinter import ttk
+from tkinter import messagebox
 
 matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
 dnis_existentes = {usuario[3] for usuario in matriz_usuarios} #comprension de conjuntos
@@ -8,7 +12,7 @@ def crear_matriz_usuarios():
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == "s":
         print("\nAgregar usuario:")
-        nombre, apellido, dni, correo = modulo_input.obtener_usuario(dnis_existentes, correos_existentes)
+        nombre, apellido, dni, correo = modulo_input.obtener_usuario_tk(dnis_existentes, correos_existentes)
         proximo_id_usuario = len(matriz_usuarios)+1
 
         print(f"El usuario {nombre} {apellido} con el DNI '{dni}' creado con ID {proximo_id_usuario}.")
@@ -19,6 +23,9 @@ def crear_matriz_usuarios():
 
         modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
         leer_matriz_usuarios([sublista])
+
+        from tkinter import messagebox
+        messagebox.showinfo("Éxito", f"Usuario {nombre} {apellido} agregado con éxito.")
 
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
         
@@ -34,17 +41,19 @@ def leer_matriz_usuarios(usuarios):
         print("-" * 30)
 
 def actualizar_matriz_usuarios():
-    opcion_seleccionada = modulo_validar.obtener_opcion()
-    while opcion_seleccionada == 's':
-        id_usuario = int(modulo_input.obtener_id(matriz_usuarios, "usuario"))
-        dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
-        opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys())) #convierte las claves en lista
-        # Llamada a la nueva función para validar y actualizar el valor
-        dic_usuario_actualizar = validar_y_actualizar_usuarios(opcion_actualizar,dic_usuario_actualizar, dnis_existentes, correos_existentes, id_usuario)
-        actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar)
+    # opcion_seleccionada = modulo_validar.obtener_opcion()
+    # while opcion_seleccionada == 's':
 
-        modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
-        opcion_seleccionada = modulo_validar.obtener_opcion(False)
+    id_usuario = int(modulo_input.obtener_id(matriz_usuarios, "usuario"))
+
+    dic_usuario_actualizar = obtener_usuario(id_usuario, matriz_usuarios)
+    opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_usuario_actualizar.keys())) #convierte las claves en lista
+    # Llamada a la nueva función para validar y actualizar el valor
+    dic_usuario_actualizar = validar_y_actualizar_usuarios(opcion_actualizar, dic_usuario_actualizar, dnis_existentes, correos_existentes, id_usuario)
+    actualizar_usuario(id_usuario, matriz_usuarios, dic_usuario_actualizar)
+
+    modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+    opcion_seleccionada = modulo_validar.obtener_opcion(False)
 
 def obtener_usuario(id_usuario, matriz_usuarios):
     for fila in matriz_usuarios:
@@ -96,22 +105,150 @@ def eliminar_matriz_usuarios():
         
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
 
-def imprimir_matriz_usuarios(matriz_usuarios):
-    len_matriz_usuarios=len(matriz_usuarios)
-    for encabezado in range(len_matriz_usuarios):
-        matriz_usuarios[encabezado][1] = matriz_usuarios[encabezado][1][:8]  # Recortar el nombre a 8 caracteres
-                    
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])# Ordenar la lista por apellido
-    encabezado_usuarios = ["ID", "Nombre", "Apellido", "DNI", "Correo"]  # Atributos de cada contenido
-    ancho_columna=30  
-    
-    modulo_varios.imprimir_linea(len(encabezado_usuarios), ancho_columna)# Imprimir la línea superior del cuadro
-    
-    print("|" + "|".join([f"{encabezado:<{ancho_columna}}" for encabezado in encabezado_usuarios]) + "|")  # Imprimir el encabezado
-    #añade barra al prncipio y final de cada cadena. recorre encabezados y los imprime a la izquierda
-    modulo_varios.imprimir_linea(len(encabezado_usuarios), ancho_columna)    # Imprimir la línea interior del cuadro
-    
-    for fila in matriz_usuarios_ordenados:    # Imprimir cada fila de la matriz
-        print("|" + "|".join([f"{str(valor).capitalize():<{ancho_columna}}" for valor in fila]) + "|")
-    
-    modulo_varios.imprimir_linea(len(encabezado_usuarios), ancho_columna) # Imprimir la línea inferior del cuadro
+# Función para mostrar la matriz de usuarios en un Treeview
+def imprimir_matriz_usuarios_tk(matriz_usuarios):
+    root = tk.Tk()
+    root.title("Matriz de Usuarios")
+
+    tree = ttk.Treeview(root, columns=("ID", "Nombre", "Apellido", "DNI", "Correo"), show="headings")
+    tree.heading("ID", text="ID")
+    tree.heading("Nombre", text="Nombre")
+    tree.heading("Apellido", text="Apellido")
+    tree.heading("DNI", text="DNI")
+    tree.heading("Correo", text="Correo")
+    tree.column("ID", width=50, anchor=tk.CENTER)
+    tree.column("Nombre", width=150, anchor="w")
+    tree.column("Apellido", width=150, anchor="w")
+    tree.column("DNI", width=100, anchor=tk.CENTER)
+    tree.column("Correo", width=200, anchor="w")
+
+    for usuario in matriz_usuarios:
+        tree.insert("", tk.END, values=usuario)
+
+    tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
+
+    def obtener_seleccion(tree):
+        item_seleccionado = tree.selection()
+        if not item_seleccionado:
+            return None
+        valores = tree.item(item_seleccionado, "values")
+        return valores
+
+    def mostrar_seleccion():
+        seleccion = obtener_seleccion(tree)
+        if seleccion:
+            id_usuario = int(seleccion[0])  # Obtener el ID como entero
+            menu_actualizar_usuario(id_usuario, seleccion, matriz_usuarios)
+        else:
+            messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
+
+    def eliminar_seleccion():
+        seleccion = obtener_seleccion(tree)
+        if seleccion:
+            id_usuario = int(seleccion[0])
+            for usuario in matriz_usuarios:
+                if usuario[0] == id_usuario:
+                    matriz_usuarios.remove(usuario)
+                    break
+            tree.delete(tree.selection()[0])
+            modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+            messagebox.showinfo("Éxito", "Usuario eliminado.")
+        else:
+            messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario para eliminar.")
+
+    btn_seleccion = tk.Button(root, text="Actualizar", command=mostrar_seleccion)
+    btn_seleccion.pack(pady=10)
+
+    btn_eliminar = tk.Button(root, text="Eliminar", command=eliminar_seleccion)
+    btn_eliminar.pack(pady=10)
+
+    boton_cerrar = tk.Button(root, text="Cerrar", command=root.destroy)
+    boton_cerrar.pack(pady=20)
+
+    root.mainloop()
+
+# --------------------------------
+# menu eliminar
+# --------------------------------
+
+def eliminar_seleccion():
+    print("usuario eliminado")
+
+# --------------------------------
+# menu actualizar
+# --------------------------------
+
+# Función para mostrar el formulario de actualización con los datos seleccionados
+def menu_actualizar_usuario(id_usuario, datos, matriz_usuarios):
+    root = tk.Tk()
+    root.title("Actualizar Usuario")
+    root.geometry("400x400")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text=f"Actualizar Usuario - ID: {id_usuario}", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    # Campo para Nombre
+    tk.Label(root, text="Nombre:", font=("Arial", 12)).pack(pady=5)
+    entry_nombre = tk.Entry(root, font=("Arial", 12))
+    entry_nombre.insert(0, datos[1])  # Insertar el nombre del usuario seleccionado
+    entry_nombre.pack(pady=5)
+
+    # Campo para Apellido
+    tk.Label(root, text="Apellido:", font=("Arial", 12)).pack(pady=5)
+    entry_apellido = tk.Entry(root, font=("Arial", 12))
+    entry_apellido.insert(0, datos[2])  # Insertar el apellido del usuario seleccionado
+    entry_apellido.pack(pady=5)
+
+    # Campo para DNI
+    tk.Label(root, text="DNI:", font=("Arial", 12)).pack(pady=5)
+    entry_dni = tk.Entry(root, font=("Arial", 12))
+    entry_dni.insert(0, datos[3])  # Insertar el DNI del usuario seleccionado
+    entry_dni.pack(pady=5)
+
+    # Campo para Mail
+    tk.Label(root, text="Mail:", font=("Arial", 12)).pack(pady=5)
+    entry_mail = tk.Entry(root, font=("Arial", 12))
+    entry_mail.insert(0, datos[4])  # Insertar el correo del usuario seleccionado
+    entry_mail.pack(pady=5)
+
+    # Botón para guardar
+    btn_guardar = tk.Button(
+        root,
+        text="Guardar",
+        font=("Arial", 12),
+        command=lambda: guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios)
+    )
+    btn_guardar.pack(pady=20)
+
+    # Botón para cerrar
+    btn_cerrar = tk.Button(root, text="Cerrar", font=("Arial", 12), command=root.destroy)
+    btn_cerrar.pack(pady=10)
+
+    root.mainloop()
+
+# Función para guardar los datos actualizados
+def guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios):
+    nombre = entry_nombre.get()
+    apellido = entry_apellido.get()
+    dni = entry_dni.get()
+    mail = entry_mail.get()
+
+    if not (nombre and apellido and dni and mail):
+        messagebox.showwarning("Campos incompletos", "Por favor, complete todos los campos.")
+        return
+
+    # Actualizar los datos en la matriz
+    for usuario in matriz_usuarios:
+        if usuario[0] == id_usuario:
+            usuario[1] = nombre
+            usuario[2] = apellido
+            usuario[3] = dni
+            usuario[4] = mail
+            break
+
+    # Guardar la matriz actualizada en el archivo
+    modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+
+    messagebox.showinfo("Éxito", "Datos actualizados correctamente.")
+    root.destroy()

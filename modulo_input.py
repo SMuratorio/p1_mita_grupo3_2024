@@ -1,4 +1,55 @@
 import modulo_validar, modulo_varios, modulo_genero
+from tkinter import simpledialog, messagebox
+
+def obtener_dinamico_tk(mensaje_input, mensaje_error, validador, capitalizar=True):
+    while True:
+        dato = simpledialog.askstring("Entrada de datos", mensaje_input)
+        if dato:
+            dato = dato.strip()
+            if capitalizar:
+                dato = dato.capitalize()
+            if validador(dato):
+                return dato
+            else:
+                messagebox.showerror("Error", mensaje_error)
+        else:
+            return None  # En caso de que el usuario cierre la ventana de entrada
+
+def obtener_unico_tk(mensaje_input, mensaje_error_unico, mensaje_error_validacion, validar_funcion, existentes):
+    while True:
+        nuevo_valor = simpledialog.askstring("Entrada de datos", mensaje_input)
+        if nuevo_valor:
+            nuevo_valor = nuevo_valor.strip()
+            if nuevo_valor in existentes:
+                messagebox.showerror("Error", mensaje_error_unico)
+            elif not validar_funcion(nuevo_valor):
+                messagebox.showerror("Error", mensaje_error_validacion)
+            else:
+                existentes.add(nuevo_valor)
+                return nuevo_valor
+        else:
+            return None
+
+def obtener_usuario_tk(dnis_existentes, correos_existentes):
+    nuevo_nombre = obtener_dinamico_tk("Ingrese el nombre del usuario: ", "Nombre de usuario no válido. ", modulo_validar.validar_strings)
+    if not nuevo_nombre:
+        return None  # Si el usuario cierra la ventana o no ingresa el dato, se sale de la función
+
+    nuevo_apellido = obtener_dinamico_tk("Ingrese el apellido del usuario: ", "Apellido de usuario no válido. ", modulo_validar.validar_strings)
+    if not nuevo_apellido:
+        return None
+
+    nuevo_dni = obtener_unico_tk("Ingrese el DNI del usuario (con puntos, formato XX.XXX.XXX): ", "El DNI ingresado ya existe. Por favor, ingrese un DNI único.", 
+                                 "El DNI ingresado no es válido. Intente nuevamente.", modulo_validar.validar_dni, dnis_existentes)
+    if not nuevo_dni:
+        return None
+
+    nuevo_mail = obtener_unico_tk("Ingrese el correo electrónico: ", "El correo ya existe. Por favor, ingrese un correo único.", 
+                                  "El correo ingresado no es válido. Intente nuevamente.", modulo_validar.validar_email, correos_existentes)
+    if not nuevo_mail:
+        return None
+
+    return (nuevo_nombre, nuevo_apellido, nuevo_dni, nuevo_mail)
 
 def obtener_dinamico(mensaje_input, mensaje_output, funcion_validacion, capitalizar=True):
     while True:
@@ -24,15 +75,6 @@ def obtener_unico(mensaje_input, mensaje_error_unico, mensaje_error_validacion, 
         else:
             existentes.add(nuevo_valor)
             return nuevo_valor
-
-def obtener_usuario(dnis_existentes, correos_existentes):
-    nuevo_nombre = obtener_dinamico("Ingrese el nombre del usuario: ", "Nombre de usuario no válido. ", modulo_validar.validar_strings)
-    nuevo_apellido = obtener_dinamico("Ingrese el apellido del usuario: ", "Apellido de usuario no válido. ", modulo_validar.validar_strings)
-    nuevo_dni = obtener_unico("Ingrese el DNI del usuario (con puntos, formato XX.XXX.XXX): ", "El DNI ingresado ya existe. Por favor, ingrese un DNI único.", 
-                              "El DNI ingresado no es válido. Intente nuevamente.", modulo_validar.validar_dni, dnis_existentes)
-    nuevo_mail = obtener_unico("Ingrese el correo electrónico: ", "El correo ya existe. Por favor, ingrese un correo único.", 
-                               "El correo ingresado no es válido. Intente nuevamente.", modulo_validar.validar_email, correos_existentes)
-    return (nuevo_nombre, nuevo_apellido, nuevo_dni, nuevo_mail) #Uso de tupla
 
 def obtener_pelicula(titulos_existentes):
     nuevo_titulo = obtener_unico("Ingrese el titulo: ", "El titulo ya existe. Por favor, ingrese un título único.", 

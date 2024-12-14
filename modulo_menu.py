@@ -1,5 +1,6 @@
-import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero
+import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz
 import tkinter as tk
+from tkinter import messagebox
 
 def mostrar_menu():
     print("\nAplicación de Seguimiento de Películas y Series Vistas")
@@ -20,15 +21,15 @@ def mostrar_menu_tkinter():
     titulo.pack(pady=20)
 
     # Botón para "Usuarios"
-    btn_usuarios = tk.Button(root, text="Usuarios", font=("Arial", 14), width=20, command=lambda: print("Usuarios seleccionados"))
+    btn_usuarios = tk.Button(root, text="Usuarios", font=("Arial", 14), width=20, command=lambda: [root.destroy(), mostrar_submenu_usuarios_tkinter()])
     btn_usuarios.pack(pady=5)
 
     # Botón para "Películas/Series"
-    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: print("Películas/Series seleccionados"))
+    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: messagebox.showinfo("Películas/Series", "Opción aún no implementada"))
     btn_peliculas_series.pack(pady=5)
 
     # Botón para "Registros Vistos"
-    btn_registros_vistos = tk.Button(root, text="Registros Vistos", font=("Arial", 14), width=20, command=lambda: print("Registros Vistos seleccionados"))
+    btn_registros_vistos = tk.Button(root, text="Registros Vistos", font=("Arial", 14), width=20, command=lambda: messagebox.showinfo("Registros Vistos", "Opción aún no implementada"))
     btn_registros_vistos.pack(pady=5)
 
     # Botón para "Salir"
@@ -62,6 +63,50 @@ def mostrar_submenu(opcion):
         print("c. Eliminar Registro")
         print("d. Generar reporte")
         print("e. Volver al Menú Principal")
+
+#-----------------
+# SUBMENU TKINTER
+#-----------------
+
+def agregar_usuario():
+    modulo_usuarios.crear_matriz_usuarios()
+    messagebox.showinfo("Éxito", "Usuario agregado con éxito.")
+
+def actualizar_usuario():
+    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
+    modulo_usuarios.actualizar_matriz_usuarios()
+    modulo_usuarios.menu_actualizar_usuario()
+
+def eliminar_usuario():
+    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
+    modulo_usuarios.eliminar_matriz_usuarios()
+
+def generar_reporte():
+    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
+
+def mostrar_submenu_usuarios_tkinter():
+    # Crear una ventana para el submenú
+    root = tk.Tk()
+    root.title("Menú Usuarios")
+    root.geometry("600x300")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú de Usuarios", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    def volver_menu_principal():
+        root.destroy()
+        mostrar_menu_tkinter()
+
+    # Botones para las opciones del submenú
+    tk.Button(root, text="Agregar Usuario", font=("Arial", 12), command=agregar_usuario).pack(pady=5)
+    tk.Button(root, text="Actualizar Usuario", font=("Arial", 12), command=actualizar_usuario).pack(pady=5)
+    tk.Button(root, text="Eliminar Usuario", font=("Arial", 12), command=eliminar_usuario).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=generar_reporte).pack(pady=5)
+    tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
+
+    # Iniciar el bucle de eventos del submenú
+    root.mainloop()
 
 def mostrar_submenu_actualizar(opciones):
     while True: 

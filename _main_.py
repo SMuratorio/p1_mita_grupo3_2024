@@ -1,4 +1,4 @@
-import modulo_menu, modulo_peliculas, modulo_usuarios, modulo_registro_vistas, modulo_matriz
+import modulo_menu, modulo_peliculas, modulo_registro_vistas, modulo_matriz
 
 def _main_():
     dic_opciones={"1":"usuarios", "2":"peliculas y series", "3":"registros vistas", "4":"salir"} #Uso de diccionarios
@@ -7,35 +7,12 @@ def _main_():
     
     salir=True
     while salir:
-        modulo_menu.mostrar_menu()
+        #modulo_menu.mostrar_menu()
         opcion = input("Seleccione una opción del menú principal: ")
         if opcion in dic_opciones:
 
             if dic_opciones[opcion] == "usuarios":  # Menú de Usuarios
-                submenu_activo = True  # Bandera para controlar el bucle del submenú de usuarios
-                while submenu_activo:
-                    modulo_menu.mostrar_submenu(opcion)
-                    subopcion_usuarios = input("Seleccione una opción del submenú de Usuarios: ").strip().lower()
-
-                    if subopcion_usuarios == 'a': # Agregar Usuario
-                        modulo_usuarios.crear_matriz_usuarios()
-                        
-                    elif subopcion_usuarios == 'b':# Actualizar Usuario
-                        modulo_usuarios.imprimir_matriz_usuarios(modulo_matriz.archivo_a_matriz("usuarios.txt")) 
-                        modulo_usuarios.actualizar_matriz_usuarios()
-
-                    elif subopcion_usuarios == 'c': # Eliminar Usuarios
-                        modulo_usuarios.imprimir_matriz_usuarios(modulo_matriz.archivo_a_matriz("usuarios.txt")) 
-                        modulo_usuarios.eliminar_matriz_usuarios()
-
-                    elif subopcion_usuarios == 'd': # Generar reporte
-                        modulo_usuarios.imprimir_matriz_usuarios(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-                    
-                    elif subopcion_usuarios == 'e': # Volver al menú principal
-                        submenu_activo = False  # Salir del submenú volviendo al menú principal
-
-                    else:
-                        print("\nOpción no válida, intente nuevamente.")
+                modulo_menu.mostrar_submenu_usuarios_tkinter()
 
             elif dic_opciones[opcion] == "peliculas y series": #Menu de peliculas/series
                 submenu_activo = True  # Bandera para controlar el bucle del submenú
