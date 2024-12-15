@@ -131,16 +131,23 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
         if not modulo_validar.validar_anio(anio):
             messagebox.showerror("Error", "Año no válido. Debe ser un número.")
             return
-        if not modulo_validar.validar_duracion(duracion):
-            messagebox.showerror("Error", "Duración no válida. Debe ser un número.")
-            return
+        if duracion:
+            if not modulo_validar.validar_duracion(duracion):
+                messagebox.showerror("Error", "Duración no válida. Debe ser un número.")
+                return
+                # Agregar sufijo a la duración según el tipo
         if titulo:
             titulo=capitalizar_titulo(titulo)
         if titulo in titulos_existentes:
             messagebox.showerror("Error", "El Titulo ingresado ya existe.")
             return
         
-        sublista = [proximo_id_pelicula, titulo, tipo, genero, int(anio), int(duracion)]
+        if tipo.lower() == "serie":
+            duracion = f"{duracion} temporadas"
+        else:
+            duracion = f"{duracion} minutos"
+        
+        sublista = [proximo_id_pelicula, titulo, tipo, genero, int(anio), duracion]
         matriz_peliculas.append(sublista)
 
         # Guardar en archivo
@@ -351,11 +358,11 @@ def refrescar_grilla(tree, matriz_peliculas):
     for item in tree.get_children():
         tree.delete(item)
 
-    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
+    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: int(x[4])) # Ordenar la lista por año de estreno (ascendente)
                             
     # Insertar los datos actualizados en la grilla
     for pelicula in matriz_peliculas_ordenadas:
-        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], pelicula[5]))
+        tree.insert("", tk.END, values=pelicula)
 
 #-----------------
 # Generar reporte
@@ -378,10 +385,10 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
     tree.column("Año", width=100, anchor="w")
     tree.column("Duración", width=100, anchor="w")
     
-    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
+    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: int(x[4])) # Ordenar la lista por año de estreno (ascendente)
     
     for pelicula in matriz_peliculas_ordenadas:
-        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], pelicula[5]))
+        tree.insert("", tk.END, values=pelicula)
 
     tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
 
@@ -425,3 +432,4 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
     boton_cerrar.pack(pady=20)
 
     root.mainloop()
+
