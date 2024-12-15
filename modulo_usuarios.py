@@ -132,7 +132,7 @@ def form_actualizar_usuario(id_usuario, datos, matriz_usuarios, tree):
     entry_dni.pack(pady=5)
 
     # Campo para Mail
-    tk.Label(root, text="Mail:", font=("Arial", 12)).pack(pady=5)
+    tk.Label(root, text="Correo:", font=("Arial", 12)).pack(pady=5)
     entry_mail = tk.Entry(root, font=("Arial", 12))
     entry_mail.insert(0, datos[4])  # Insertar el correo del usuario seleccionado
     entry_mail.pack(pady=5)
@@ -152,10 +152,9 @@ def form_actualizar_usuario(id_usuario, datos, matriz_usuarios, tree):
 
     root.mainloop()
 
-
 def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios, tree):
-    nombre = entry_nombre.get()
-    apellido = entry_apellido.get()
+    nombre = entry_nombre.get().capitalize()
+    apellido = entry_apellido.get().capitalize()
     dni = entry_dni.get()
     mail = entry_mail.get()
 
@@ -180,8 +179,6 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
         if dni in dnis_existentes:
             messagebox.showerror("Error", "El DNI ingresado ya existe.")
             return  # Detener ejecución si el DNI ya existe en los registros
-        
-        matriz_usuarios[id_usuario][3] = dni  # Actualiza el DNI
     
     # Validar correo solo si no está vacío
     if mail:
@@ -193,8 +190,6 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
         if mail in correos_existentes:
             messagebox.showerror("Error", "El correo ingresado ya existe.")
             return  # Detener ejecución si el correo ya existe en los registros
-
-        matriz_usuarios[id_usuario][4] = mail  # Actualiza el correo
 
     for usuario in matriz_usuarios:
         if usuario[0] == id_usuario:
@@ -252,7 +247,7 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
         usuario[1] = usuario[1][:8]
         tree.insert("", tk.END, values=(usuario[0], usuario[1], usuario[2], usuario[3], usuario[4]))
 
-    for usuario in matriz_usuarios:
+    for usuario in matriz_usuarios_ordenados:
         tree.insert("", tk.END, values=usuario)
 
     tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
@@ -270,7 +265,7 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_usuario = int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_usuario(id_usuario, seleccion, matriz_usuarios, tree)
+                form_actualizar_usuario(id_usuario, seleccion, matriz_usuarios_ordenados, tree)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
 
