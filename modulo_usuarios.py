@@ -152,6 +152,7 @@ def form_actualizar_usuario(id_usuario, datos, matriz_usuarios, tree):
 
     root.mainloop()
 
+
 def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios, tree):
     nombre = entry_nombre.get()
     apellido = entry_apellido.get()
@@ -179,7 +180,9 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
         if dni in dnis_existentes:
             messagebox.showerror("Error", "El DNI ingresado ya existe.")
             return  # Detener ejecución si el DNI ya existe en los registros
-
+        
+        matriz_usuarios[id_usuario][3] = dni  # Actualiza el DNI
+    
     # Validar correo solo si no está vacío
     if mail:
         if not modulo_validar.validar_email(mail):
@@ -191,10 +194,6 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
             messagebox.showerror("Error", "El correo ingresado ya existe.")
             return  # Detener ejecución si el correo ya existe en los registros
 
-    # Actualizar datos solo si los campos son modificados
-    if dni:
-        matriz_usuarios[id_usuario][3] = dni  # Actualiza el DNI
-    if mail:
         matriz_usuarios[id_usuario][4] = mail  # Actualiza el correo
 
     for usuario in matriz_usuarios:
