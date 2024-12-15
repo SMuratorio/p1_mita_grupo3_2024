@@ -69,17 +69,13 @@ def mostrar_submenu(opcion):
 #-----------------
 
 def agregar_usuario():
-    modulo_usuarios.crear_matriz_usuarios()
-    messagebox.showinfo("Éxito", "Usuario agregado con éxito.")
+    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
 
 def actualizar_usuario():
     modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-    modulo_usuarios.actualizar_matriz_usuarios()
-    modulo_usuarios.menu_actualizar_usuario()
 
 def eliminar_usuario():
     modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-    modulo_usuarios.eliminar_matriz_usuarios()
 
 def generar_reporte():
     modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
@@ -98,8 +94,9 @@ def mostrar_submenu_usuarios_tkinter():
         root.destroy()
         mostrar_menu_tkinter()
 
+    mu = modulo_matriz.archivo_a_matriz("usuarios.txt")
     # Botones para las opciones del submenú
-    tk.Button(root, text="Agregar Usuario", font=("Arial", 12), command=agregar_usuario).pack(pady=5)
+    tk.Button(root, text="Agregar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.form_agregar_usuario(mu)).pack(pady=5)
     tk.Button(root, text="Actualizar Usuario", font=("Arial", 12), command=actualizar_usuario).pack(pady=5)
     tk.Button(root, text="Eliminar Usuario", font=("Arial", 12), command=eliminar_usuario).pack(pady=5)
     tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=generar_reporte).pack(pady=5)

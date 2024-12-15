@@ -1,6 +1,5 @@
 import modulo_validar, modulo_menu, modulo_input, modulo_varios, modulo_matriz
 import tkinter as tk
-from tkinter import simpledialog
 from tkinter import ttk
 from tkinter import messagebox
 
@@ -105,7 +104,6 @@ def eliminar_matriz_usuarios():
         
         opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
 
-# Función para mostrar la matriz de usuarios en un Treeview
 def imprimir_matriz_usuarios_tk(matriz_usuarios):
     root = tk.Tk()
     root.title("Matriz de Usuarios")
@@ -138,7 +136,7 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios):
         seleccion = obtener_seleccion(tree)
         if seleccion:
             id_usuario = int(seleccion[0])  # Obtener el ID como entero
-            menu_actualizar_usuario(id_usuario, seleccion, matriz_usuarios)
+            form_actualizar_usuario(id_usuario, seleccion, matriz_usuarios, tree)
         else:
             messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
 
@@ -167,19 +165,51 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios):
 
     root.mainloop()
 
-# --------------------------------
-# menu eliminar
-# --------------------------------
+def form_agregar_usuario(matriz_usuarios):
+    root = tk.Tk()
+    root.title("Agregar Usuario")
+    root.geometry("400x400")
 
-def eliminar_seleccion():
-    print("usuario eliminado")
+    # Etiqueta para el título
+    titulo = tk.Label(root, text=f"Agregar Usuario", font=("Arial", 16))
+    titulo.pack(pady=10)
 
-# --------------------------------
-# menu actualizar
-# --------------------------------
+    # Campo para Nombre
+    tk.Label(root, text="Nombre:", font=("Arial", 12)).pack(pady=5)
+    entry_nombre = tk.Entry(root, font=("Arial", 12))
+    entry_nombre.pack(pady=5)
 
-# Función para mostrar el formulario de actualización con los datos seleccionados
-def menu_actualizar_usuario(id_usuario, datos, matriz_usuarios):
+    # Campo para Apellido
+    tk.Label(root, text="Apellido:", font=("Arial", 12)).pack(pady=5)
+    entry_apellido = tk.Entry(root, font=("Arial", 12))
+    entry_apellido.pack(pady=5)
+
+    # Campo para DNI
+    tk.Label(root, text="DNI:", font=("Arial", 12)).pack(pady=5)
+    entry_dni = tk.Entry(root, font=("Arial", 12))
+    entry_dni.pack(pady=5)
+
+    # Campo para Mail
+    tk.Label(root, text="Mail:", font=("Arial", 12)).pack(pady=5)
+    entry_mail = tk.Entry(root, font=("Arial", 12))
+    entry_mail.pack(pady=5)
+
+    # Botón para guardar
+    btn_guardar = tk.Button(
+        root,
+        text="Guardar",
+        font=("Arial", 12),
+        command=lambda: agregar_datos(root, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios)
+    )
+    btn_guardar.pack(pady=20)
+
+    # Botón para cerrar
+    btn_cerrar = tk.Button(root, text="Cerrar", font=("Arial", 12), command=root.destroy)
+    btn_cerrar.pack(pady=10)
+
+    root.mainloop()
+
+def form_actualizar_usuario(id_usuario, datos, matriz_usuarios, tree):
     root = tk.Tk()
     root.title("Actualizar Usuario")
     root.geometry("400x400")
@@ -217,7 +247,7 @@ def menu_actualizar_usuario(id_usuario, datos, matriz_usuarios):
         root,
         text="Guardar",
         font=("Arial", 12),
-        command=lambda: guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios)
+        command=lambda: actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios, tree)
     )
     btn_guardar.pack(pady=20)
 
@@ -227,8 +257,7 @@ def menu_actualizar_usuario(id_usuario, datos, matriz_usuarios):
 
     root.mainloop()
 
-# Función para guardar los datos actualizados
-def guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios):
+def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios, tree):
     nombre = entry_nombre.get()
     apellido = entry_apellido.get()
     dni = entry_dni.get()
@@ -238,7 +267,6 @@ def guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, ent
         messagebox.showwarning("Campos incompletos", "Por favor, complete todos los campos.")
         return
 
-    # Actualizar los datos en la matriz
     for usuario in matriz_usuarios:
         if usuario[0] == id_usuario:
             usuario[1] = nombre
@@ -247,8 +275,27 @@ def guardar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, ent
             usuario[4] = mail
             break
 
-    # Guardar la matriz actualizada en el archivo
     modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
-
     messagebox.showinfo("Éxito", "Datos actualizados correctamente.")
     root.destroy()
+    refrescar_grilla(tree, matriz_usuarios)
+
+def agregar_datos(root, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios):
+    nombre = entry_nombre.get()
+    apellido = entry_apellido.get()
+    dni = entry_dni.get()
+    mail = entry_mail.get()
+    proximo_id_usuario = len(matriz_usuarios) + 1
+
+    sublista = [proximo_id_usuario, nombre, apellido, dni, mail]
+    matriz_usuarios.append(sublista)
+
+    modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+    messagebox.showinfo("Éxito", f"Usuario {nombre} {apellido} agregado con éxito.")
+    root.destroy()
+
+def refrescar_grilla(tree, matriz_usuarios):
+    for item in tree.get_children():
+        tree.delete(item)
+    for usuario in matriz_usuarios:
+        tree.insert("", tk.END, values=usuario)
