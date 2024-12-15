@@ -1,4 +1,4 @@
-import modulo_validar,modulo_matriz
+import modulo_sinopsis, modulo_validar, modulo_matriz
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -24,37 +24,16 @@ def capitalizar_titulo(titulo):
 #-----------------
 # Agrerar pelicula
 #-----------------
-"""def crear_matriz_peliculas():
-    opcion_seleccionada = modulo_validar.obtener_opcion()
-    while opcion_seleccionada == "s":
-        proximo_id_peliculas = len(matriz_peliculas)+1
-        print("\nAgregar pelicula o serie:")
-        titulo, tipo, genero, anio, duracion = modulo_input.obtener_pelicula(titulos_existentes)
-
-        sinopsis_formateada=modulo_sinopsis.formatear_sinopsis(titulo)  # Obtener sinopsis formateada
-        modulo_sinopsis.guardar_sinopsis_en_archivo(sinopsis_formateada)
-
-        print(f"La {tipo} '{titulo}' creada con ID {proximo_id_peliculas}.")
-
-        sublista = [proximo_id_peliculas, titulo, tipo, genero, anio, duracion]
-        matriz_peliculas.append(sublista)
-        print("\nPelícula/Serie agregada con éxito.")
-
-        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
-        leer_matriz_peliculas([sublista])
-
-        opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-"""
 def form_agregar_pelicula(matriz_peliculas):
     root = tk.Tk()
     root.title("Agregar Película")
-    root.geometry("500x400")
+    root.geometry("600x500")
 
-    # Configurar las columnas y filas para centrar el contenido
+    # Configurar columnas y filas para centrar el contenido
     root.grid_columnconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
     root.grid_rowconfigure(0, weight=1)
-    root.grid_rowconfigure(7, weight=1)
+    root.grid_rowconfigure(8, weight=1)
 
     # Etiqueta para el título
     titulo = tk.Label(root, text="Agregar Película", font=("Arial", 16))
@@ -77,9 +56,14 @@ def form_agregar_pelicula(matriz_peliculas):
     entry_anio = tk.Entry(root, font=("Arial", 12))
     entry_anio.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Duración(minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
+    tk.Label(root, text="Duración (minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
     entry_duracion = tk.Entry(root, font=("Arial", 12))
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
+
+    # TextArea para Sinopsis
+    tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
+    text_sinopsis = tk.Text(root, font=("Arial", 12), height=5, width=20, wrap="word")
+    text_sinopsis.grid(row=6, column=1, padx=10, pady=5)
 
     # Botón para guardar película
     btn_guardar = tk.Button(
@@ -93,24 +77,27 @@ def form_agregar_pelicula(matriz_peliculas):
             entry_genero,
             entry_anio,
             entry_duracion,
+            text_sinopsis,
             matriz_peliculas
         )
     )
-    btn_guardar.grid(row=6, column=0, pady=20, padx=5, sticky="e")
+    btn_guardar.grid(row=7, column=0, pady=20, padx=5, sticky="e")
 
     # Botón para cerrar
     btn_cerrar = tk.Button(root, text="Cerrar", font=("Arial", 12), command=root.destroy)
-    btn_cerrar.grid(row=6, column=1, pady=20, padx=5, sticky="w")
+    btn_cerrar.grid(row=7, column=1, pady=20, padx=5, sticky="w")
 
     root.mainloop()
 
-def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, matriz_peliculas):
+def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas):
     try:
         titulo = entry_titulo.get()
         tipo = entry_tipo.get().capitalize()
         genero = entry_genero.get().capitalize()
         anio = entry_anio.get()
         duracion = entry_duracion.get()
+        sinopsis = text_sinopsis.get("1.0", "end").strip()  # Obtener el texto del TextArea
+
         proximo_id_pelicula = len(matriz_peliculas) + 1
         
         # Verificar espacios en blanco
@@ -140,12 +127,15 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
             messagebox.showerror("Error", "El Titulo ingresado ya existe.")
             return
         
-        sublista = [proximo_id_pelicula, titulo, tipo, genero, int(anio), int(duracion)]
+        sinopsis_formateada = modulo_sinopsis.formatear_sinopsis(titulo, sinopsis)
+        sublista = [proximo_id_pelicula, titulo, tipo, genero, anio, duracion]
         matriz_peliculas.append(sublista)
 
         # Guardar en archivo
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
         messagebox.showinfo("Éxito", f"Película/Serie '{titulo}' agregada con éxito.")
+        # Guardar sinopsis
+        modulo_sinopsis.guardar_sinopsis_en_archivo(sinopsis_formateada)
         root.destroy()
 
     except ValueError:
@@ -153,73 +143,10 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
     except Exception as e:
         messagebox.showerror(f"Ha ocurrido un error inesperado: {e}")
 
-#--------------------
-# Actualizar pelicula
-#--------------------
-"""def actualizar_matriz_peliculas():
-    opcion_seleccionada = modulo_validar.obtener_opcion()
-    while opcion_seleccionada == 's':
-        id_pelicula = int(modulo_input.obtener_id(matriz_peliculas, "pelicula/serie"))
-        dic_pelicula_actualizar = obtener_pelicula(id_pelicula, matriz_peliculas)
-        opcion_actualizar = modulo_menu.mostrar_submenu_actualizar(list(dic_pelicula_actualizar.keys())) #convierte las claves en lista
-        # Llamada a la nueva función para validar y actualizar el valor
-        dic_pelicula_actualizar = validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id_pelicula, titulos_existentes)
-        actualizar_pelicula(id_pelicula, matriz_peliculas, dic_pelicula_actualizar)
-        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
-        
-        opcion_seleccionada = modulo_validar.obtener_opcion(False)
-
-def obtener_pelicula(id_pelicula, matriz_peliculas):
-    for fila in matriz_peliculas:
-        if fila[0] == id_pelicula:
-            return {"Titulo":fila[1], "Tipo": fila[2], "Genero": fila[3], "Año": fila[4]}
-
-def actualizar_pelicula(id_pelicula, matriz_peliculas, pelicula_actualizar):
-    for fila in matriz_peliculas:
-        if fila[0] == id_pelicula:
-            fila[1] = pelicula_actualizar["Titulo"]
-            fila[2] = pelicula_actualizar["Tipo"]
-            fila[3] = pelicula_actualizar["Genero"]
-            fila[4] = pelicula_actualizar["Año"]
-            return
-
-def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id_pelicula, titulos_existentes):
-    validadores = {"Titulo": lambda titulo: modulo_validar.validar_titulo(titulo) and modulo_varios.capitalizar_titulo(titulo) not in titulos_existentes, 
-                   "Tipo": modulo_validar.validar_tipo,
-                   "Genero": lambda genero: True,
-                   "Año": modulo_validar.validar_anio}
-
-    titulo_actual = dic_pelicula_actualizar.get("Titulo")  
-    valor_actual = dic_pelicula_actualizar.get(opcion_actualizar) #obtiene valor asociado a esa clave 
-    
-    if opcion_actualizar == "Genero":
-        print(f"Va a actualizar el campo 'Genero' cuyo valor actual es: '{valor_actual}'.")
-        nuevo_valor= modulo_genero.seleccionar_genero()
-        
-    else:
-        nuevo_valor = modulo_input.obtener_nuevo_valor(opcion_actualizar, dic_pelicula_actualizar, validadores).capitalize()
-
-    if opcion_actualizar == "Tipo":  # Se verifica si se está actualizando el tipo
-        if nuevo_valor in ["película", "pelicula"]:
-            duracion = modulo_input.obtener_dinamico("Ingrese la duración de la película (en minutos): ","Duración no válida. Por favor, ingrese un número entero positivo.",
-                                                      modulo_validar.validar_duracion)
-            dic_pelicula_actualizar["Duracion"] = f"{duracion} minutos"  # Actualizar duración para película
-        elif nuevo_valor == "serie":
-            duracion = modulo_input.obtener_dinamico("Ingrese la cantidad de temporadas: ","Cantidad no válida. Por favor, ingrese un número entero positivo.",
-                                                      modulo_validar.validar_duracion)
-            dic_pelicula_actualizar["Duracion"] = f"{duracion} temporadas"  # Actualizar duración para serie
-    
-    if opcion_actualizar == "Titulo":
-        titulos_existentes.discard(titulo_actual);titulos_existentes.add(nuevo_valor)
-    
-    dic_pelicula_actualizar[opcion_actualizar] = nuevo_valor #diccionario que almacena la información de un usuario.
-    print(f"{nuevo_valor} con ID {id_pelicula} ha sido actualizado.") #Movi el print aca
-    return dic_pelicula_actualizar
-"""
 def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     root = tk.Tk()
     root.title("Actualizar Película")
-    root.geometry("500x400")
+    root.geometry("600x500")
 
     # Configurar las columnas y filas para centrar el contenido
     root.grid_columnconfigure(0, weight=1)
@@ -257,6 +184,13 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     entry_duracion.insert(0, seleccion[5])
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
 
+    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", entry_titulo.get())
+    # TextArea para Sinopsis
+    tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
+    text_sinopsis = tk.Text(root, font=("Arial", 12), height=5, width=20, wrap="word")
+    text_sinopsis.insert("1.0", sinopsis)  # Cambiado "0" a "1.0"
+    text_sinopsis.grid(row=6, column=1, padx=10, pady=5)
+
     # Botón para guardar cambios
     btn_guardar = tk.Button(
         root,
@@ -270,24 +204,26 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
             entry_genero,
             entry_anio,
             entry_duracion,
+            text_sinopsis,
             matriz_peliculas,
             tree
         )
     )
-    btn_guardar.grid(row=6, column=0, padx=5, pady=20, sticky="e")
+    btn_guardar.grid(row=7, column=0, padx=5, pady=20, sticky="e")
 
     # Botón para cerrar
     btn_cerrar = tk.Button(root, text="Cerrar", font=("Arial", 12), command=root.destroy)
-    btn_cerrar.grid(row=6, column=1, padx=5, pady=20, sticky="w")
+    btn_cerrar.grid(row=7, column=1, padx=5, pady=20, sticky="w")
 
     root.mainloop()
 
-def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, matriz_peliculas, tree):
+def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas, tree):
     titulo = entry_titulo.get()
     tipo = entry_tipo.get().capitalize()
     genero = entry_genero.get().capitalize()
     anio = entry_anio.get()
     duracion = entry_duracion.get()
+    sinopsis = text_sinopsis.get("1.0", "end").strip()  # Obtener el texto del TextArea
 
     # Validar que no haya campos vacíos
     if not (titulo and tipo and genero and anio and duracion):
@@ -320,12 +256,6 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry
     if not modulo_validar.validar_duracion(duracion):
         messagebox.showerror("Error", "Duracion no válido. Intente nuevamente.")
         return
-    
-    # Agregar sufijo a la duración según el tipo
-    if tipo.lower() == "película":
-        duracion += " minutos"
-    elif tipo.lower() == "serie":
-        duracion += " temporadas"
 
     # Actualizar los datos en la matriz de películas
     for pelicula in matriz_peliculas:
@@ -340,6 +270,9 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry
     # Guardar la matriz actualizada en el archivo
     modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
     
+    # Guardar sinopsis
+    modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", sinopsis, titulo)
+
     # Refrescar la grilla
     refrescar_grilla(tree, matriz_peliculas)
     
@@ -404,16 +337,17 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
         def eliminar_seleccion():
             seleccion = obtener_seleccion(tree)
             if seleccion:
-                # Filtrar los registros que no coinciden con el ID seleccionado
-                matriz_peliculas[:] = [registro for registro in matriz_peliculas if registro[0] != seleccion[0]]
-                
-                # Eliminar el registro de la vista (Treeview)
+                id_pelicula = int(seleccion[0])
+                for pelicula in matriz_peliculas:
+                    if pelicula[0] == id_pelicula:
+                        matriz_peliculas.remove(pelicula)
+                        break
                 tree.delete(tree.selection()[0])
-                
-                messagebox.showinfo("Éxito", "Pelicula/Serie eliminada.")
+                modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+                modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", seleccion[1])
+                messagebox.showinfo("Éxito", "Película eliminada.")
             else:
-                messagebox.showwarning("Sin selección", "Por favor, seleccione una pelicula/serie para eliminar.")
-        
+                messagebox.showwarning("Sin selección", "Por favor, seleccione una película para eliminar.")            
 
         btn_seleccion = tk.Button(root, text="Actualizar", command=actualizar_seleccion)
         btn_seleccion.pack(pady=10)

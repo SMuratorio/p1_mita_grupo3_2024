@@ -63,15 +63,6 @@ def mostrar_submenu_usuarios_tkinter():
     # Iniciar el bucle de eventos del submenú
     root.mainloop()
 
-"""elif opcion == '2':
-        print("\nPelículas/Series")
-        print("a. Agregar Película/Serie")
-        print("b. Actualizar Película/Serie")
-        print("c. Eliminar Película/Serie")
-        print("d. Generar reporte")
-        print("e. Manejar sinopsis")
-        print("f. Promedios de calificaciones")
-        print("g. Volver al Menú Principal")"""
 def mostrar_submenu_peliculas_tkinter():
     # Crear una ventana para el submenú
     root = tk.Tk()
