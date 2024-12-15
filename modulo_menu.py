@@ -1,4 +1,4 @@
-import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz
+import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas
 import tkinter as tk
 from tkinter import messagebox
 
@@ -25,7 +25,7 @@ def mostrar_menu_tkinter():
     btn_usuarios.pack(pady=5)
 
     # Botón para "Películas/Series"
-    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: messagebox.showinfo("Películas/Series", "Opción aún no implementada"))
+    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: [root.destroy(), mostrar_submenu_peliculas_tkinter()])
     btn_peliculas_series.pack(pady=5)
 
     # Botón para "Registros Vistos"
@@ -68,18 +68,6 @@ def mostrar_submenu(opcion):
 # SUBMENU TKINTER
 #-----------------
 
-def agregar_usuario():
-    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-
-def actualizar_usuario():
-    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-
-def eliminar_usuario():
-    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-
-def generar_reporte():
-    modulo_usuarios.imprimir_matriz_usuarios_tk(modulo_matriz.archivo_a_matriz("usuarios.txt"))
-
 def mostrar_submenu_usuarios_tkinter():
     # Crear una ventana para el submenú
     root = tk.Tk()
@@ -97,9 +85,34 @@ def mostrar_submenu_usuarios_tkinter():
     mu = modulo_matriz.archivo_a_matriz("usuarios.txt")
     # Botones para las opciones del submenú
     tk.Button(root, text="Agregar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.form_agregar_usuario(mu)).pack(pady=5)
-    tk.Button(root, text="Actualizar Usuario", font=("Arial", 12), command=actualizar_usuario).pack(pady=5)
-    tk.Button(root, text="Eliminar Usuario", font=("Arial", 12), command=eliminar_usuario).pack(pady=5)
-    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=generar_reporte).pack(pady=5)
+    tk.Button(root, text="Actualizar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.imprimir_matriz_usuarios_tk(mu)).pack(pady=5)
+    tk.Button(root, text="Eliminar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.imprimir_matriz_usuarios_tk(mu)).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_usuarios.imprimir_matriz_usuarios_tk(mu)).pack(pady=5)
+    tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
+
+    # Iniciar el bucle de eventos del submenú
+    root.mainloop()
+
+def mostrar_submenu_peliculas_tkinter():
+    # Crear una ventana para el submenú
+    root = tk.Tk()
+    root.title("Menú Peliculas")
+    root.geometry("600x300")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú de Peliculas", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    def volver_menu_principal():
+        root.destroy()
+        mostrar_menu_tkinter()
+
+    mu = modulo_matriz.archivo_a_matriz("peliculas.txt")
+    # Botones para las opciones del submenú
+    tk.Button(root, text="Agregar Película", font=("Arial", 12), command=lambda: modulo_peliculas.form_agregar_pelicula(mu)).pack(pady=5)
+    tk.Button(root, text="Actualizar Película", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mu)).pack(pady=5)
+    tk.Button(root, text="Eliminar Película", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mu)).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mu)).pack(pady=5)
     tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
 
     # Iniciar el bucle de eventos del submenú
