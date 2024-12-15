@@ -67,7 +67,7 @@ def agregar_datos(root, entry_usuario_id, entry_pelicula_id, entry_estado, entry
         # Obtener los valores de los campos
         usuario_id = int(entry_usuario_id.get())
         pelicula_id = int(entry_pelicula_id.get())
-        estado = entry_estado.get().lower()
+        estado = entry_estado.get().capitalize()
         calificacion = entry_calificacion.get() if estado == "terminada" else "0"
 
         # Validar que los campos no estén vacíos
@@ -93,8 +93,21 @@ def agregar_datos(root, entry_usuario_id, entry_pelicula_id, entry_estado, entry
             messagebox.showerror("Error", "Calificación no válida. Debe ser un número entre 1 y 10.")
             return
 
+        # Buscar el apellido del usuario usando el ID
+        apellido_usuario = next((usuario[1] for usuario in matriz_usuarios if usuario[0] == usuario_id), None)
+        if not apellido_usuario:
+            messagebox.showerror("Error", "No se encontró el apellido del usuario.")
+            return
+
+        # Buscar el título de la película usando el ID
+        titulo_pelicula = next((pelicula[1] for pelicula in matriz_peliculas if pelicula[0] == pelicula_id), None)
+        if not titulo_pelicula:
+            messagebox.showerror("Error", "No se encontró el título de la película/serie.")
+            return
+
         # Guardar el registro
-        matriz_registro_vistas.append([len(matriz_registro_vistas) + 1, usuario_id, pelicula_id, estado, calificacion])
+        matriz_registro_vistas.append([len(matriz_registro_vistas) + 1, usuario_id,apellido_usuario,pelicula_id ,titulo_pelicula ,estado, calificacion])
+        modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
         messagebox.showinfo("Éxito", "Registro agregado correctamente.")
         root.destroy()
 
@@ -194,22 +207,35 @@ def actualizar_registro(root, id_registro, entry_usuario_id, entry_pelicula_id, 
             return
     else:
         calificacion = 0  # Asignar calificación 0 si no es 'terminada'
+    
+    apellido_usuario = next((usuario[1] for usuario in matriz_usuarios if usuario[0] == usuario_id), None)
+    if not apellido_usuario:
+        messagebox.showerror("Error", "No se encontró el apellido del usuario.")
+        return
 
+        # Buscar el título de la película usando el ID
+    titulo_pelicula = next((pelicula[1] for pelicula in matriz_peliculas if pelicula[0] == pelicula_id), None)
+    if not titulo_pelicula:
+        messagebox.showerror("Error", "No se encontró el título de la película/serie.")
+        return
+    
     # Buscar el registro y actualizarlo
     for registro in matriz_registro_vistas:
         if registro[0] == id_registro:
             # Actualizar los valores
             registro[1] = usuario_id  # Actualizar ID de Usuario
+            registro[2] = apellido_usuario
             registro[3] = pelicula_id  # Actualizar ID de Película
+            registro[4] = titulo_pelicula
             registro[5] = estado  # Actualizar el estado
             registro[6] = calificacion  # Actualizar la calificación
             break
 
     # Guardar la matriz actualizada en el archivo
     modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+    refrescar_grilla(tree, matriz_registro_vistas)
     messagebox.showinfo("Éxito", "Registro actualizado correctamente.")
     root.destroy()
-    refrescar_grilla(tree, matriz_registro_vistas)
 
 def refrescar_grilla(tree, matriz_registro_vistas):
     for item in tree.get_children():
@@ -218,7 +244,7 @@ def refrescar_grilla(tree, matriz_registro_vistas):
     for registro in matriz_registro_vistas:
         registro[4] = registro[4][:8]
   
-    matriz_registros_ordenados = sorted(matriz_registro_vistas, key=lambda x: x[2])
+    matriz_registros_ordenados = sorted(matriz_registro_vistas, key=lambda x:str(x[2]))
 
     for registro in matriz_registros_ordenados:
         tree.insert("", tk.END, values=registro)
@@ -251,11 +277,11 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
     tree.column("Calificación", width=100, anchor="w")
 
     # Recortar los títulos a un máximo de 8 caracteres
-    """  for registro in contenido_registro_vistas:
-        registro[4] = registro[4][:8]"""
+    for registro in contenido_registro_vistas:
+        registro[4] = registro[4][:8]
 
     # Ordenar la matriz por apellido (índice 2)
-    matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[2])
+    matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: str(x[2]))
 
     # Insertar los datos en el Treeview
     for registro in matriz_registros_ordenados:

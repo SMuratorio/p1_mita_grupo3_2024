@@ -211,7 +211,7 @@ def refrescar_grilla(tree, matriz_usuarios):
     for item in tree.get_children():
         tree.delete(item)
     
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
+    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: str(fila[2]))
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
         # Recortar el nombre a 8 caracteres
@@ -238,7 +238,7 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
     tree.column("Correo", width=200, anchor="w")
 
     # Ordenar la matriz por apellido
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
+    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: sstr(fila[2]))
 
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
