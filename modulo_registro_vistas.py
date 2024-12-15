@@ -251,8 +251,8 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
     tree.column("Calificación", width=100, anchor="w")
 
     # Recortar los títulos a un máximo de 8 caracteres
-    for registro in contenido_registro_vistas:
-        registro[4] = registro[4][:8]
+    """  for registro in contenido_registro_vistas:
+        registro[4] = registro[4][:8]"""
 
     # Ordenar la matriz por apellido (índice 2)
     matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: x[2])

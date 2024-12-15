@@ -48,7 +48,7 @@ def capitalizar_titulo(titulo):
 def form_agregar_pelicula(matriz_peliculas):
     root = tk.Tk()
     root.title("Agregar Película")
-    root.geometry("400x400")
+    root.geometry("500x400")
 
     # Configurar las columnas y filas para centrar el contenido
     root.grid_columnconfigure(0, weight=1)
@@ -107,8 +107,8 @@ def form_agregar_pelicula(matriz_peliculas):
 def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, matriz_peliculas):
     try:
         titulo = entry_titulo.get()
-        tipo = entry_tipo.get()
-        genero = entry_genero.get()
+        tipo = entry_tipo.get().capitalize()
+        genero = entry_genero.get().capitalize()
         anio = entry_anio.get()
         duracion = entry_duracion.get()
         proximo_id_pelicula = len(matriz_peliculas) + 1
@@ -121,7 +121,6 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
         # Validaciones
         if not modulo_validar.validar_titulo(titulo):
             messagebox.showerror("Error", "Título no válido. Intente nuevamente.")
-            titulo=capitalizar_titulo(titulo)
             return
         if not modulo_validar.validar_tipo(tipo):
             messagebox.showerror("Error", "Tipo no válido. Intente nuevamente.")
@@ -135,7 +134,12 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
         if not modulo_validar.validar_duracion(duracion):
             messagebox.showerror("Error", "Duración no válida. Debe ser un número.")
             return
-
+        if titulo:
+            titulo=capitalizar_titulo(titulo)
+        if titulo in titulos_existentes:
+            messagebox.showerror("Error", "El Titulo ingresado ya existe.")
+            return
+        
         sublista = [proximo_id_pelicula, titulo, tipo, genero, int(anio), int(duracion)]
         matriz_peliculas.append(sublista)
 
@@ -149,9 +153,9 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
     except Exception as e:
         messagebox.showerror(f"Ha ocurrido un error inesperado: {e}")
 
-#-----------------
+#--------------------
 # Actualizar pelicula
-#-----------------
+#--------------------
 """def actualizar_matriz_peliculas():
     opcion_seleccionada = modulo_validar.obtener_opcion()
     while opcion_seleccionada == 's':
@@ -215,7 +219,7 @@ def validar_y_actualizar_pelicula(opcion_actualizar, dic_pelicula_actualizar, id
 def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     root = tk.Tk()
     root.title("Actualizar Película")
-    root.geometry("400x400")
+    root.geometry("500x400")
 
     # Configurar las columnas y filas para centrar el contenido
     root.grid_columnconfigure(0, weight=1)
@@ -280,8 +284,8 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
 
 def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, matriz_peliculas, tree):
     titulo = entry_titulo.get()
-    tipo = entry_tipo.get()
-    genero = entry_genero.get()
+    tipo = entry_tipo.get().capitalize()
+    genero = entry_genero.get().capitalize()
     anio = entry_anio.get()
     duracion = entry_duracion.get()
 
@@ -289,13 +293,21 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry
     if not (titulo and tipo and genero and anio and duracion):
         messagebox.showwarning("Campos incompletos", "Por favor, complete todos los campos.")
         return
+    
     titulo = capitalizar_titulo(titulo)
-    if titulo in titulos_existentes:
-        messagebox.showerror("Error", "El título ya existe en la base de datos. Intente con otro título.")
+    datos_actuales = next((pelicula for pelicula in matriz_peliculas if pelicula[0] == id_pelicula), None)
+    if not datos_actuales:
+        messagebox.showerror("Error", "Titulo no encontrado en la matriz.")
         return
-    if not modulo_validar.validar_titulo(titulo):
-        messagebox.showerror("Error", "Titulo no válido. Intente nuevamente.")
-        return
+
+    if titulo and titulo != datos_actuales[1]:
+        if not modulo_validar.validar_titulo(titulo):
+            messagebox.showerror("Error", "Titulo no válido")
+            return
+        if titulo in titulos_existentes:
+            messagebox.showerror("Error", "El titulo ingresado ya existe.")
+            return
+        
     if not modulo_validar.validar_tipo(tipo):
         messagebox.showerror("Error", "Tipo no válido. Intente nuevamente.")
         return
@@ -308,6 +320,12 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry
     if not modulo_validar.validar_duracion(duracion):
         messagebox.showerror("Error", "Duracion no válido. Intente nuevamente.")
         return
+    
+    # Agregar sufijo a la duración según el tipo
+    if tipo.lower() == "película":
+        duracion += " minutos"
+    elif tipo.lower() == "serie":
+        duracion += " temporadas"
 
     # Actualizar los datos en la matriz de películas
     for pelicula in matriz_peliculas:
@@ -332,18 +350,12 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry
 def refrescar_grilla(tree, matriz_peliculas):
     for item in tree.get_children():
         tree.delete(item)
-    
-    for i in range(len(matriz_peliculas)):
-        matriz_peliculas[i][1] = matriz_peliculas[i][1][:8]  #Recortar el título a 8 caracteres
 
-    for pelicula in matriz_peliculas:  # Convertir el año a entero si está en formato de cadena
-        pelicula[4] = pelicula[4]  # Convertir el año de estreno a entero
-                            
     matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
+                            
     # Insertar los datos actualizados en la grilla
-    for pelicula in matriz_peliculas:
-        tree.insert("", tk.END, values=pelicula)
-
+    for pelicula in matriz_peliculas_ordenadas:
+        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], pelicula[5]))
 
 #-----------------
 # Generar reporte
@@ -365,17 +377,11 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
     tree.column("Género", width=100, anchor=tk.CENTER)
     tree.column("Año", width=100, anchor="w")
     tree.column("Duración", width=100, anchor="w")
-
-    for i in range(len(matriz_peliculas)):
-        matriz_peliculas[i][1] = matriz_peliculas[i][1][:8]  #Recortar el título a 8 caracteres
-
-    for pelicula in matriz_peliculas:  # Convertir el año a entero si está en formato de cadena
-        pelicula[4] = pelicula[4] # Convertir el año de estreno a entero
-                            
+    
     matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: x[4]) # Ordenar la lista por año de estreno (ascendente)
-
+    
     for pelicula in matriz_peliculas_ordenadas:
-        tree.insert("", tk.END, values=pelicula)
+        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], pelicula[5]))
 
     tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
 

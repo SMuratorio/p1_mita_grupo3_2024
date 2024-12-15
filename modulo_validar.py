@@ -1,11 +1,11 @@
 import re, modulo_genero
 
-def validar_strings(strings): #valida apellido y nombre   
-    patron = r'^[A-Za-z]{3,}$'
+def validar_strings(strings):  # Valida apellido y nombre
+    patron = r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ]{3,}$'
     return re.match(patron, strings) is not None
 
-def validar_titulo(titulo):# Permite letras, números y signos especiales; no hay mínimo de letras
-    patron = r'^[A-Za-z0-9\W]{1,}$'  # \W permite todos los caracteres no alfanuméricos
+def validar_titulo(titulo):
+    patron = r"^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\-\.\,\!¡¿\?\'\s]+$"
     return re.match(patron, titulo) is not None
 
 def validar_email(mail):
@@ -22,7 +22,7 @@ def validar_anio(anio): #Expresión regular para validar un año en formato YYYY
 
 def validar_tipo(tipo):
     opciones_validas = ["serie", "película", "pelicula"]
-    return tipo in opciones_validas
+    return tipo.lower() in opciones_validas
 
 def validar_duracion(entrada): #para validar duracion
     if entrada.isdigit():

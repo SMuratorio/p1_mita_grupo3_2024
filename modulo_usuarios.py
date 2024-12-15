@@ -35,7 +35,7 @@ def form_agregar_usuario(matriz_usuarios):
     entry_dni.pack(pady=5)
 
     # Campo para Mail
-    tk.Label(root, text="Mail:", font=("Arial", 12)).pack(pady=5)
+    tk.Label(root, text="Correo:", font=("Arial", 12)).pack(pady=5)
     entry_mail = tk.Entry(root, font=("Arial", 12))
     entry_mail.pack(pady=5)
 
@@ -56,8 +56,8 @@ def form_agregar_usuario(matriz_usuarios):
 
 def agregar_datos(root, entry_nombre, entry_apellido, entry_dni, entry_mail, matriz_usuarios):
     try:
-        nombre = entry_nombre.get()
-        apellido = entry_apellido.get()
+        nombre = entry_nombre.get().capitalize()
+        apellido = entry_apellido.get().capitalize()
         dni = entry_dni.get()
         mail = entry_mail.get()
         proximo_id_usuario = len(matriz_usuarios) + 1
@@ -70,7 +70,7 @@ def agregar_datos(root, entry_nombre, entry_apellido, entry_dni, entry_mail, mat
         # Validaciones
         if not modulo_validar.validar_strings(nombre):
             messagebox.showerror("Error", "Nombre no válido. Intente nuevamente.")
-            return
+            return 
         if not modulo_validar.validar_strings(apellido):
             messagebox.showerror("Error", "Apellido no válido. Intente nuevamente.")
             return
@@ -169,28 +169,29 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
         messagebox.showerror("Error", "Apellido no válido. Intente nuevamente.")
         return
 
-    # Validar DNI solo si no está vacío
-    if dni:
+    datos_actuales = next((usuario for usuario in matriz_usuarios if usuario[0] == id_usuario), None)
+    if not datos_actuales:
+        messagebox.showerror("Error", "Usuario no encontrado en la matriz.")
+        return
+
+    # Validar DNI solo si se modificó
+    if dni and dni != datos_actuales[3]:
         if not modulo_validar.validar_dni(dni):
             messagebox.showerror("Error", "DNI no válido. Asegúrese de que esté en formato XX.XXX.XXX.")
-            return  # Detener ejecución si el formato del DNI no es válido
-
-        # Validar que el DNI no exista en los registros (si no es el mismo que el actual)
+            return
         if dni in dnis_existentes:
             messagebox.showerror("Error", "El DNI ingresado ya existe.")
-            return  # Detener ejecución si el DNI ya existe en los registros
-    
-    # Validar correo solo si no está vacío
-    if mail:
+            return
+
+    # Validar correo solo si se modificó
+    if mail and mail != datos_actuales[4]:
         if not modulo_validar.validar_email(mail):
             messagebox.showerror("Error", "Correo no válido. Intente nuevamente.")
-            return  # Detener ejecución si el formato del correo no es válido
-
-        # Validar que el correo no exista en los registros (si no es el mismo que el actual)
+            return
         if mail in correos_existentes:
             messagebox.showerror("Error", "El correo ingresado ya existe.")
-            return  # Detener ejecución si el correo ya existe en los registros
-
+            return
+        
     for usuario in matriz_usuarios:
         if usuario[0] == id_usuario:
             usuario[1] = nombre
@@ -200,25 +201,23 @@ def actualizar_datos(root, id_usuario, entry_nombre, entry_apellido, entry_dni, 
             break
 
     modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+    
+    refrescar_grilla(tree, matriz_usuarios)
+    
     messagebox.showinfo("Éxito", "Datos actualizados correctamente.")
     root.destroy()
-    refrescar_grilla(tree, matriz_usuarios)
 
 def refrescar_grilla(tree, matriz_usuarios):
     for item in tree.get_children():
         tree.delete(item)
-
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
     
+    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
         # Recortar el nombre a 8 caracteres
         usuario[1] = usuario[1][:8]
         tree.insert("", tk.END, values=(usuario[0], usuario[1], usuario[2], usuario[3], usuario[4]))
-
-    for usuario in matriz_usuarios_ordenados:
-        tree.insert("", tk.END, values=usuario)
-
+    
 #-----------------
 # Generar reporte
 #----------------
@@ -240,16 +239,13 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
 
     # Ordenar la matriz por apellido
     matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
-    
+
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
         # Recortar el nombre a 8 caracteres
         usuario[1] = usuario[1][:8]
         tree.insert("", tk.END, values=(usuario[0], usuario[1], usuario[2], usuario[3], usuario[4]))
-
-    for usuario in matriz_usuarios_ordenados:
-        tree.insert("", tk.END, values=usuario)
-
+    
     tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
 
     # Solo mostrar los botones si el modo es "normal"
