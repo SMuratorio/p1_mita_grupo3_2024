@@ -1,6 +1,3 @@
-def imprimir_linea(num_columnas, ancho_columna):
-    print("+" + "+".join(["-" * ancho_columna] * num_columnas) + "+")
-
 def capitalizar_titulo(titulo):
      # Capitaliza la primera letra del título y cada palabra que tenga 3 letras o más
     palabras = titulo.split()

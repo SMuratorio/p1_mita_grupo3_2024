@@ -1,14 +1,13 @@
-import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero
+import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas, modulo_registro_vistas
 import tkinter as tk
 
-def mostrar_menu():
-    print("\nAplicación de Seguimiento de Películas y Series Vistas")
-    print("Menú Principal")
-    print("1. Usuarios")
-    print("2. Películas/Series")
-    print("3. Registros Vistos")
-    print("4. Salir")
+mr = modulo_matriz.archivo_a_matriz("registros.txt")
+mp = modulo_matriz.archivo_a_matriz("peliculas.txt")
+mu = modulo_matriz.archivo_a_matriz("usuarios.txt")
 
+#-----------------
+# MENU TKINTER
+#-----------------
 def mostrar_menu_tkinter():
     # Crear la ventana principal
     root = tk.Tk()
@@ -20,33 +19,51 @@ def mostrar_menu_tkinter():
     titulo.pack(pady=20)
 
     # Botón para "Usuarios"
-    btn_usuarios = tk.Button(root, text="Usuarios", font=("Arial", 14), width=20, command=lambda: print("Usuarios seleccionados"))
+    btn_usuarios = tk.Button(root, text="Usuarios", font=("Arial", 14), width=20, command=lambda: [root.destroy(), mostrar_submenu_usuarios_tkinter()])
     btn_usuarios.pack(pady=5)
 
     # Botón para "Películas/Series"
-    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: print("Películas/Series seleccionados"))
+    btn_peliculas_series = tk.Button(root, text="Películas/Series", font=("Arial", 14), width=20, command=lambda: [root.destroy(), mostrar_submenu_peliculas_tkinter()])
     btn_peliculas_series.pack(pady=5)
 
     # Botón para "Registros Vistos"
-    btn_registros_vistos = tk.Button(root, text="Registros Vistos", font=("Arial", 14), width=20, command=lambda: print("Registros Vistos seleccionados"))
+    btn_registros_vistos = tk.Button(root, text="Registros Vistos", font=("Arial", 14), width=20, command=lambda:  [root.destroy(), mostrar_submenu_registros_tkinter()] )
     btn_registros_vistos.pack(pady=5)
 
     # Botón para "Salir"
-    btn_salir = tk.Button(root, text="Salir", font=("Arial", 14), width=20, command=root.quit)
+    btn_salir = tk.Button(root, text="Salir", font=("Arial", 14), width=20, command=root.destroy)
     btn_salir.pack(pady=20)
 
     # Iniciar el bucle de eventos
     root.mainloop()
 
-def mostrar_submenu(opcion):
-    if opcion == '1':
-        print("\nUsuarios")
-        print("a. Agregar Usuario")
-        print("b. Actualizar Usuario")
-        print("c. Eliminar Usuario")
-        print("d. Generar reporte")
-        print("e. Volver al Menú Principal")
-    elif opcion == '2':
+#-----------------
+# SUBMENU TKINTER
+#-----------------
+def mostrar_submenu_usuarios_tkinter():
+    # Crear una ventana para el submenú
+    root = tk.Tk()
+    root.title("Menú Usuarios")
+    root.geometry("600x300")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú de Usuarios", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    def volver_menu_principal():
+        root.destroy()
+        mostrar_menu_tkinter()
+
+    # Botones para las opciones del submenú
+    tk.Button(root, text="Agregar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.form_agregar_usuario(mu)).pack(pady=5)
+    tk.Button(root, text="Actualizar/Eliminar Usuario", font=("Arial", 12), command=lambda: modulo_usuarios.imprimir_matriz_usuarios_tk(mu, modo="normal")).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_usuarios.imprimir_matriz_usuarios_tk(mu, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
+
+    # Iniciar el bucle de eventos del submenú
+    root.mainloop()
+
+"""elif opcion == '2':
         print("\nPelículas/Series")
         print("a. Agregar Película/Serie")
         print("b. Actualizar Película/Serie")
@@ -54,31 +71,54 @@ def mostrar_submenu(opcion):
         print("d. Generar reporte")
         print("e. Manejar sinopsis")
         print("f. Promedios de calificaciones")
-        print("g. Volver al Menú Principal")
-    elif opcion == '3':
-        print("\nRegistros Vistos")
-        print("a. Agregar Registro")
-        print("b. Actualizar Registro")
-        print("c. Eliminar Registro")
-        print("d. Generar reporte")
-        print("e. Volver al Menú Principal")
+        print("g. Volver al Menú Principal")"""
+def mostrar_submenu_peliculas_tkinter():
+    # Crear una ventana para el submenú
+    root = tk.Tk()
+    root.title("Menú Peliculas y Series")
+    root.geometry("600x300")
 
-def mostrar_submenu_actualizar(opciones):
-    while True: 
-        print("Seleccione la opción que desea actualizar: ")
-        for opcion in opciones:
-            id = opciones.index(opcion) + 1
-            print(f"({id}) {opcion}")
-        try:
-            opcion_seleccionada = int(input("Opción: "))
-            if 1 <= opcion_seleccionada <= len(opciones):  # Verifica que esté en el rango
-                return opciones[opcion_seleccionada - 1]  # Retorna la opción seleccionada
-            else:
-                print(f"Error: El número debe estar entre 1 y {len(opciones)}.")
-        except ValueError:
-            print("Error: Debe ingresar un número válido.")
-        except Exception as e:
-            print(f"Ha ocurrido un error inesperado: {e}")
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú de Peliculas y Series", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    def volver_menu_principal():
+        root.destroy()
+        mostrar_menu_tkinter()
+
+    # Botones para las opciones del submenú
+    tk.Button(root, text="Agregar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.form_agregar_pelicula(mp)).pack(pady=5)
+    tk.Button(root, text="Actualizar/Eliminar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="normal")).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
+
+    # Iniciar el bucle de eventos del submenú
+    root.mainloop()
+
+def mostrar_submenu_registros_tkinter():
+    # Crear una ventana para el submenú
+    root = tk.Tk()
+    root.title("Menú Usuarios")
+    root.geometry("600x300")
+
+    # Etiqueta para el título
+    titulo = tk.Label(root, text="Menú de Registros Vistas", font=("Arial", 16))
+    titulo.pack(pady=10)
+
+    def volver_menu_principal():
+        root.destroy()
+        mostrar_menu_tkinter()
+
+    
+    # Botones para las opciones del submenú
+    tk.Button(root, text="Agregar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.form_agregar_registro(mr, mu, mp)).pack(pady=5)
+    tk.Button(root, text="Actualizar/Eliminar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(mr, modo="normal")).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(mr, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
+
+    # Iniciar el bucle de eventos del submenú
+    root.mainloop()
+
 
 def submenu_sinopsis(archivo, matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()

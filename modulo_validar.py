@@ -40,26 +40,3 @@ def validar_estado(estado):
 def validar_genero(genero):
     """Valida que el género no esté vacío y que no exista ya en el diccionario."""
     return len(genero) > 3 and genero not in modulo_genero.dic_genero and genero.isalpha()
-
-def validar_id(id, dic_parametros):
-    if str(id).isdigit():
-        matriz = dic_parametros["matriz"]
-        for fila in matriz:
-            if fila[0] == int(id):
-                return True
-    return False
-
-def obtener_opcion(primera_consulta=True):
-    while True:
-        try:
-            if primera_consulta:
-                respuesta = "s"
-            else:
-                respuesta = input("\n¿Desea continuar? (s/n): ").strip().lower()
-            
-            if respuesta not in ['s', 'n']:
-                raise ValueError("Entrada no válida. Por favor, ingrese 's' o 'n'.")
-            
-            return respuesta
-        except ValueError as e:
-            print(e)
