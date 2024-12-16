@@ -24,6 +24,10 @@ def capitalizar_titulo(titulo):
 #-----------------
 # Agrerar pelicula
 #-----------------
+from tkinter import ttk
+import tkinter as tk
+import modulo_genero  # Asegúrate de tener acceso a este módulo
+
 def form_agregar_pelicula(matriz_peliculas):
     root = tk.Tk()
     root.title("Agregar Película")
@@ -47,11 +51,16 @@ def form_agregar_pelicula(matriz_peliculas):
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
     tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
     tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
-    tipo_combobox.current(0)  # Selecciona "Películas" por defecto
+    tipo_combobox.current(0)  # Selecciona "Película" por defecto
 
     tk.Label(root, text="Género:", font=("Arial", 12)).grid(row=3, column=0, sticky="e", padx=5, pady=5)
-    entry_genero = tk.Entry(root, font=("Arial", 12))
-    entry_genero.grid(row=3, column=1, padx=10, pady=5)
+
+    # Cargar géneros desde el archivo JSON
+    generos = list(modulo_genero.cargar_json().keys())
+    genero_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=generos)
+    genero_combobox.grid(row=3, column=1, padx=10, pady=5)
+    if generos:  # Si hay géneros disponibles
+        genero_combobox.current(0)
 
     tk.Label(root, text="Año:", font=("Arial", 12)).grid(row=4, column=0, sticky="e", padx=5, pady=5)
     entry_anio = tk.Entry(root, font=("Arial", 12))
@@ -74,8 +83,8 @@ def form_agregar_pelicula(matriz_peliculas):
         command=lambda: agregar_datos_pelicula(
             root,
             entry_titulo,
-            tipo_combobox,  # Se pasa el Combobox en lugar del Entry
-            entry_genero,
+            tipo_combobox,
+            genero_combobox,  # Se pasa el Combobox de género en lugar de un campo abierto
             entry_anio,
             entry_duracion,
             text_sinopsis,
@@ -158,16 +167,16 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
     tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
     tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
-
-    # Seleccionar el valor actual del tipo
-    tipo_actual = seleccion[2]
-    if tipo_actual in ["Película", "Serie"]:
-        tipo_combobox.set(tipo_actual)  # Selecciona automáticamente el valor correcto
+    tipo_combobox.set(seleccion[2])  # Selecciona automáticamente el valor actual
 
     tk.Label(root, text="Género:", font=("Arial", 12)).grid(row=3, column=0, sticky="e", padx=5, pady=5)
-    entry_genero = tk.Entry(root, font=("Arial", 12))
-    entry_genero.insert(0, seleccion[3])
-    entry_genero.grid(row=3, column=1, padx=10, pady=5)
+
+    # Cargar opciones de género desde JSON
+    generos = list(modulo_genero.cargar_json().keys())
+    genero_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=generos)
+    genero_combobox.grid(row=3, column=1, padx=10, pady=5)
+    if seleccion[3] in generos:
+        genero_combobox.set(seleccion[3])  # Selecciona automáticamente el género actual
 
     tk.Label(root, text="Año:", font=("Arial", 12)).grid(row=4, column=0, sticky="e", padx=5, pady=5)
     entry_anio = tk.Entry(root, font=("Arial", 12))
@@ -182,7 +191,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     # TextArea para Sinopsis
     tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
     text_sinopsis = tk.Text(root, font=("Arial", 12), height=5, width=20, wrap="word")
-    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", seleccion[0])
+    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", id_pelicula)
     text_sinopsis.insert("1.0", sinopsis)
     text_sinopsis.grid(row=6, column=1, padx=10, pady=5)
 
@@ -196,7 +205,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
             id_pelicula,
             entry_titulo,
             tipo_combobox,  # Pasar el Combobox actualizado
-            entry_genero,
+            genero_combobox,  # Pasar el Combobox actualizado
             entry_anio,
             entry_duracion,
             text_sinopsis,
@@ -342,4 +351,3 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
     boton_cerrar.pack(pady=20)
 
     root.mainloop()
-
