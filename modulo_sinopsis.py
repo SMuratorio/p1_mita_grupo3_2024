@@ -26,28 +26,30 @@ def guardar_sinopsis_en_archivo(archivo, id_pelicula, titulo, sinopsis):
     except Exception as e:
         print(f"Error al guardar la sinopsis: {e}")
 
+
 def actualizar_sinopsis(archivo, nueva_sinopsis, id):
     try:
         lineas_actualizadas = []
         sinopsis_actualizada = False  # Bandera para saber si ya se actualizó la sinopsis
 
         with open(archivo, "r", encoding="UTF-8") as file:
-            lineas = file.readlines()
+            while True:
+                linea = file.readline()  # Leer una línea a la vez
+                if not linea:  # Si no hay más líneas, salimos del bucle
+                    break
 
-        for linea in lineas:
-            partes = linea.strip().split(";")
-            if len(partes) < 3:  # Verificar formato correcto
-                lineas_actualizadas.append(linea)  # Mantener líneas mal formateadas
-                continue
+                partes = linea.strip().split(";")
+                if len(partes) < 3:  # Verificar formato correcto
+                    lineas_actualizadas.append(linea)  # Mantener líneas mal formateadas
+                    continue
 
-            id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
-            if id_actual == str(id):  # Si encontramos el ID
-                # Reemplazar la sinopsis con la nueva
-                lineas_actualizadas.append(f"{id_actual};{titulo};{nueva_sinopsis}\n")
-                sinopsis_actualizada = True
-            else:
-                # Mantener la línea original
-                lineas_actualizadas.append(linea)
+                id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
+                if id_actual == str(id):  # Si encontramos el ID
+                    lineas_actualizadas.append(f"{id_actual};{titulo};{nueva_sinopsis}\n")
+                    sinopsis_actualizada = True
+                else:
+                    # Mantener la línea original
+                    lineas_actualizadas.append(linea)
 
         if not sinopsis_actualizada:
             print(f"El ID '{id}' no se encontró en el archivo.")

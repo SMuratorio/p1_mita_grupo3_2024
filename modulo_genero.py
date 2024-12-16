@@ -122,6 +122,11 @@ def imprimir_generos_tk():
         nuevo_genero = entry_genero.get().strip()
         definicion = text_definicion.get("1.0", tk.END).strip()
 
+        if not modulo_validar.validar_strings(nuevo_genero):
+            messagebox.showerror("Error", "Genero invalido intente nuevamente.")
+            entry_genero.delete(0, tk.END)
+            return
+
         if not nuevo_genero or not definicion:
             messagebox.showerror("Error", "Todos los campos son obligatorios.")
             return
@@ -148,7 +153,7 @@ def imprimir_generos_tk():
     button_frame.pack(pady=10)
 
     # Botones para acciones CRUD
-    tk.Button(button_frame, text="Agregar", font=("Arial", 12), command=agregar_genero_action).grid(row=0, column=0, padx=5)
+    tk.Button(button_frame, text="Enviar", font=("Arial", 12), command=agregar_genero_action).grid(row=0, column=0, padx=5)
     tk.Button(button_frame, text="Eliminar", font=("Arial", 12), command=eliminar_genero_action).grid(row=0, column=1, padx=5)
     tk.Button(button_frame, text="Cerrar", font=("Arial", 12), command=root.destroy).grid(row=0, column=2, padx=5)
 
