@@ -17,7 +17,7 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
 
     # Función para habilitar el campo "Calificación" si el estado es "terminada"
     def verificar_estado(event):
-        if entry_estado.get().lower() == "terminada":
+        if combo_estado.get().lower() == "terminada":
             entry_calificacion.config(state="normal")  # Habilitar el campo "Calificación"
         else:
             entry_calificacion.config(state="disabled")  # Deshabilitar el campo "Calificación"
@@ -27,20 +27,23 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
     titulo.pack(pady=10)
 
     # Campo para ID Usuario
-    tk.Label(root, text="ID Usuario:", font=("Arial", 12)).pack(pady=5)
-    entry_usuario_id = tk.Entry(root, font=("Arial", 12))
-    entry_usuario_id.pack(pady=5)
+    tk.Label(root, text="Usuario:", font=("Arial", 12)).pack(pady=5)
+    opciones_usuarios = [f"{usuario[1]} {usuario[2]}" for usuario in matriz_usuarios]
+    combo_usuario = ttk.Combobox(root, values=opciones_usuarios, font=("Arial", 12), state="readonly")
+    combo_usuario.pack(pady=5)
 
     # Campo para ID Película/Serie
-    tk.Label(root, text="ID Película/Serie:", font=("Arial", 12)).pack(pady=5)
-    entry_pelicula_id = tk.Entry(root, font=("Arial", 12))
-    entry_pelicula_id.pack(pady=5)
+    tk.Label(root, text="Película/Serie:", font=("Arial", 12)).pack(pady=5)
+    opciones_peliculas = [pelicula[1] for pelicula in matriz_peliculas]
+    combo_pelicula = ttk.Combobox(root, values=opciones_peliculas, font=("Arial", 12), state="readonly")
+    combo_pelicula.pack(pady=5)
 
     # Campo para Estado
     tk.Label(root, text="Estado:", font=("Arial", 12)).pack(pady=5)
-    entry_estado = tk.Entry(root, font=("Arial", 12))
-    entry_estado.pack(pady=5)
-    entry_estado.bind("<KeyRelease>", verificar_estado)  # Verificar el estado en cada pulsación de tecla
+    opciones_estado = ["En curso", "Terminada", "Pendiente"]
+    combo_estado = ttk.Combobox(root, values=opciones_estado, font=("Arial", 12), state="readonly")
+    combo_estado.pack(pady=5)
+    combo_estado.bind("<<ComboboxSelected>>", verificar_estado)
 
     # Campo para Calificación
     tk.Label(root, text="Calificación:", font=("Arial", 12)).pack(pady=5)
@@ -52,7 +55,10 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
         root,
         text="Guardar",
         font=("Arial", 12),
-        command=lambda: agregar_datos(root, entry_usuario_id, entry_pelicula_id, entry_estado, entry_calificacion, matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
+        command=lambda: agregar_datos(
+            root, combo_usuario, combo_pelicula, combo_estado, entry_calificacion, 
+            matriz_registro_vistas, matriz_usuarios, matriz_peliculas
+        )
     )
     btn_guardar.pack(pady=20)
 
@@ -62,64 +68,41 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
 
     root.mainloop()
 
-def agregar_datos(root, entry_usuario_id, entry_pelicula_id, entry_estado, entry_calificacion, matriz_registro_vistas, matriz_usuarios, matriz_peliculas):
+def agregar_datos(root, combo_usuario, combo_pelicula, combo_estado, entry_calificacion, matriz_registro_vistas, matriz_usuarios, matriz_peliculas):
     try:
-        # Obtener los valores de los campos
-        usuario_id = int(entry_usuario_id.get())
-        pelicula_id = int(entry_pelicula_id.get())
-        estado = entry_estado.get().capitalize()
-        calificacion = entry_calificacion.get() if estado == "terminada" else "0"
+        # Obtener los valores seleccionados
+        usuario_seleccionado = combo_usuario.get()
+        pelicula_seleccionada = combo_pelicula.get()
+        estado = combo_estado.get()
+        calificacion = entry_calificacion.get() if estado.lower() == "terminada" else "0"
 
-        # Validar que los campos no estén vacíos
-        if not estado or not entry_usuario_id.get() or not entry_pelicula_id.get():
-            messagebox.showerror("Error", "Todos los campos son obligatorios. No se puede dejar ninguno en blanco.")
+        # Validar selección de usuario y película
+        if not usuario_seleccionado or not pelicula_seleccionada or not estado:
+            messagebox.showerror("Error", "Todos los campos son obligatorios.")
             return
 
-        # Validar que los IDs sean válidos
-        if usuario_id not in [usuario[0] for usuario in matriz_usuarios]:
-            messagebox.showerror("Error", "ID de usuario no válido.")
-            return
-
-        if pelicula_id not in [pelicula[0] for pelicula in matriz_peliculas]:
-            messagebox.showerror("Error", "ID de película/serie no válido.")
-            return
-
-        if not modulo_validar.validar_estado(estado):
-            messagebox.showerror("Error", "Estado no válido. Los estados válidos son: 'en curso', 'pendiente' o 'terminada'.")
-            return
+        # Obtener IDs correspondientes
+        usuario = next(usuario for usuario in matriz_usuarios if f"{usuario[1]} {usuario[2]}" == usuario_seleccionado)
+        pelicula_id = next(pelicula[0] for pelicula in matriz_peliculas if pelicula[1] == pelicula_seleccionada)
 
         # Validar calificación si el estado es "terminada"
-        if estado == "terminada" and (not modulo_validar.validar_calificacion(calificacion)):
-            messagebox.showerror("Error", "Calificación no válida. Debe ser un número entre 1 y 10.")
-            return
-
-        # Buscar el apellido del usuario usando el ID
-        apellido_usuario = next((usuario[1] for usuario in matriz_usuarios if usuario[0] == usuario_id), None)
-        if not apellido_usuario:
-            messagebox.showerror("Error", "No se encontró el apellido del usuario.")
-            return
-
-        # Buscar el título de la película usando el ID
-        titulo_pelicula = next((pelicula[1] for pelicula in matriz_peliculas if pelicula[0] == pelicula_id), None)
-        if not titulo_pelicula:
-            messagebox.showerror("Error", "No se encontró el título de la película/serie.")
+        if estado.lower() == "terminada" and not calificacion.isdigit():
+            messagebox.showerror("Error", "Calificación no válida. Debe ser un número.")
             return
 
         # Guardar el registro
-        matriz_registro_vistas.append([len(matriz_registro_vistas) + 1, usuario_id,apellido_usuario,pelicula_id ,titulo_pelicula ,estado, calificacion])
+        matriz_registro_vistas.append([len(matriz_registro_vistas) + 1, usuario[0], usuario[2], pelicula_id, pelicula_seleccionada, estado, calificacion])
         modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
         messagebox.showinfo("Éxito", "Registro agregado correctamente.")
         root.destroy()
 
-    except ValueError:
-        messagebox.showerror("Error", "Por favor ingrese valores válidos en todos los campos.")
     except Exception as e:
-        messagebox.showerror("Error", f"Ha ocurrido un error inesperado: {e}")
+        messagebox.showerror("Error", f"Ha ocurrido un error: {e}")
 
 #--------------------
 # Actualizar registro
 #--------------------
-def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
+def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas):
     root = tk.Tk()
     root.title("Actualizar Registro de Vista")
     root.geometry("400x400") 
@@ -129,43 +112,50 @@ def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
     titulo.pack(pady=10)
 
     def verificar_estado(event):
-        if entry_estado.get().lower() == "terminada":
+        if combo_estado.get().lower() == "terminada":
             entry_calificacion.config(state="normal")  # Habilitar el campo "Calificación"
         else:
             entry_calificacion.config(state="disabled")  # Deshabilitar el campo "Calificación"
 
     # Campo para ID de Usuario
-    tk.Label(root, text="ID de Usuario:", font=("Arial", 12)).pack(pady=5)
-    entry_usuario_id = tk.Entry(root, font=("Arial", 12))
-    entry_usuario_id.insert(0, datos[1])  # Insertar el ID de Usuario
-    entry_usuario_id.pack(pady=5)
+    tk.Label(root, text="Usuario:", font=("Arial", 12)).pack(pady=5)
+    opciones_usuarios = [f"{usuario[1]} {usuario[2]}" for usuario in matriz_usuarios]
+    combo_usuario = ttk.Combobox(root, values=opciones_usuarios, font=("Arial", 12), state="readonly")
+    combo_usuario.set(next(f"{usuario[1]} {usuario[2]}" for usuario in matriz_usuarios if usuario[0] == int(datos[1])))
+    combo_usuario.pack(pady=5)
 
     # Campo para ID de Película/Serie
-    tk.Label(root, text="ID de Película/Serie:", font=("Arial", 12)).pack(pady=5)
-    entry_pelicula_id = tk.Entry(root, font=("Arial", 12))
-    entry_pelicula_id.insert(0, datos[3])  # Insertar el ID de Película/Serie
-    entry_pelicula_id.pack(pady=5)
+    tk.Label(root, text="Película/Serie:", font=("Arial", 12)).pack(pady=5)
+    opciones_peliculas = [pelicula[1] for pelicula in matriz_peliculas]
+    combo_pelicula = ttk.Combobox(root, values=opciones_peliculas, font=("Arial", 12), state="readonly")
+    combo_pelicula.set(next(pelicula[1] for pelicula in matriz_peliculas if pelicula[0] == int(datos[3])))
+    combo_pelicula.pack(pady=5)
 
     # Campo para Estado
     tk.Label(root, text="Estado:", font=("Arial", 12)).pack(pady=5)
-    entry_estado = tk.Entry(root, font=("Arial", 12))
-    entry_estado.pack(pady=5)
-    entry_estado.insert(0, datos[5])
-    entry_estado.bind("<KeyRelease>", verificar_estado)
+    opciones_estado = ["En curso", "Terminada", "Pendiente"]
+    combo_estado = ttk.Combobox(root, values=opciones_estado, font=("Arial", 12), state="readonly")
+    combo_estado.set(datos[5])
+    combo_estado.pack(pady=5)
+    combo_estado.bind("<<ComboboxSelected>>", verificar_estado)
 
     # Campo para Calificación
     tk.Label(root, text="Calificación:", font=("Arial", 12)).pack(pady=5)
     entry_calificacion = tk.Entry(root, font=("Arial", 12))
-    entry_calificacion.insert(0, datos[6])  # Insertar la calificación (si existe)
+    entry_calificacion.insert(0, datos[6])  # Insertar la calificación
     entry_calificacion.pack(pady=5)
-    entry_calificacion.config(state="disabled")  # Deshabilitar al principio
+    if datos[5].lower() != "terminada":
+        entry_calificacion.config(state="disabled")  # Deshabilitar si no está terminada
 
     # Botón para guardar
     btn_guardar = tk.Button(
         root,
         text="Guardar",
         font=("Arial", 12),
-        command=lambda: actualizar_registro(root, id_registro,entry_usuario_id, entry_pelicula_id ,entry_estado, entry_calificacion, matriz_registro_vistas, tree)
+        command=lambda: actualizar_registro(
+            root, id_registro, combo_usuario, combo_pelicula, combo_estado, entry_calificacion, 
+            matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas
+        )
     )
     btn_guardar.pack(pady=20)
 
@@ -175,68 +165,47 @@ def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
 
     root.mainloop()
 
-def actualizar_registro(root, id_registro, entry_usuario_id, entry_pelicula_id, entry_estado, entry_calificacion, matriz_registro_vistas, tree):
-    usuario_id =int(entry_usuario_id.get())  # Obtener el nuevo ID de usuario
-    pelicula_id = int(entry_pelicula_id.get())  # Obtener el nuevo ID de película
-    estado = entry_estado.get().lower()
-    calificacion = entry_calificacion.get()
+def actualizar_registro(root, id_registro, combo_usuario, combo_pelicula, combo_estado, entry_calificacion, matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas):
+    try:
+        # Obtener los valores seleccionados
+        usuario_seleccionado = combo_usuario.get()
+        pelicula_seleccionada = combo_pelicula.get()
+        estado = combo_estado.get()
+        calificacion = entry_calificacion.get() if estado.lower() == "terminada" else "0"
 
-    if not estado or not pelicula_id or not usuario_id:
-        messagebox.showwarning("Campo incompleto", "Por favor, ingrese el estado.")
-        return
-
-    if usuario_id not in [usuario[0] for usuario in matriz_usuarios]:
-        messagebox.showerror("Error", "ID de usuario no válido.")
-        return
-
-    if pelicula_id not in [pelicula[0] for pelicula in matriz_peliculas]:
-        messagebox.showerror("Error", "ID de película/serie no válido.")
-        return
-    
-    # Validar el estado
-    if not modulo_validar.validar_estado(estado):
-        messagebox.showerror("Error", "Estado no válido. Los estados válidos son: 'en curso', 'pendiente' o 'terminada'.")
-        return
-
-    # Si el estado es "terminada", validamos la calificación
-    if estado == "terminada":
-        if not calificacion:
-            messagebox.showerror("Error", "Debe ingresar una calificación para el estado 'terminada'.")
+        # Validar selección de usuario y película
+        if not usuario_seleccionado or not pelicula_seleccionada or not estado:
+            messagebox.showerror("Error", "Todos los campos son obligatorios.")
             return
-        if not modulo_validar.validar_calificacion(calificacion):
-            messagebox.showerror("Error", "La calificación debe ser un número entre 1 y 10.")
+
+        # Obtener IDs correspondientes
+        usuario = next(usuario for usuario in matriz_usuarios if f"{usuario[1]} {usuario[2]}" == usuario_seleccionado)
+        pelicula_id = next(pelicula[0] for pelicula in matriz_peliculas if pelicula[1] == pelicula_seleccionada)
+
+        # Validar calificación si el estado es "terminada"
+        if estado.lower() == "terminada" and not calificacion.isdigit():
+            messagebox.showerror("Error", "Calificación no válida. Debe ser un número.")
             return
-    else:
-        calificacion = 0  # Asignar calificación 0 si no es 'terminada'
-    
-    apellido_usuario = next((usuario[1] for usuario in matriz_usuarios if usuario[0] == usuario_id), None)
-    if not apellido_usuario:
-        messagebox.showerror("Error", "No se encontró el apellido del usuario.")
-        return
 
-        # Buscar el título de la película usando el ID
-    titulo_pelicula = next((pelicula[1] for pelicula in matriz_peliculas if pelicula[0] == pelicula_id), None)
-    if not titulo_pelicula:
-        messagebox.showerror("Error", "No se encontró el título de la película/serie.")
-        return
-    
-    # Buscar el registro y actualizarlo
-    for registro in matriz_registro_vistas:
-        if registro[0] == id_registro:
-            # Actualizar los valores
-            registro[1] = usuario_id  # Actualizar ID de Usuario
-            registro[2] = apellido_usuario
-            registro[3] = pelicula_id  # Actualizar ID de Película
-            registro[4] = titulo_pelicula
-            registro[5] = estado  # Actualizar el estado
-            registro[6] = calificacion  # Actualizar la calificación
-            break
+        # Buscar y actualizar el registro
+        for registro in matriz_registro_vistas:
+            if registro[0] == id_registro:
+                registro[1] = usuario[0]
+                registro[2] = usuario[2]
+                registro[3] = pelicula_id
+                registro[4] = pelicula_seleccionada
+                registro[5] = estado
+                registro[6] = calificacion
+                break
 
-    # Guardar la matriz actualizada en el archivo
-    modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
-    refrescar_grilla(tree, matriz_registro_vistas)
-    messagebox.showinfo("Éxito", "Registro actualizado correctamente.")
-    root.destroy()
+        # Guardar los cambios en el archivo
+        modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+        refrescar_grilla(tree, matriz_registro_vistas)
+        messagebox.showinfo("Éxito", "Registro actualizado correctamente.")
+        root.destroy()
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Ha ocurrido un error: {e}")
 
 def refrescar_grilla(tree, matriz_registro_vistas):
     for item in tree.get_children():
@@ -250,7 +219,7 @@ def refrescar_grilla(tree, matriz_registro_vistas):
 #-----------------
 # Generar reporte
 #-----------------
-def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal"):
+def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, matriz_usuarios, matriz_peliculas, modo="normal"):
     root = tk.Tk()
     root.title("Matriz de Registros de Vistas")
 
@@ -296,7 +265,7 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_registro= int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_registro(id_registro, seleccion, matriz_registro_vistas, tree)
+                form_actualizar_registro(id_registro, seleccion, matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
         
@@ -309,7 +278,6 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
                 # Eliminar el registro de la vista (Treeview)
                 tree.delete(tree.selection()[0])
                 modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
-                root.destroy()
                 messagebox.showinfo("Éxito", "Registro eliminado.")
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un registro para eliminar.")

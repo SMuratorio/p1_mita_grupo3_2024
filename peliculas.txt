@@ -21,7 +21,7 @@
 21;El Club de la Pelea;Película;Drama;1999;139
 22;Sherlock;Serie;Misterio;2010;4
 23;Avatar;Película;Ciencia ficción;2009;162
-24;Chernobyl;Serie;Histórico;2019;1da
+24;Chernobyl;Serie;Histórico;2019;1
 25;Titanic;Película;Drama;1997;195
 26;Narcos;Serie;Crimen;2015;3
 27;Toy Story;Película;Animación;1995;81
