@@ -1,4 +1,4 @@
-import modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas, modulo_registro_vistas
+import modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas, modulo_registro_vistas, modulo_sinopsis
 import tkinter as tk
 
 mr = modulo_matriz.archivo_a_matriz("registros.txt")
@@ -67,7 +67,7 @@ def mostrar_submenu_peliculas_tkinter():
     # Crear una ventana para el submenú
     root = tk.Tk()
     root.title("Menú Peliculas y Series")
-    root.geometry("600x300")
+    root.geometry("700x400")
 
     # Etiqueta para el título
     titulo = tk.Label(root, text="Menú de Peliculas y Series", font=("Arial", 16))
@@ -82,6 +82,7 @@ def mostrar_submenu_peliculas_tkinter():
     tk.Button(root, text="Actualizar/Eliminar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="normal")).pack(pady=5)
     tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="reporte")).pack(pady=5)
     tk.Button(root, text="Agregar/Actualizar/Eliminar Genero", font=("Arial", 12), command=modulo_genero.imprimir_generos_tk).pack(pady=5)
+    tk.Button(root, text="Leer Sinopsis", font=("Arial", 12), command=modulo_sinopsis.leer_sinopsis).pack(pady=5)
     tk.Button(root, text="Ver Calificaciones", font=("Arial", 12), command=mostrar_submenu_calificaciones).pack(pady=5)
     tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
 

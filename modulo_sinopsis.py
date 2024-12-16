@@ -1,3 +1,5 @@
+from tkinter import simpledialog, messagebox
+
 def buscar_sinopsis(archivo, id):
     try:
         with open(archivo, "r", encoding="UTF-8") as file:
@@ -8,9 +10,9 @@ def buscar_sinopsis(archivo, id):
                     continue  # Ignorar líneas mal formateadas
                 id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
                 if id_actual == str(id):  # Comparar el ID
-                    return sinopsis
+                    return titulo, sinopsis
                 
-        return "Sinopsis no encontrada."
+        return None,"Sinopsis no encontrada."
     except FileNotFoundError:
         return "El archivo no existe."
     except Exception as e:
@@ -85,3 +87,17 @@ def eliminar_del_archivo(archivo, id):
     except Exception as e:
         print(f"Error al eliminar del archivo: {e}")
 
+def leer_sinopsis():
+    id_pelicula = simpledialog.askstring("Leer Sinopsis", "Ingresa el ID de la película o serie:")
+    
+    if not id_pelicula:
+        return
+
+    archivo = "sinopsis.txt"  # Ruta del archivo de sinopsis
+    titulo,sinopsis = buscar_sinopsis(archivo, id_pelicula)  # Buscar sinopsis por ID
+    
+    # Mostrar la sinopsis en una ventana emergente
+    if sinopsis != "Sinopsis no encontrada." and titulo!=None:
+        messagebox.showinfo("Sinopsis", f"Sinopsis de la película/serie ID {id_pelicula}:\n\n{titulo}\n\n{sinopsis}")
+    else:
+        messagebox.showerror("Error", sinopsis)

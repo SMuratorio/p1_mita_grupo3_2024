@@ -303,8 +303,9 @@ def refrescar_grilla(tree, matriz_peliculas):
                             
     # Insertar los datos actualizados en la grilla
     for pelicula in matriz_peliculas_ordenadas:
-        tree.insert("", tk.END, values=pelicula)
-
+        duracion = f"{pelicula[5]} Minutos" if pelicula[2] == "Película" else f"{pelicula[5]} Temporadas"
+        # Insertar la fila con la duración transformada
+        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], duracion))
 #-----------------
 # Generar reporte
 #-----------------
