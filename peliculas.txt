@@ -1,30 +1,31 @@
-1;El Señor de Los Anillos;Película;Fantasía;2001;178 minutos
-2;Breaking Bad;Serie;Drama;2008;5 temporadas
-3;Matrix;Película;Ciencia ficción;1999;136 minutos
-4;Stranger Things;Serie;Terror;2016;4 temporadas
-5;Inception;Película;Acción;2010;148 minutos
-6;The Crown;Serie;Histórico;2016;5 temporadas
-7;Interstellar;Película;Ciencia ficción;2014;169 minutos
-8;La Casa de Papel;Serie;Crimen;2017;5 temporadas
-9;The Mandalorian;Serie;Ciencia ficción;2019;3 temporadas
-10;Gladiador;Película;Acción;2000;155 minutos
-11;Los Sopranos;Serie;Drama;1999;6 temporadas
-12;El Gran Budapest Hotel;Película;Fantasía;2003;125 minutos
-13;Dark;Serie;Ciencia ficción;2017;3 temporadas
-14;El Padrino;Película;Crimen;1972;175 minutos
-15;Jurassic Park;Película;Ciencia ficción;1993;127 minutos
-16;Friends;Serie;Comedia;1994;10 temporadas
-17;El Exorcista;Película;Terror;1973;122 minutos
-18;The Office;Serie;Comedia;2005;9 temporadas
-19;Forrest Gump;Película;Drama;1994;142 minutos
-20;Game of Thrones;Serie;Fantasía;2011;8 temporadas
-21;El Club de la Pelea;Película;Drama;1999;139 minutos
-22;Sherlock;Serie;Misterio;2010;4 temporadas
-23;Avatar;Película;Ciencia ficción;2009;162 minutos
-24;Chernobyl;Serie;Histórico;2019;1 temporada
-25;Titanic;Película;Drama;1997;195 minutos
-26;Narcos;Serie;Crimen;2015;3 temporadas
-27;Toy Story;Película;Animación;1995;81 minutos
-28;The Witcher;Serie;Fantasía;2019;2 temporadas
-29;Harry Potter y la Piedra Filosofal;Película;Fantasía;2001;152 minutos
-30;Better Call Saul;Serie;Drama;2015;6 temporadas
+1;El Señor de Los Anillos;Película;Fantasía;2001;178
+2;Breaking Bad;Serie;Drama;2008;5
+3;Matrix;Película;Ciencia ficción;1999;136
+4;Stranger Things;Serie;Terror;2016;4
+5;Inception;Película;Acción;2010;148
+6;The Crown;Serie;Histórico;2016;5
+7;Interstellar;Película;Ciencia ficción;2014;169
+8;La Casa de Papel;Serie;Crimen;2017;5
+9;The Mandalorian;Serie;Ciencia ficción;2019;3
+10;Gladiador;Película;Acción;2000;155
+11;Los Sopranos;Serie;Drama;1999;6
+12;El Gran Budapest Hotel;Película;Fantasía;2003;125
+13;Dark;Serie;Ciencia ficción;2017;3
+14;El Padrino;Película;Crimen;1972;175
+15;Jurassic Park;Película;Ciencia ficción;1993;127
+16;Friends;Serie;Comedia;1994;10
+17;El Exorcista;Película;Terror;1973;122
+18;The Office;Serie;Comedia;2005;9
+19;Forrest Gump;Película;Drama;1994;142
+20;Game of Thrones;Serie;Fantasía;2011;8
+21;El Club de la Pelea;Película;Drama;1999;139
+22;Sherlock;Serie;Misterio;2010;4
+23;Avatar;Película;Ciencia ficción;2009;162
+24;Chernobyl;Serie;Histórico;2019;1da
+25;Titanic;Película;Drama;1997;195
+26;Narcos;Serie;Crimen;2015;3
+27;Toy Story;Película;Animación;1995;81
+28;The Witcher;Serie;Fantasía;2019;2
+29;Harry Potter y la Piedra Filosofal;Película;Fantasía;2001;152
+30;Better Call Saul;Serie;Drama;2015;6
+31;From;Serie;Terror;2020;3

@@ -1,4 +1,4 @@
-import modulo_sinopsis, modulo_validar, modulo_matriz
+import modulo_genero, modulo_sinopsis, modulo_validar, modulo_matriz
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -24,8 +24,6 @@ def capitalizar_titulo(titulo):
 #-----------------
 # Agrerar pelicula
 #-----------------
-import modulo_genero  # Asegúrate de tener acceso a este módulo
-
 def form_agregar_pelicula(matriz_peliculas):
     root = tk.Tk()
     root.title("Agregar Película")
@@ -64,9 +62,22 @@ def form_agregar_pelicula(matriz_peliculas):
     entry_anio = tk.Entry(root, font=("Arial", 12))
     entry_anio.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Duración (minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
+    # Dinámico: Label para duración
+    duracion_label = tk.Label(root, text="Duración minutos:", font=("Arial", 12))
+    duracion_label.grid(row=5, column=0, sticky="e", padx=5, pady=5)
+
     entry_duracion = tk.Entry(root, font=("Arial", 12))
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
+
+    # Callback para cambiar el texto del Label según el tipo seleccionado
+    def actualizar_label_duracion(event):
+        if tipo_combobox.get() == "Película":
+            duracion_label.config(text="Duración minutos:")
+        elif tipo_combobox.get() == "Serie":
+            duracion_label.config(text="Duración temporadas:")
+
+    # Vincular el evento de cambio al combobox
+    tipo_combobox.bind("<<ComboboxSelected>>", actualizar_label_duracion)
 
     # TextArea para Sinopsis
     tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
@@ -185,10 +196,23 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     entry_anio.insert(0, seleccion[4])
     entry_anio.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Duración (minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
+    # Dinámico: Label para duración
+    duracion_label = tk.Label(root, text="Duración minutos:", font=("Arial", 12))
+    duracion_label.grid(row=5, column=0, sticky="e", padx=5, pady=5)
+
     entry_duracion = tk.Entry(root, font=("Arial", 12))
     entry_duracion.insert(0, seleccion[5])
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
+
+    # Callback para cambiar el texto del Label según el tipo seleccionado
+    def actualizar_label_duracion(event):
+        if tipo_combobox.get() == "Película":
+            duracion_label.config(text="Duración minutos:")
+        elif tipo_combobox.get() == "Serie":
+            duracion_label.config(text="Duración temporadas:")
+
+    # Vincular el evento de cambio al combobox
+    tipo_combobox.bind("<<ComboboxSelected>>", actualizar_label_duracion)
 
     # TextArea para Sinopsis
     tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
@@ -291,22 +315,26 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
 
     tree = ttk.Treeview(root, columns=("ID", "Título", "Tipo", "Género", "Año", "Duración"), show="headings")
     tree.heading("ID", text="ID")
-    tree.heading("Título", text="Título")  # Corregido: "Título" en lugar de "Titulo"
+    tree.heading("Título", text="Título")
     tree.heading("Tipo", text="Tipo")
     tree.heading("Género", text="Género")
     tree.heading("Año", text="Año")
     tree.heading("Duración", text="Duración")
     tree.column("ID", width=50, anchor=tk.CENTER)
-    tree.column("Título", width=150, anchor="w")  # Corregido: "Título"
+    tree.column("Título", width=150, anchor="w")
     tree.column("Tipo", width=150, anchor="w")
     tree.column("Género", width=100, anchor=tk.CENTER)
     tree.column("Año", width=100, anchor="w")
-    tree.column("Duración", width=100, anchor="w")
-    
-    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: int(x[4])) # Ordenar la lista por año de estreno (ascendente)
-    
+    tree.column("Duración", width=150, anchor="w")
+
+    # Ordenar la matriz por año de estreno (ascendente)
+    matriz_peliculas_ordenadas = sorted(matriz_peliculas, key=lambda x: int(x[4]))
+
+    # Transformar la duración antes de insertar en el Treeview
     for pelicula in matriz_peliculas_ordenadas:
-        tree.insert("", tk.END, values=pelicula)
+        duracion = f"{pelicula[5]} Minutos" if pelicula[2] == "Película" else f"{pelicula[5]} Temporadas"
+        # Insertar la fila con la duración transformada
+        tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], duracion))
 
     tree.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
 
@@ -321,10 +349,10 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
         def actualizar_seleccion():
             seleccion = obtener_seleccion(tree)
             if seleccion:
-                id_pelicula= int(seleccion[0])  # Obtener el ID como entero
+                id_pelicula = int(seleccion[0])  # Obtener el ID como entero
                 form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree)
             else:
-                messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
+                messagebox.showwarning("Sin selección", "Por favor, seleccione una película.")
         
         def eliminar_seleccion():
             seleccion = obtener_seleccion(tree)
@@ -339,7 +367,7 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
                 modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", seleccion[0])
                 messagebox.showinfo("Éxito", "Película eliminada.")
             else:
-                messagebox.showwarning("Sin selección", "Por favor, seleccione una película para eliminar.")            
+                messagebox.showwarning("Sin selección", "Por favor, seleccione una película para eliminar.")
 
         btn_seleccion = tk.Button(root, text="Actualizar", command=actualizar_seleccion)
         btn_seleccion.pack(pady=10)
