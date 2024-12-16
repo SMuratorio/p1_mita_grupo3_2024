@@ -1,67 +1,59 @@
-def buscar_sinopsis(archivo, titulo):
-    sinopsis = []
-    encontrado = False  # Indica si el título ha sido encontrado
-
+def buscar_sinopsis(archivo, id):
     try:
         with open(archivo, "r", encoding="UTF-8") as file:
             for linea in file:
-                if linea.startswith(titulo):  # Cuando encuentra el título
-                    encontrado = True
-                elif encontrado:
-                    if linea == "\n":  # Si encuentra una línea en blanco, termina la sinopsis
-                        encontrado = False  # Marcamos que la sinopsis ha terminado
-                    else:
-                        sinopsis.append(linea.strip())  # Agrega la línea a la sinopsis
-
-        return "\n".join(sinopsis)+"\n" if sinopsis else ""  # Devuelve la sinopsis o None si no se encuentra
-
+                # Separar por ';' para obtener el ID, título y sinopsis
+                partes = linea.strip().split(";")
+                if len(partes) < 3:
+                    continue  # Ignorar líneas mal formateadas
+                id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
+                if id_actual == str(id):  # Comparar el ID
+                    return sinopsis
+                
+        return "Sinopsis no encontrada."
     except FileNotFoundError:
-        print("El archivo de sinopsis no existe.")
-    except OSError:
-        print("Hubo un error al abrir el archivo.")
+        return "El archivo no existe."
     except Exception as e:
-        print(f"Ha ocurrido un error inesperado: {e}")
-
-def guardar_sinopsis_en_archivo(sinopsis_formateada):
+        return f"Error inesperado: {e}"
+    
+def guardar_sinopsis_en_archivo(archivo, id_pelicula, titulo, sinopsis):
     try:
-        with open("sinopsis.txt", "a", encoding="utf-8") as file:
-            file.write(f"\n{sinopsis_formateada}")
+        with open(archivo, "a", encoding="utf-8") as file:
+            # Escribir en formato ID;Título;Sinopsis
+            file.write(f"{id_pelicula};{titulo};{sinopsis}\n")        
     except Exception as e:
         print(f"Error al guardar la sinopsis: {e}")
 
-def formatear_sinopsis(titulo, sinopsis, max_longitud=80):
-    palabras = sinopsis.split()
-    lineas = []
-    linea_actual = ""
-    
-    for palabra in palabras:
-        if len(linea_actual) + len(palabra) + 1 > max_longitud:# Si la línea actual más la nueva palabra excede el límite
-            lineas.append(linea_actual.strip())  # Agregar la línea actual a la lista
-            linea_actual = palabra  # Comenzar una nueva línea
-        else:
-            linea_actual += " " + palabra  # Agregar la palabra a la línea actual
-
-    lineas.append(linea_actual.strip())  # Agregar la última línea
-    
-    # Formatear la salida
-    sinopsis_formateada = f"{titulo}\n" + "\n".join(lineas) + "\n"
-    return sinopsis_formateada
-
-def actualizar_sinopsis(archivo, sinopsis, titulo):
+def actualizar_sinopsis(archivo, nueva_sinopsis, id):
     try:
-        nueva_sinopsis_formateada = formatear_sinopsis(titulo, sinopsis)
+        lineas_actualizadas = []
+        sinopsis_actualizada = False  # Bandera para saber si ya se actualizó la sinopsis
 
         with open(archivo, "r", encoding="UTF-8") as file:
-            lineas_actualizadas = []
-            while (linea := file.readline()):
-                if linea.strip().startswith(titulo):  # Verifica si la línea corresponde al título
-                    lineas_actualizadas.append(f"{titulo}: {nueva_sinopsis_formateada}\n")
-                else:
-                    lineas_actualizadas.append(linea)
+            lineas = file.readlines()
 
+        for linea in lineas:
+            partes = linea.strip().split(";")
+            if len(partes) < 3:  # Verificar formato correcto
+                lineas_actualizadas.append(linea)  # Mantener líneas mal formateadas
+                continue
+
+            id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
+            if id_actual == str(id):  # Si encontramos el ID
+                # Reemplazar la sinopsis con la nueva
+                lineas_actualizadas.append(f"{id_actual};{titulo};{nueva_sinopsis}\n")
+                sinopsis_actualizada = True
+            else:
+                # Mantener la línea original
+                lineas_actualizadas.append(linea)
+
+        if not sinopsis_actualizada:
+            print(f"El ID '{id}' no se encontró en el archivo.")
+            return
+
+        # Sobrescribir el archivo con las líneas actualizadas
         with open(archivo, "w", encoding="UTF-8") as file:
-            for linea in lineas_actualizadas:
-                file.write(linea)
+            file.writelines(lineas_actualizadas)
 
     except FileNotFoundError:
         print("El archivo de sinopsis no existe.")
@@ -70,55 +62,21 @@ def actualizar_sinopsis(archivo, sinopsis, titulo):
     except Exception as e:
         print(f"Ha ocurrido un error inesperado: {e}")
 
-def eliminar_sinopsis(archivo, titulo, matriz_peliculas):
-    try:
-        #titulo, id_pelicula = leer_sinopsis(archivo, matriz_peliculas)
-
-        # Abrir el archivo para leer línea por línea
-        with open(archivo, "r", encoding="utf-8") as file:
-            lineas_filtradas = []
-            saltar_lineas = False
-
-            linea = file.readline()
-            while linea:
-                if linea.strip() == titulo:  # Detecta el inicio de la sinopsis
-                    saltar_lineas = True
-                elif saltar_lineas and linea.strip() == "":  # Fin de la sinopsis
-                    saltar_lineas = False
-                elif not saltar_lineas:
-                    lineas_filtradas.append(linea)  # Guarda las líneas que no se eliminarán
-
-                linea = file.readline()  # Leer la siguiente línea
-
-        # Sobrescribir el archivo con las sinopsis restantes
-        with open(archivo, "w", encoding="utf-8") as file:
-            file.writelines(lineas_filtradas)
-            print(f"\nLa sinopsis de '{titulo}' ha sido eliminada del archivo.")
-
-    except FileNotFoundError:
-        print("El archivo de sinopsis no existe.")
-    except KeyError:
-        print("El título ingresado no existe en la matriz de películas.")
-    except Exception as e:
-        print(f"Error al eliminar la sinopsis: {e}")
-
-def eliminar_del_archivo(archivo, titulo): #elimina sinopsis en cuando se elimina de la matriz peliculas
+def eliminar_del_archivo(archivo, id):
     try:
         # Crear una lista para almacenar las líneas que no se eliminarán
         lineas_filtradas = []
-        saltar_lineas = False
 
         # Leer el archivo línea por línea
         with open(archivo, "r", encoding="utf-8") as file:
-            while (linea := file.readline()):
-                if linea.strip() == titulo:  # Detecta el inicio de la sinopsis
-                    saltar_lineas = True
-                elif saltar_lineas and linea.strip() == "":  # Fin de la sinopsis
-                    saltar_lineas = False
-                elif not saltar_lineas:
-                    lineas_filtradas.append(linea)  # Guarda las líneas que no se eliminarán
+            for linea in file:
+                partes = linea.strip().split(";")
+                if len(partes) >= 3 and partes[0] == str(id):
+                    # Si el ID coincide, saltamos esta línea (no la agregamos)
+                    continue
+                lineas_filtradas.append(linea)  # Mantener las líneas que no se eliminan
 
-        # Sobrescribir el archivo con las sinopsis restantes
+        # Sobrescribir el archivo con las líneas restantes
         with open(archivo, "w", encoding="utf-8") as file:
             file.writelines(lineas_filtradas)
 
@@ -126,3 +84,4 @@ def eliminar_del_archivo(archivo, titulo): #elimina sinopsis en cuando se elimin
         print("El archivo de sinopsis no existe.")
     except Exception as e:
         print(f"Error al eliminar del archivo: {e}")
+

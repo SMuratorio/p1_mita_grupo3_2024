@@ -45,8 +45,9 @@ def form_agregar_pelicula(matriz_peliculas):
     entry_titulo.grid(row=1, column=1, padx=10, pady=5)
 
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
-    entry_tipo = tk.Entry(root, font=("Arial", 12))
-    entry_tipo.grid(row=2, column=1, padx=10, pady=5)
+    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
+    tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
+    tipo_combobox.current(0)  # Selecciona "Películas" por defecto
 
     tk.Label(root, text="Género:", font=("Arial", 12)).grid(row=3, column=0, sticky="e", padx=5, pady=5)
     entry_genero = tk.Entry(root, font=("Arial", 12))
@@ -73,7 +74,7 @@ def form_agregar_pelicula(matriz_peliculas):
         command=lambda: agregar_datos_pelicula(
             root,
             entry_titulo,
-            entry_tipo,
+            tipo_combobox,  # Se pasa el Combobox en lugar del Entry
             entry_genero,
             entry_anio,
             entry_duracion,
@@ -89,31 +90,25 @@ def form_agregar_pelicula(matriz_peliculas):
 
     root.mainloop()
 
-def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas):
+def agregar_datos_pelicula(root, entry_titulo, tipo_combobox, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas):
     try:
         titulo = entry_titulo.get()
-        tipo = entry_tipo.get().capitalize()
+        tipo = tipo_combobox.get()  # Obtener el valor seleccionado del Combobox
         genero = entry_genero.get().capitalize()
         anio = entry_anio.get()
         duracion = entry_duracion.get()
         sinopsis = text_sinopsis.get("1.0", "end").strip()  # Obtener el texto del TextArea
 
         proximo_id_pelicula = len(matriz_peliculas) + 1
-        
+
         # Verificar espacios en blanco
         if not titulo or not tipo or not genero or not anio or not duracion:
             messagebox.showerror("Error", "Todos los campos son obligatorios. No se puede dejar ninguno en blanco.")
             return
-        
+
         # Validaciones
         if not modulo_validar.validar_titulo(titulo):
             messagebox.showerror("Error", "Título no válido. Intente nuevamente.")
-            return
-        if not modulo_validar.validar_tipo(tipo):
-            messagebox.showerror("Error", "Tipo no válido. Intente nuevamente.")
-            return
-        if not modulo_validar.validar_genero(genero): #ARREGLAR
-            messagebox.showerror("Error", "Género no válido. Intente nuevamente.")
             return
         if not modulo_validar.validar_anio(anio):
             messagebox.showerror("Error", "Año no válido. Debe ser un número.")
@@ -122,14 +117,8 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
             if not modulo_validar.validar_duracion(duracion):
                 messagebox.showerror("Error", "Duración no válida. Debe ser un número.")
                 return
-                # Agregar sufijo a la duración según el tipo
-        if titulo:
-            titulo=capitalizar_titulo(titulo)
-        if titulo in titulos_existentes:
-            messagebox.showerror("Error", "El Titulo ingresado ya existe.")
-            return
-        
-        sinopsis_formateada = modulo_sinopsis.formatear_sinopsis(titulo, sinopsis)
+
+        titulo = capitalizar_titulo(titulo)
         sublista = [proximo_id_pelicula, titulo, tipo, genero, anio, duracion]
         matriz_peliculas.append(sublista)
 
@@ -137,7 +126,7 @@ def agregar_datos_pelicula(root, entry_titulo, entry_tipo, entry_genero, entry_a
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
         messagebox.showinfo("Éxito", f"Película/Serie '{titulo}' agregada con éxito.")
         # Guardar sinopsis
-        modulo_sinopsis.guardar_sinopsis_en_archivo(sinopsis_formateada)
+        modulo_sinopsis.guardar_sinopsis_en_archivo("sinopsis.txt", proximo_id_pelicula, titulo, sinopsis)
         root.destroy()
 
     except ValueError:
@@ -167,9 +156,13 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     entry_titulo.grid(row=1, column=1, padx=10, pady=5)
 
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
-    entry_tipo = tk.Entry(root, font=("Arial", 12))
-    entry_tipo.insert(0, seleccion[2])
-    entry_tipo.grid(row=2, column=1, padx=10, pady=5)
+    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
+    tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
+
+    # Seleccionar el valor actual del tipo
+    tipo_actual = seleccion[2]
+    if tipo_actual in ["Película", "Serie"]:
+        tipo_combobox.set(tipo_actual)  # Selecciona automáticamente el valor correcto
 
     tk.Label(root, text="Género:", font=("Arial", 12)).grid(row=3, column=0, sticky="e", padx=5, pady=5)
     entry_genero = tk.Entry(root, font=("Arial", 12))
@@ -181,16 +174,16 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     entry_anio.insert(0, seleccion[4])
     entry_anio.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Duración(minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
+    tk.Label(root, text="Duración (minutos/temporadas):", font=("Arial", 12)).grid(row=5, column=0, sticky="e", padx=5, pady=5)
     entry_duracion = tk.Entry(root, font=("Arial", 12))
     entry_duracion.insert(0, seleccion[5])
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
 
-    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", entry_titulo.get())
     # TextArea para Sinopsis
     tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
     text_sinopsis = tk.Text(root, font=("Arial", 12), height=5, width=20, wrap="word")
-    text_sinopsis.insert("1.0", sinopsis)  # Cambiado "0" a "1.0"
+    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", seleccion[0])
+    text_sinopsis.insert("1.0", sinopsis)
     text_sinopsis.grid(row=6, column=1, padx=10, pady=5)
 
     # Botón para guardar cambios
@@ -202,7 +195,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
             root,
             id_pelicula,
             entry_titulo,
-            entry_tipo,
+            tipo_combobox,  # Pasar el Combobox actualizado
             entry_genero,
             entry_anio,
             entry_duracion,
@@ -211,76 +204,64 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
             tree
         )
     )
-    btn_guardar.grid(row=7, column=0, padx=5, pady=20, sticky="e")
+    btn_guardar.grid(row=7, column=0, pady=20, padx=5, sticky="e")
 
     # Botón para cerrar
     btn_cerrar = tk.Button(root, text="Cerrar", font=("Arial", 12), command=root.destroy)
-    btn_cerrar.grid(row=7, column=1, padx=5, pady=20, sticky="w")
+    btn_cerrar.grid(row=7, column=1, pady=20, padx=5, sticky="w")
 
     root.mainloop()
 
-def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, entry_tipo, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas, tree):
-    titulo = entry_titulo.get()
-    tipo = entry_tipo.get().capitalize()
-    genero = entry_genero.get().capitalize()
-    anio = entry_anio.get()
-    duracion = entry_duracion.get()
-    sinopsis = text_sinopsis.get("1.0", "end").strip()  # Obtener el texto del TextArea
+def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, entry_genero, entry_anio, entry_duracion, text_sinopsis, matriz_peliculas, tree):
+    try:
+        titulo = entry_titulo.get()
+        tipo = tipo_combobox.get()  # Obtener el valor del Combobox
+        genero = entry_genero.get()
+        anio = entry_anio.get()
+        duracion = entry_duracion.get()
+        sinopsis = text_sinopsis.get("1.0", "end").strip()
 
-    # Validar que no haya campos vacíos
-    if not (titulo and tipo and genero and anio and duracion):
-        messagebox.showwarning("Campos incompletos", "Por favor, complete todos los campos.")
-        return
-    
-    titulo = capitalizar_titulo(titulo)
-    datos_actuales = next((pelicula for pelicula in matriz_peliculas if pelicula[0] == id_pelicula), None)
-    if not datos_actuales:
-        messagebox.showerror("Error", "Titulo no encontrado en la matriz.")
-        return
-
-    if titulo and titulo != datos_actuales[1]:
+        # Validaciones
+        if not titulo or not tipo or not genero or not anio or not duracion:
+            messagebox.showerror("Error", "Todos los campos son obligatorios.")
+            return
         if not modulo_validar.validar_titulo(titulo):
-            messagebox.showerror("Error", "Titulo no válido")
+            messagebox.showerror("Error", "Título no válido.")
             return
-        if titulo in titulos_existentes:
-            messagebox.showerror("Error", "El titulo ingresado ya existe.")
+        if not modulo_validar.validar_anio(anio):
+            messagebox.showerror("Error", "Año no válido.")
             return
-        
-    if not modulo_validar.validar_tipo(tipo):
-        messagebox.showerror("Error", "Tipo no válido. Intente nuevamente.")
-        return
-    if not modulo_validar.validar_genero(genero):
-        messagebox.showerror("Error", "Genero no válido. Intente nuevamente.")
-        return
-    if not modulo_validar.validar_anio(anio):
-        messagebox.showerror("Error", "Año no válido. Intente nuevamente.")
-        return
-    if not modulo_validar.validar_duracion(duracion):
-        messagebox.showerror("Error", "Duracion no válido. Intente nuevamente.")
-        return
+        if duracion and not modulo_validar.validar_duracion(duracion):
+            messagebox.showerror("Error", "Duración no válida.")
+            return
 
-    # Actualizar los datos en la matriz de películas
-    for pelicula in matriz_peliculas:
-        if pelicula[0] == id_pelicula:
-            pelicula[1] = titulo
-            pelicula[2] = tipo
-            pelicula[3] = genero
-            pelicula[4] = anio
-            pelicula[5] = duracion
-            break
+        # Actualizar la matriz
+        for pelicula in matriz_peliculas:
+            if pelicula[0] == id_pelicula:
+                pelicula[1] = titulo
+                pelicula[2] = tipo
+                pelicula[3] = genero
+                pelicula[4] = anio
+                pelicula[5] = duracion
+                break
 
-    # Guardar la matriz actualizada en el archivo
-    modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
-    
-    # Guardar sinopsis
-    modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", sinopsis, titulo)
+        # Actualizar la sinopsis
+        modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", sinopsis, id_pelicula)
 
-    # Refrescar la grilla
-    refrescar_grilla(tree, matriz_peliculas)
-    
-    # Mostrar mensaje de éxito
-    messagebox.showinfo("Éxito", f"Película '{titulo}' actualizada con éxito.")
-    root.destroy()
+        # Guardar la matriz actualizada
+        modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+
+        # Refrescar el Treeview
+        for item in tree.get_children():
+            tree.delete(item)
+        for pelicula in matriz_peliculas:
+            tree.insert("", tk.END, values=pelicula)
+
+        messagebox.showinfo("Éxito", f"La película/serie '{titulo}' se ha actualizado correctamente.")
+        root.destroy()
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Ha ocurrido un error: {e}")
 
 def refrescar_grilla(tree, matriz_peliculas):
     for item in tree.get_children():
@@ -346,7 +327,7 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
                         break
                 tree.delete(tree.selection()[0])
                 modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
-                modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", seleccion[1])
+                modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", seleccion[0])
                 messagebox.showinfo("Éxito", "Película eliminada.")
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione una película para eliminar.")            
