@@ -120,7 +120,7 @@ def agregar_datos_pelicula(root, entry_titulo, tipo_combobox, entry_genero, entr
         proximo_id_pelicula = len(matriz_peliculas) + 1
 
         # Verificar espacios en blanco
-        if not titulo or not tipo or not genero or not anio or not duracion:
+        if not titulo or not tipo or not genero or not anio or not duracion or not sinopsis:
             messagebox.showerror("Error", "Todos los campos son obligatorios. No se puede dejar ninguno en blanco.")
             return
 
