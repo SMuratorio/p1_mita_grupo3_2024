@@ -282,7 +282,7 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, en
                 break
 
         # Actualizar la sinopsis
-        modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", sinopsis, id_pelicula)
+        modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", titulo, sinopsis, id_pelicula)
 
         # Guardar la matriz actualizada
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)

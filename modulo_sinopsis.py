@@ -27,7 +27,7 @@ def guardar_sinopsis_en_archivo(archivo, id_pelicula, titulo, sinopsis):
         print(f"Error al guardar la sinopsis: {e}")
 
 
-def actualizar_sinopsis(archivo, nueva_sinopsis, id):
+def actualizar_sinopsis(archivo, nuevo_titulo, nueva_sinopsis, id):
     try:
         lineas_actualizadas = []
         sinopsis_actualizada = False  # Bandera para saber si ya se actualizó la sinopsis
@@ -43,9 +43,9 @@ def actualizar_sinopsis(archivo, nueva_sinopsis, id):
                     lineas_actualizadas.append(linea)  # Mantener líneas mal formateadas
                     continue
 
-                id_actual, titulo, sinopsis = partes[0], partes[1], partes[2]
+                id_actual, _, _ = partes[0], partes[1], partes[2]
                 if id_actual == str(id):  # Si encontramos el ID
-                    lineas_actualizadas.append(f"{id_actual};{titulo};{nueva_sinopsis}\n")
+                    lineas_actualizadas.append(f"{id_actual};{nuevo_titulo};{nueva_sinopsis}\n")
                     sinopsis_actualizada = True
                 else:
                     # Mantener la línea original
