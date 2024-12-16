@@ -279,7 +279,7 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, en
                 pelicula[3] = genero
                 pelicula[4] = anio
                 pelicula[5] = duracion
-            break
+                break
 
         # Actualizar la sinopsis
         modulo_sinopsis.actualizar_sinopsis("sinopsis.txt", sinopsis, id_pelicula)
