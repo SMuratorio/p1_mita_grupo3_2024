@@ -351,4 +351,3 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
     boton_cerrar.pack(pady=20)
 
     root.mainloop()
-    
