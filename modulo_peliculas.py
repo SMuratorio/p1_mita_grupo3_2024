@@ -200,8 +200,9 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     duracion_label = tk.Label(root, text="Duración minutos:", font=("Arial", 12))
     duracion_label.grid(row=5, column=0, sticky="e", padx=5, pady=5)
 
+    unidad = str(seleccion[5]).split(" ")[0] if seleccion[5] else seleccion[5]
     entry_duracion = tk.Entry(root, font=("Arial", 12))
-    entry_duracion.insert(0, seleccion[5])
+    entry_duracion.insert(0, unidad)
     entry_duracion.grid(row=5, column=1, padx=10, pady=5)
 
     # Callback para cambiar el texto del Label según el tipo seleccionado
