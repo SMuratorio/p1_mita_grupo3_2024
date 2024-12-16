@@ -262,7 +262,7 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_usuario = int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_usuario(id_usuario, seleccion, matriz_usuarios_ordenados, tree)
+                form_actualizar_usuario(id_usuario, seleccion, matriz_usuarios, tree)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
 

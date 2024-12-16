@@ -279,10 +279,6 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, en
                 pelicula[3] = genero
                 pelicula[4] = anio
                 pelicula[5] = duracion
-            if tipo.lower() == "serie":
-                pelicula[5] = f"{duracion} temporadas"
-            else:
-                pelicula[5] = f"{duracion} minutos"
             break
 
         # Actualizar la sinopsis
@@ -290,6 +286,8 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, en
 
         # Guardar la matriz actualizada
         modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
+
+        refrescar_grilla(tree, matriz_peliculas)
 
         messagebox.showinfo("Éxito", f"La película/serie '{titulo}' se ha actualizado correctamente.")
         root.destroy()
@@ -351,7 +349,7 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_pelicula = int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree)
+                form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas_ordenadas, tree)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione una película.")
         
@@ -366,6 +364,7 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
                 tree.delete(tree.selection()[0])
                 modulo_matriz.guardar_matriz_en_archivo("peliculas.txt", matriz_peliculas)
                 modulo_sinopsis.eliminar_del_archivo("sinopsis.txt", seleccion[0])
+                root.destroy()
                 messagebox.showinfo("Éxito", "Película eliminada.")
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione una película para eliminar.")
