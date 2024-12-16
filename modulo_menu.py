@@ -1,4 +1,4 @@
-import modulo_sinopsis, modulo_validar, modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas, modulo_registro_vistas
+import modulo_calificaciones, modulo_genero, modulo_usuarios, modulo_matriz, modulo_peliculas, modulo_registro_vistas
 import tkinter as tk
 
 mr = modulo_matriz.archivo_a_matriz("registros.txt")
@@ -81,6 +81,7 @@ def mostrar_submenu_peliculas_tkinter():
     tk.Button(root, text="Agregar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.form_agregar_pelicula(mp)).pack(pady=5)
     tk.Button(root, text="Actualizar/Eliminar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="normal")).pack(pady=5)
     tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Agregar/Actualizar/Eliminar Genero", font=("Arial", 12), command=modulo_genero.imprimir_generos_tk).pack(pady=5)
     tk.Button(root, text="Ver Calificaciones", font=("Arial", 12), command=mostrar_submenu_calificaciones).pack(pady=5)
     tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
 
@@ -137,67 +138,3 @@ def mostrar_submenu_calificaciones():
 
     # Botón para volver al menú principal
     tk.Button(ventana_calificaciones, text="Volver al Menú Principal", font=("Arial", 12), command=ventana_calificaciones.destroy).pack(pady=20)
-
-
-def submenu_genero():
-    opcion_seleccionada=modulo_validar.obtener_opcion()
-    while opcion_seleccionada=="s":
-        print("\nSubmenú de gestión de géneros")
-        print("1: Agregar un nuevo género")
-        print("2: Actualizar un género existente")
-        print("3: Eliminar un género")
-        print("0: Volver al submenú de generos")
-        
-        try:
-            opcion_sub = int(input("Seleccione una opción: ").strip())
-            if opcion_sub not in range(0, 3):
-                raise ValueError  # Lanza una excepción si el número está fuera del rango      
-    
-        
-            if opcion_sub == 1:
-                modulo_genero.agregar_genero(modulo_genero.dic_genero)
-            elif opcion_sub == 2:
-                modulo_genero.actualizar_genero()
-            elif opcion_sub == 3:
-                modulo_genero.eliminar_genero()
-            elif opcion_sub == 0:
-                print("Regresando...")
-                opcion_seleccionada="n"
-    
-        except ValueError:
-            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
-        except Exception as e:
-            print(f"Ha ocurrido un error inesperado: {e}")
-
-def submenu_sinopsis(archivo, matriz_peliculas):
-    opcion_seleccionada = modulo_validar.obtener_opcion()
-    while opcion_seleccionada == "s":
-        print("\nOpciones de Sinopsis")
-        print("1. Leer Sinopsis")
-        print("2. Actualizar Sinopsis")
-        print("3. Eliminar sinopsis")
-        print("0. Regresar al menu principal")
-
-        try:
-            opcion_sub = int(input("Seleccione una opción: ").strip())
-            if opcion_sub not in range(0, 4):
-                raise ValueError  # Lanza una excepción si el número está fuera del rango
-            
-            if opcion_sub == 1:
-                modulo_sinopsis.leer_sinopsis(archivo, matriz_peliculas)
-                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
-            elif opcion_sub == 2:
-                modulo_sinopsis.actualizar_sinopsis(archivo, matriz_peliculas)
-                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
-            elif opcion_sub == 3:
-                modulo_sinopsis.eliminar_sinopsis(archivo, matriz_peliculas)
-                opcion_seleccionada = modulo_validar.obtener_opcion(primera_consulta=False)
-            elif opcion_sub == 0:
-                print("Regresando al menú principal.")
-                opcion_seleccionada = "n"
-        
-        except ValueError:
-            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
-        except Exception as e:
-            print(f"Ha ocurrido un error inesperado: {e}")
-        
