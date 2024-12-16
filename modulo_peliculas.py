@@ -45,7 +45,7 @@ def form_agregar_pelicula(matriz_peliculas):
     entry_titulo.grid(row=1, column=1, padx=10, pady=5)
 
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
-    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
+    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), width=18, state="readonly", values=["Película", "Serie"])
     tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
     tipo_combobox.current(0)  # Selecciona "Película" por defecto
 
@@ -53,7 +53,7 @@ def form_agregar_pelicula(matriz_peliculas):
 
     # Cargar géneros desde el archivo JSON
     generos = list(modulo_genero.cargar_json().keys())
-    genero_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=generos)
+    genero_combobox = ttk.Combobox(root, font=("Arial", 12), width=18, state="readonly", values=generos)
     genero_combobox.grid(row=3, column=1, padx=10, pady=5)
     if generos:  # Si hay géneros disponibles
         genero_combobox.current(0)
@@ -178,7 +178,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     entry_titulo.grid(row=1, column=1, padx=10, pady=5)
 
     tk.Label(root, text="Tipo:", font=("Arial", 12)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
-    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=["Película", "Serie"])
+    tipo_combobox = ttk.Combobox(root, font=("Arial", 12), width=18, state="readonly", values=["Película", "Serie"])
     tipo_combobox.grid(row=2, column=1, padx=10, pady=5)
     tipo_combobox.set(seleccion[2])  # Selecciona automáticamente el valor actual
 
@@ -186,7 +186,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
 
     # Cargar opciones de género desde JSON
     generos = list(modulo_genero.cargar_json().keys())
-    genero_combobox = ttk.Combobox(root, font=("Arial", 12), state="readonly", values=generos)
+    genero_combobox = ttk.Combobox(root, font=("Arial", 12), width=18, state="readonly", values=generos)
     genero_combobox.grid(row=3, column=1, padx=10, pady=5)
     if seleccion[3] in generos:
         genero_combobox.set(seleccion[3])  # Selecciona automáticamente el género actual
@@ -274,7 +274,7 @@ def actualizar_datos_pelicula(root, id_pelicula, entry_titulo, tipo_combobox, en
         # Actualizar la matriz
         for pelicula in matriz_peliculas:
             if pelicula[0] == id_pelicula:
-                pelicula[1] = titulo
+                pelicula[1] = capitalizar_titulo(titulo)
                 pelicula[2] = tipo
                 pelicula[3] = genero
                 pelicula[4] = anio
