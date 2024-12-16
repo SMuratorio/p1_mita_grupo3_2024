@@ -1,16 +1,16 @@
-import modulo_validar, modulo_matriz
+import modulo_matriz
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
-matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
-matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
-matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
-
 #-----------------
 # Agregar registro
 #-----------------
-def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_peliculas):
+def form_agregar_registro():
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+
     root = tk.Tk()
     root.title("Agregar Registro")
     root.geometry("400x400")
@@ -102,7 +102,11 @@ def agregar_datos(root, combo_usuario, combo_pelicula, combo_estado, entry_calif
 #--------------------
 # Actualizar registro
 #--------------------
-def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas):
+def form_actualizar_registro(id_registro, datos, tree):
+    matriz_usuarios=modulo_matriz.archivo_a_matriz("usuarios.txt")
+    matriz_peliculas=modulo_matriz.archivo_a_matriz("peliculas.txt")
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+
     root = tk.Tk()
     root.title("Actualizar Registro de Vista")
     root.geometry("400x400") 
@@ -219,7 +223,9 @@ def refrescar_grilla(tree, matriz_registro_vistas):
 #-----------------
 # Generar reporte
 #-----------------
-def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, matriz_usuarios, matriz_peliculas, modo="normal"):
+def imprimir_matriz_registro_vistas_tk(modo="normal"):
+    matriz_registro_vistas=modulo_matriz.archivo_a_matriz("registros.txt")
+
     root = tk.Tk()
     root.title("Matriz de Registros de Vistas")
 
@@ -244,7 +250,7 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, matriz_usuario
     tree.column("Calificación", width=100, anchor="w")
 
     # Ordenar la matriz por apellido (índice 2)
-    matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: str(x[2]))
+    matriz_registros_ordenados = sorted(matriz_registro_vistas, key=lambda x: str(x[2]))
 
     # Insertar los datos en el Treeview
     for registro in matriz_registros_ordenados:
@@ -265,7 +271,7 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, matriz_usuario
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_registro= int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_registro(id_registro, seleccion, matriz_registro_vistas, tree, matriz_usuarios, matriz_peliculas)
+                form_actualizar_registro(id_registro, seleccion, tree)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un usuario.")
         

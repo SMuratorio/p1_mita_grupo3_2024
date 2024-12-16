@@ -104,9 +104,9 @@ def mostrar_submenu_registros_tkinter():
         mostrar_menu_tkinter()
     
     # Botones para las opciones del submenú
-    tk.Button(root, text="Agregar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.form_agregar_registro(mr, mu, mp)).pack(pady=5)
-    tk.Button(root, text="Actualizar/Eliminar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(mr, mu, mp, modo="normal")).pack(pady=5)
-    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(mr, mu, mp, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Agregar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.form_agregar_registro()).pack(pady=5)
+    tk.Button(root, text="Actualizar/Eliminar Registro", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(modo="normal")).pack(pady=5)
+    tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_registro_vistas.imprimir_matriz_registro_vistas_tk(modo="reporte")).pack(pady=5)
     tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
 
     # Iniciar el bucle de eventos del submenú
