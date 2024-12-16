@@ -17,7 +17,7 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
 
     # Función para habilitar el campo "Calificación" si el estado es "terminada"
     def verificar_estado(event):
-        if entry_estado.get().lower() == "terminada":
+        if combo_estado.get().lower() == "terminada":
             entry_calificacion.config(state="normal")  # Habilitar el campo "Calificación"
         else:
             entry_calificacion.config(state="disabled")  # Deshabilitar el campo "Calificación"
@@ -36,11 +36,11 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
     entry_pelicula_id = tk.Entry(root, font=("Arial", 12))
     entry_pelicula_id.pack(pady=5)
 
-    # Campo para Estado
+    # Campo para Estado con ComboBox
     tk.Label(root, text="Estado:", font=("Arial", 12)).pack(pady=5)
-    entry_estado = tk.Entry(root, font=("Arial", 12))
-    entry_estado.pack(pady=5)
-    entry_estado.bind("<KeyRelease>", verificar_estado)  # Verificar el estado en cada pulsación de tecla
+    combo_estado = ttk.Combobox(root, values=["En curso", "Pendiente", "Terminada"], font=("Arial", 12))
+    combo_estado.pack(pady=5)
+    combo_estado.bind("<<ComboboxSelected>>", verificar_estado)  # Verificar el estado cuando se seleccione
 
     # Campo para Calificación
     tk.Label(root, text="Calificación:", font=("Arial", 12)).pack(pady=5)
@@ -52,7 +52,7 @@ def form_agregar_registro(matriz_registro_vistas, matriz_usuarios, matriz_pelicu
         root,
         text="Guardar",
         font=("Arial", 12),
-        command=lambda: agregar_datos(root, entry_usuario_id, entry_pelicula_id, entry_estado, entry_calificacion, matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
+        command=lambda: agregar_datos(root, entry_usuario_id, entry_pelicula_id, combo_estado, entry_calificacion, matriz_registro_vistas, matriz_usuarios, matriz_peliculas)
     )
     btn_guardar.pack(pady=20)
 
@@ -129,7 +129,7 @@ def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
     titulo.pack(pady=10)
 
     def verificar_estado(event):
-        if entry_estado.get().lower() == "terminada":
+        if combo_estado.get().lower() == "terminada":
             entry_calificacion.config(state="normal")  # Habilitar el campo "Calificación"
         else:
             entry_calificacion.config(state="disabled")  # Deshabilitar el campo "Calificación"
@@ -146,12 +146,12 @@ def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
     entry_pelicula_id.insert(0, datos[3])  # Insertar el ID de Película/Serie
     entry_pelicula_id.pack(pady=5)
 
-    # Campo para Estado
+    # Campo para Estado con ComboBox
     tk.Label(root, text="Estado:", font=("Arial", 12)).pack(pady=5)
-    entry_estado = tk.Entry(root, font=("Arial", 12))
-    entry_estado.pack(pady=5)
-    entry_estado.insert(0, datos[5])
-    entry_estado.bind("<KeyRelease>", verificar_estado)
+    combo_estado = ttk.Combobox(root, values=["En curso", "Pendiente", "Terminada"], font=("Arial", 12))
+    combo_estado.insert(0, datos[5])  # Insertar el estado actual
+    combo_estado.pack(pady=5)
+    combo_estado.bind("<<ComboboxSelected>>", verificar_estado)
 
     # Campo para Calificación
     tk.Label(root, text="Calificación:", font=("Arial", 12)).pack(pady=5)
@@ -165,7 +165,7 @@ def form_actualizar_registro(id_registro, datos, matriz_registro_vistas, tree):
         root,
         text="Guardar",
         font=("Arial", 12),
-        command=lambda: actualizar_registro(root, id_registro,entry_usuario_id, entry_pelicula_id ,entry_estado, entry_calificacion, matriz_registro_vistas, tree)
+        command=lambda: actualizar_registro(root, id_registro, entry_usuario_id, entry_pelicula_id, combo_estado, entry_calificacion, matriz_registro_vistas, tree)
     )
     btn_guardar.pack(pady=20)
 
