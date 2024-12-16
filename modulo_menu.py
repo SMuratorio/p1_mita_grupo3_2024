@@ -81,6 +81,7 @@ def mostrar_submenu_peliculas_tkinter():
     tk.Button(root, text="Agregar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.form_agregar_pelicula(mp)).pack(pady=5)
     tk.Button(root, text="Actualizar/Eliminar Película/Serie", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="normal")).pack(pady=5)
     tk.Button(root, text="Generar Reporte", font=("Arial", 12), command=lambda: modulo_peliculas.imprimir_matriz_peliculas_tk(mp, modo="reporte")).pack(pady=5)
+    tk.Button(root, text="Ver Calificaciones", font=("Arial", 12), command=mostrar_submenu_calificaciones).pack(pady=5)
     tk.Button(root, text="Volver al Menú Principal", font=("Arial", 12), command=volver_menu_principal).pack(pady=20)
 
     # Iniciar el bucle de eventos del submenú
@@ -110,6 +111,63 @@ def mostrar_submenu_registros_tkinter():
     # Iniciar el bucle de eventos del submenú
     root.mainloop()
 
+def mostrar_submenu_calificaciones():
+    # Crear la ventana del submenú
+    ventana_calificaciones = tk.Toplevel()
+    ventana_calificaciones.title("Menú de Calificaciones")
+    ventana_calificaciones.geometry("400x300")
+
+    # Etiqueta de título
+    tk.Label(ventana_calificaciones, text="Opciones de Promedios de Calificaciones", font=("Arial", 16)).pack(pady=10)
+
+    # Botones para las opciones
+    tk.Button(
+        ventana_calificaciones,
+        text="Calificaciones por Género",
+        font=("Arial", 12),
+        command=lambda: modulo_calificaciones.mostrar_promedios(modulo_calificaciones.promedio_por_genero, "Promedios de Calificaciones por Género")
+    ).pack(pady=10)
+
+    tk.Button(
+        ventana_calificaciones,
+        text="Calificaciones por Título",
+        font=("Arial", 12),
+        command=lambda: modulo_calificaciones.mostrar_promedios(modulo_calificaciones.promedio_peliculas, "Promedios de Calificaciones por Título")
+    ).pack(pady=10)
+
+    # Botón para volver al menú principal
+    tk.Button(ventana_calificaciones, text="Volver al Menú Principal", font=("Arial", 12), command=ventana_calificaciones.destroy).pack(pady=20)
+
+
+def submenu_genero():
+    opcion_seleccionada=modulo_validar.obtener_opcion()
+    while opcion_seleccionada=="s":
+        print("\nSubmenú de gestión de géneros")
+        print("1: Agregar un nuevo género")
+        print("2: Actualizar un género existente")
+        print("3: Eliminar un género")
+        print("0: Volver al submenú de generos")
+        
+        try:
+            opcion_sub = int(input("Seleccione una opción: ").strip())
+            if opcion_sub not in range(0, 3):
+                raise ValueError  # Lanza una excepción si el número está fuera del rango      
+    
+        
+            if opcion_sub == 1:
+                modulo_genero.agregar_genero(modulo_genero.dic_genero)
+            elif opcion_sub == 2:
+                modulo_genero.actualizar_genero()
+            elif opcion_sub == 3:
+                modulo_genero.eliminar_genero()
+            elif opcion_sub == 0:
+                print("Regresando...")
+                opcion_seleccionada="n"
+    
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
+        except Exception as e:
+            print(f"Ha ocurrido un error inesperado: {e}")
 
 def submenu_sinopsis(archivo, matriz_peliculas):
     opcion_seleccionada = modulo_validar.obtener_opcion()
@@ -143,60 +201,3 @@ def submenu_sinopsis(archivo, matriz_peliculas):
         except Exception as e:
             print(f"Ha ocurrido un error inesperado: {e}")
         
-def submenu_calificaciones():
-    opcion_seleccionada=modulo_validar.obtener_opcion()
-    while opcion_seleccionada=="s":
-        print("\nOpciones de Promedios de calificaciones")
-        print("1. Calificiones por genero")
-        print("2. Calificaciones por titulo")
-        print("0. Regresar al menu principal")
-
-        try:
-            opcion_sub = int(input("Seleccione una opción: ").strip())
-            if opcion_sub not in range(0, 3):
-                raise ValueError  # Lanza una excepción si el número está fuera del rango
-            
-            if opcion_sub == 1:
-                modulo_calificaciones.imprimir_promedios(modulo_calificaciones.promedio_por_genero, "Promedios de Calificación por Género")
-                opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-            elif opcion_sub == 2:
-                modulo_calificaciones.imprimir_promedios(modulo_calificaciones.promedio_peliculas, "Promedios de Calificación por Película")  
-                opcion_seleccionada=modulo_validar.obtener_opcion(primera_consulta=False)
-            elif opcion_sub == 0:
-                print("Regresando al menú principal.")
-                opcion_seleccionada="n"
-        
-        except ValueError:
-            print("Entrada no válida. Por favor, ingrese un número entre 0 y 2.")
-        except Exception as e:
-            print(f"Ha ocurrido un error inesperado: {e}")
-
-def submenu_genero():
-    opcion_seleccionada=modulo_validar.obtener_opcion()
-    while opcion_seleccionada=="s":
-        print("\nSubmenú de gestión de géneros")
-        print("1: Agregar un nuevo género")
-        print("2: Actualizar un género existente")
-        print("3: Eliminar un género")
-        print("0: Volver al submenú de generos")
-        
-        try:
-            opcion_sub = int(input("Seleccione una opción: ").strip())
-            if opcion_sub not in range(0, 3):
-                raise ValueError  # Lanza una excepción si el número está fuera del rango      
-    
-        
-            if opcion_sub == 1:
-                modulo_genero.agregar_genero(modulo_genero.dic_genero)
-            elif opcion_sub == 2:
-                modulo_genero.actualizar_genero()
-            elif opcion_sub == 3:
-                modulo_genero.eliminar_genero()
-            elif opcion_sub == 0:
-                print("Regresando...")
-                opcion_seleccionada="n"
-    
-        except ValueError:
-            print("Entrada no válida. Por favor, ingrese un número entre 0 y 3.")
-        except Exception as e:
-            print(f"Ha ocurrido un error inesperado: {e}")

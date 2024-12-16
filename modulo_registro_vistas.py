@@ -186,12 +186,13 @@ def actualizar_registro(root, id_registro, entry_usuario_id, entry_pelicula_id, 
         return
 
     if usuario_id not in [usuario[0] for usuario in matriz_usuarios]:
-            messagebox.showerror("Error", "ID de usuario no válido.")
-            return
+        messagebox.showerror("Error", "ID de usuario no válido.")
+        return
 
     if pelicula_id not in [pelicula[0] for pelicula in matriz_peliculas]:
         messagebox.showerror("Error", "ID de película/serie no válido.")
         return
+    
     # Validar el estado
     if not modulo_validar.validar_estado(estado):
         messagebox.showerror("Error", "Estado no válido. Los estados válidos son: 'en curso', 'pendiente' o 'terminada'.")
@@ -240,9 +241,6 @@ def actualizar_registro(root, id_registro, entry_usuario_id, entry_pelicula_id, 
 def refrescar_grilla(tree, matriz_registro_vistas):
     for item in tree.get_children():
         tree.delete(item)
-    
-    for registro in matriz_registro_vistas:
-        registro[4] = registro[4][:8]
   
     matriz_registros_ordenados = sorted(matriz_registro_vistas, key=lambda x:str(x[2]))
 
@@ -276,10 +274,6 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
     tree.column("Estado", width=100, anchor="w")
     tree.column("Calificación", width=100, anchor="w")
 
-    # Recortar los títulos a un máximo de 8 caracteres
-    for registro in contenido_registro_vistas:
-        registro[4] = registro[4][:8]
-
     # Ordenar la matriz por apellido (índice 2)
     matriz_registros_ordenados = sorted(contenido_registro_vistas, key=lambda x: str(x[2]))
 
@@ -309,12 +303,13 @@ def imprimir_matriz_registro_vistas_tk(contenido_registro_vistas, modo="normal")
         def eliminar_seleccion():
             seleccion = obtener_seleccion(tree)
             if seleccion:
-                # Filtrar los registros que no coinciden con el ID seleccionado
-                contenido_registro_vistas[:] = [registro for registro in contenido_registro_vistas if registro[0] != seleccion[0]]
+                id_seleccionado = int(seleccion[0])
+                matriz_registro_vistas[:] = [registro for registro in matriz_registro_vistas if registro[0] != id_seleccionado]
                 
                 # Eliminar el registro de la vista (Treeview)
                 tree.delete(tree.selection()[0])
-                
+                modulo_matriz.guardar_matriz_en_archivo("registros.txt", matriz_registro_vistas)
+                root.destroy()
                 messagebox.showinfo("Éxito", "Registro eliminado.")
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un registro para eliminar.")

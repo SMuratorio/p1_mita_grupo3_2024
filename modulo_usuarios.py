@@ -211,12 +211,12 @@ def refrescar_grilla(tree, matriz_usuarios):
     for item in tree.get_children():
         tree.delete(item)
     
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: str(fila[2]))
+    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
         # Recortar el nombre a 8 caracteres
         usuario[1] = usuario[1][:8]
-        tree.insert("", tk.END, values=(usuario[0], usuario[1], usuario[2], usuario[3], usuario[4]))
+        tree.insert("", tk.END, values=usuario)
     
 #-----------------
 # Generar reporte
@@ -237,8 +237,9 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
     tree.column("DNI", width=100, anchor=tk.CENTER)
     tree.column("Correo", width=200, anchor="w")
 
+    
     # Ordenar la matriz por apellido
-    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: sstr(fila[2]))
+    matriz_usuarios_ordenados = sorted(matriz_usuarios, key=lambda fila: fila[2])
 
     # Insertar los datos en el Treeview
     for usuario in matriz_usuarios_ordenados:
@@ -268,12 +269,13 @@ def imprimir_matriz_usuarios_tk(matriz_usuarios, modo="normal"):
         def eliminar_seleccion():#(funcion que elimina usuario)
             seleccion = obtener_seleccion(tree)
             if seleccion:
-                # Filtrar los registros que no coinciden con el ID seleccionado
-                matriz_usuarios[:] = [registro for registro in matriz_usuarios if registro[0] != seleccion[0]]
-                
+                id_seleccionado = int(seleccion[0])
+                matriz_usuarios[:] = [usuario for usuario in matriz_usuarios if usuario[0] != id_seleccionado]
+
                 # Eliminar el registro de la vista (Treeview)
                 tree.delete(tree.selection()[0])
-                
+                modulo_matriz.guardar_matriz_en_archivo("usuarios.txt", matriz_usuarios)
+                root.destroy()
                 messagebox.showinfo("Éxito", "Registro eliminado.")
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione un registro para eliminar.")
