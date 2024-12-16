@@ -218,7 +218,7 @@ def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     # TextArea para Sinopsis
     tk.Label(root, text="Sinopsis:", font=("Arial", 12)).grid(row=6, column=0, sticky="ne", padx=5, pady=5)
     text_sinopsis = tk.Text(root, font=("Arial", 12), height=5, width=20, wrap="word")
-    sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", id_pelicula)
+    _ , sinopsis = modulo_sinopsis.buscar_sinopsis("sinopsis.txt", id_pelicula)
     text_sinopsis.insert("1.0", sinopsis)
     text_sinopsis.grid(row=6, column=1, padx=10, pady=5)
 
