@@ -350,7 +350,7 @@ def imprimir_matriz_peliculas_tk(matriz_peliculas, modo="normal"):
             seleccion = obtener_seleccion(tree)
             if seleccion:
                 id_pelicula = int(seleccion[0])  # Obtener el ID como entero
-                form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas_ordenadas, tree)
+                form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree)
             else:
                 messagebox.showwarning("Sin selección", "Por favor, seleccione una película.")
         
