@@ -156,6 +156,9 @@ def agregar_datos_pelicula(root, entry_titulo, tipo_combobox, entry_genero, entr
     except Exception as e:
         messagebox.showerror(f"Ha ocurrido un error inesperado: {e}")
 
+#--------------------
+# Actualizar pelicula
+#--------------------
 def form_actualizar_pelicula(id_pelicula, seleccion, matriz_peliculas, tree):
     root = tk.Tk()
     root.title("Actualizar Película")
@@ -306,6 +309,7 @@ def refrescar_grilla(tree, matriz_peliculas):
         duracion = f"{pelicula[5]} Minutos" if pelicula[2] == "Película" else f"{pelicula[5]} Temporadas"
         # Insertar la fila con la duración transformada
         tree.insert("", tk.END, values=(pelicula[0], pelicula[1], pelicula[2], pelicula[3], pelicula[4], duracion))
+
 #-----------------
 # Generar reporte
 #-----------------

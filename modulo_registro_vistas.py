@@ -1,4 +1,4 @@
-import modulo_matriz
+import modulo_matriz, modulo_validar
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
@@ -86,8 +86,8 @@ def agregar_datos(root, combo_usuario, combo_pelicula, combo_estado, entry_calif
         pelicula_id = next(pelicula[0] for pelicula in matriz_peliculas if pelicula[1] == pelicula_seleccionada)
 
         # Validar calificación si el estado es "terminada"
-        if estado.lower() == "terminada" and not calificacion.isdigit():
-            messagebox.showerror("Error", "Calificación no válida. Debe ser un número.")
+        if estado.lower() == "terminada" and not modulo_validar.validar_calificacion(calificacion):
+            messagebox.showerror("Error", "Calificación no válida. Debeestar entre 1 y 10.")
             return
 
         # Guardar el registro
@@ -187,8 +187,8 @@ def actualizar_registro(root, id_registro, combo_usuario, combo_pelicula, combo_
         pelicula_id = next(pelicula[0] for pelicula in matriz_peliculas if pelicula[1] == pelicula_seleccionada)
 
         # Validar calificación si el estado es "terminada"
-        if estado.lower() == "terminada" and not calificacion.isdigit():
-            messagebox.showerror("Error", "Calificación no válida. Debe ser un número.")
+        if estado.lower() == "terminada" and not modulo_validar.validar_calificacion(calificacion):
+            messagebox.showerror("Error", "Calificación no válida. Debe estar entre 1 y 10.")
             return
 
         # Buscar y actualizar el registro
