@@ -1,4 +1,4 @@
-import json, modulo_validar, modulo_menu
+import json, modulo_validar
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -105,7 +105,7 @@ def imprimir_generos_tk():
         return key_genero, definicion
 
     # Función para manejar la selección en el Treeview
-    def manejar_seleccion(event):
+    def actualizar_seleccion(event):
         """Rellena los campos con los valores seleccionados en el Treeview."""
         key_genero, definicion = obtener_seleccion()
         if key_genero and definicion:
@@ -115,7 +115,7 @@ def imprimir_generos_tk():
             text_definicion.insert("1.0", definicion)
 
     # Asociar el evento de selección en el Treeview
-    tree.bind("<<TreeviewSelect>>", manejar_seleccion)
+    tree.bind("<<TreeviewSelect>>", actualizar_seleccion)
 
     # Función para agregar un género
     def agregar_genero_action():

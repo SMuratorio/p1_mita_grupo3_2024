@@ -1,4 +1,4 @@
-import re, modulo_genero
+import re
 
 def validar_strings(strings):  # Valida apellido y nombre
     patron = r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ]{3,}$'
@@ -20,10 +20,6 @@ def validar_anio(anio): #Expresión regular para validar un año en formato YYYY
     patron = r'^(19|20)\d{2}$'
     return re.match(patron, anio) is not None
 
-def validar_tipo(tipo):
-    opciones_validas = ["serie", "película", "pelicula"]
-    return tipo.lower() in opciones_validas
-
 def validar_duracion(entrada): #para validar duracion
     if entrada.isdigit():
         return int(entrada) > 0
@@ -32,11 +28,3 @@ def validar_duracion(entrada): #para validar duracion
 def validar_calificacion(calificacion):
     patron = r'^(?:[1-9]|10)$' # Expresión regular para validar que el número esté entre 1 y 10
     return re.match(patron, calificacion) is not None
-
-def validar_estado(estado):
-    estados_validos = ["en curso", "pendiente", "terminada"]    # Lista de estados válidos
-    return estado.lower() in estados_validos # Verifica si el estado ingresado está en la lista de estados válidos
-
-def validar_genero(genero):
-    """Valida que el género no esté vacío y que no exista ya en el diccionario."""
-    return len(genero) > 3 and genero not in modulo_genero.dic_genero and genero.isalpha()
